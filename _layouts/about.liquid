@@ -63,7 +63,36 @@ layout: default
       </h2>
       {% include selected_papers.liquid %}
     {% endif %}
-
+     <!-- Awards Section -->
+    {% if page.awards %}
+      <section id="awards">
+        <h2>Awards</h2>
+        <ul>
+          {% for award in page.awards %}
+            <li>
+              <strong>{{ award.name }}</strong> - {{ award.organization }} ({{ award.date }})<br>
+              <em>{{ award.description }}</em>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+    <!-- Education Section -->
+    {% if page.education %}
+      <section id="education">
+        <h2>Education</h2>
+        <ul>
+          {% for item in page.education %}
+            <li>
+              <strong>{{ item.degree }}</strong><br>
+              <em>{{ item.institution }}</em><br>
+              <span>{{ item.start_date }} - {{ item.end_date }}</span><br>
+              <p>{{ item.description }}</p>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
     <!-- Social -->
     {% if page.social %}
       <div class="social">
