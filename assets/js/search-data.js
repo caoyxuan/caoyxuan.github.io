@@ -375,7 +375,10 @@ ninja.data = [{
           window.location.href = "/blog/2015/formatting-and-links/";
         
       },
-    },{id: "news-one-paper-is-accepted-to-neurips-2023-better-with-less-a-data-centric-prespective-on-pre-training-graph-neural-networks",
+    },{id: "news-one-paper-is-accepted-to-sigkdd-2023-when-to-pre-train-graph-neural-networks-from-data-generation-perspective",
+          title: '🎉 One paper is accepted to SIGKDD 2023: When to Pre-Train Graph Neural...',
+          description: "",
+          section: "News",},{id: "news-one-paper-is-accepted-to-neurips-2023-better-with-less-a-data-centric-prespective-on-pre-training-graph-neural-networks",
           title: '🎉 One paper is accepted to NeurIPS 2023:Better with Less: A Data-Centric Prespective...',
           description: "",
           section: "News",},{id: "news-one-paper-is-accepted-to-acl-2024-cross-lingual-knowledge-editing-in-large-language-models",
