@@ -10,6 +10,9 @@ profile:
   image_circular: false # crops the image to make it circular
   more_info: 
 
+education: true
+awards: true
+
 selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 
@@ -17,18 +20,6 @@ announcements:
   enabled: true # includes a list of news items
   scrollable: true # adds a vertical scroll bar if there are more than 3 news items
   limit: 5 # leave blank to include all the news in the `_news` folder
-
-Education:
-Zhejiang University, 2022.09 - (now)
-Master in Computer Science and Technology
-Zhejiang University, 2018.09 - 2022.07
-Bachelor in Computer Science and Technolog
-
-Awards:
-National Scholarship, 2023
-Outstanding Graduate of Zhejiang Province, 2022
-Zhejiang Government Scholarship, 2021
-First Prize Scholarship, 2019, 2021
 
 latest_posts:
   enabled: false
