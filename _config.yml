@@ -181,6 +181,7 @@ exclude:
   - _pages/blog.md
   - _pages/dropdown.md
   - _pages/projects.md 
+  - _pages/cv.md 
   - _pages/repositories.md
   - docker-compose.yml
   - docker-compose-slim.yml
