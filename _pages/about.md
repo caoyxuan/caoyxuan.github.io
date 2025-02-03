@@ -23,16 +23,12 @@ education:
     
 awards: 
   - name: "National Scholarship"
-    organization: "Ministry of Education of PRC"
     date: "2023"
   - name: "Outstanding Graduate of Zhejiang Province"
-    organization: "Department of Education of Zhejiang Province"
     date: "2022"
   - name: "Zhejiang Government Scholarship"
-    organization: "Department of Education of Zhejiang Province"
     date: "2021"
   - name: "First Prize Scholarship"
-    organization: "Zhejiang University"
     date: "2019, 2021"
 
 selected_papers: true # includes a list of papers marked as "selected={true}"
