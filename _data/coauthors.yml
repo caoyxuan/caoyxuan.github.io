@@ -1,13 +1,13 @@
 "yang":
   - firstname: ["Yang"]
-    url: http://yangy.org/
- - firstname: ["Carl"]
+    url: https://yangy.org/
+  - firstname: ["Carl"]
     url: https://www.cs.emory.edu/~jyang71/
 "xu":
   - firstname: ["Jiarong"]
     url: https://galina0217.github.io/
 "zhang":
-   - firstname: ["Yunchao"]
+  - firstname: ["Yunchao"]
     url: https://StylesZhang.github.io/
 "wang":
   - firstname: ["Jiaan"]
