@@ -27,7 +27,7 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-Hello, I am a third-year master student of Computer Science and Technology at Zhejiang University advised by [Prof. Yang Yang](https://yangy.org/) and [Prof. Jiarong Xu (Fudan University)](https://galina0217.github.io/). I also work closely with [Prof. Carl Yang (Emory University)](https://www.cs.emory.edu/~jyang71/). I am an incoming Ph.D. student in Computer Science at HKUST, where I will work with [Prof. Junxian He](https://jxhe.github.io/). Before that, I received the bachelor degree in Computer Science in Zhejiang University in 2022. 
+Hello, I am a third-year master student of Computer Science and Technology at Zhejiang University advised by [Prof. Yang Yang](http://yangy.org/) and [Prof. Jiarong Xu (Fudan University)](https://galina0217.github.io/). I also work closely with [Prof. Carl Yang (Emory University)](https://www.cs.emory.edu/~jyang71/). I am an incoming Ph.D. student in Computer Science at HKUST, where I will work with [Prof. Junxian He](https://jxhe.github.io/). Before that, I received the bachelor degree in Computer Science in Zhejiang University in 2022. 
 
 My research interest lies in understanding 
 
