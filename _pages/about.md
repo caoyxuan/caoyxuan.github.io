@@ -19,7 +19,6 @@ announcements:
   limit: 5 # leave blank to include all the news in the `_news` folder
 
 Education:
-
 Zhejiang University, 2022.09 - (now)
 Master in Computer Science and Technology
 Zhejiang University, 2018.09 - 2022.07
