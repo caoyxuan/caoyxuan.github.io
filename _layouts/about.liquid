@@ -66,12 +66,11 @@ layout: default
      <!-- Awards Section -->
     {% if page.awards %}
       <section id="awards">
-        <h2>Awards</h2>
+        <h2>awards</h2>
         <ul>
           {% for award in page.awards %}
             <li>
               <strong>{{ award.name }}</strong> - {{ award.organization }} ({{ award.date }})<br>
-              <em>{{ award.description }}</em>
             </li>
           {% endfor %}
         </ul>
@@ -80,7 +79,7 @@ layout: default
     <!-- Education Section -->
     {% if page.education %}
       <section id="education">
-        <h2>Education</h2>
+        <h2>education</h2>
         <ul>
           {% for item in page.education %}
             <li>
