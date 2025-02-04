@@ -91,7 +91,14 @@ layout: default
         </ul>
       </section>
     {% endif %}
-   
+   {% if page.miscellaneous %}
+  <section class="miscellaneous">
+    <h2>Miscellaneous</h2>
+    <p>{{ page.miscellaneous }}</p>
+  </section>
+{% endif %}
+
+
     <!-- Social -->
     {% if page.social %}
       <div class="social">
