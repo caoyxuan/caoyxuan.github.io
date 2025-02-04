@@ -87,7 +87,9 @@ layout: default
     <!-- Selected papers -->
     {% if page.selected_papers %}
       <h2>Publications</h2>
-      {% include selected_papers.liquid %}
+     <div class="publications">
+        {% bibliography %}
+      </div>
     {% endif %}
     <!-- Social -->
     {% if page.social %}
