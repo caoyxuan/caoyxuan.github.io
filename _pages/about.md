@@ -40,8 +40,8 @@ announcements:
   limit: 5 # leave blank to include all the news in the `_news` folder
 
 miscellaneous: 
-"In my free time, I enjoy hiking and writing. I’m a fan of Khalil Fong, an incredible artist and musician. 
-I am also interested in cognitive science, cosmology, and metaphysics, particularly in exploring the correlations between them."
+  In my free time, I enjoy hiking and writing. I’m a fan of Khalil Fong, an incredible artist and musician. 
+  I am also interested in cognitive science, cosmology, and metaphysics, particularly in exploring the correlations between them.
 
 latest_posts:
   enabled: false
