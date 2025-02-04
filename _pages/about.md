@@ -2,7 +2,7 @@
 layout: about
 title: About
 permalink: /
-
+subtitle: <i>Hakuna Matata.</i>
 
 profile:
   align: right
