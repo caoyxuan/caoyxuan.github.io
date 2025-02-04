@@ -9,14 +9,7 @@ ninja.data = [{
     handler: () => {
       window.location.href = "/";
     },
-  },{id: "nav-publications",
-          title: "Publications",
-          description: "Asterisk indicates equal contribution.",
-          section: "Navigation",
-          handler: () => {
-            window.location.href = "/publications/";
-          },
-        },{id: "post-a-post-with-image-galleries",
+  },{id: "post-a-post-with-image-galleries",
       
         title: "a post with image galleries",
       
