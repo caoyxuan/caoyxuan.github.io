@@ -183,6 +183,7 @@ exclude:
   - _pages/projects.md 
   - _pages/cv.md 
   - _pages/repositories.md
+  - _pages/teaching.md
   - docker-compose.yml
   - docker-compose-slim.yml
   - FAQ.md
