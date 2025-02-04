@@ -40,21 +40,17 @@ announcements:
   limit: 5 # leave blank to include all the news in the `_news` folder
 
 miscellaneous: 
-  In my free time, I enjoy hiking and writing. 
-  
-  I’m a fan of Khalil Fong, an incredible artist and musician. I also play in a band called 'ANS' with my friends.
-  
-  I am also interested in cognitive science, cosmology, and metaphysics, particularly in exploring the correlations between their laws.
-
+ In my free time, I enjoy hiking and writing. I’m an avid fan of Khalil Fong, an exceptional artist and musician. 
+ I also play in a band called 'ANS' with my friends. I am interested in cognitive science, cosmology, and metaphysics, with a particular focus on exploring the interconnections between their underlying principles.
+ 
 latest_posts:
   enabled: false
   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
   limit: 3 # leave blank to include all the blog posts
 ---
 
-Hello, I am a third-year master student of Computer Science and Technology at Zhejiang University advised by [Prof. Yang Yang](http://yangy.org/) and [Prof. Jiarong Xu](https://galina0217.github.io/). I also work closely with [Prof. Carl Yang](https://www.cs.emory.edu/~jyang71/). 
-I am an incoming Ph.D. student in Computer Science at HKUST, where I will work with [Prof. Junxian He](https://jxhe.github.io/). Before that, I received the bachelor degree in Computer Science in Zhejiang University in 2022. 
+Hello, I am a third-year master student of Computer Science and Technology at Zhejiang University advised by Prof. [Yang Yang](http://yangy.org/) and Prof. [Jiarong Xu](https://galina0217.github.io/). I also work closely with Prof. [Carl Yang](https://www.cs.emory.edu/~jyang71/). 
+I am an incoming Ph.D. student in Computer Science at HKUST, where I will work with Prof. [Junxian He](https://jxhe.github.io/). Before that, I received the bachelor degree in Computer Science from Zhejiang University in 2022. 
 
 My current research interest primarily lies in machine learning and exploring the capability boundaries of large language models (LLMs).
-
 I am also interested in graph data mining and its specialized applications in real-world scenarios.
