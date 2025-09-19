@@ -22,6 +22,8 @@ education:
     end_date: "2022.07"
     
 awards: 
+  - name: "Hong Kong PhD Fellowship Scheme"
+    date: "2025"
   - name: "National Scholarship"
     date: "2023"
   - name: "Outstanding Graduate of Zhejiang Province"
@@ -49,9 +51,8 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-I am an incoming Ph.D. student in Computer Science at HKUST, where I will work with Prof. [Junxian He](https://jxhe.github.io/). Currently, I am a third-year master student of Computer Science and Technology at Zhejiang University advised by Prof. [Yang Yang](http://yangy.org/) and Prof. [Jiarong Xu](https://galina0217.github.io/). 
-I also work closely with Prof. [Carl Yang](https://www.cs.emory.edu/~jyang71/). 
-Before that, I received my bachelor degree in Computer Science from Zhejiang University. 
+I am a first-year Ph.D. student in Computer Science at [HKUST](https://hkust.edu.hk/zh-hant), supervised by Prof. [Junxian He](https://jxhe.github.io/). Before that, I got my masters' degree in Computer Science and Technology Department at Zhejiang University, advised by Prof. [Yang Yang](http://yangy.org/) and Prof. [Jiarong Xu](https://galina0217.github.io/). 
+I also collaborated with Prof. [Carl Yang](https://www.cs.emory.edu/~jyang71/) during my 
 
-My current research interest primarily lies in machine learning and exploring the capability boundaries of large language models (LLMs).
+My current research interest primarily lies in LLM post-training and LLM reasoning.
 I am also interested in graph data mining and its specialized applications in real-world scenarios.
