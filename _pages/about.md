@@ -6,7 +6,7 @@ subtitle: <i>Hakuna Matata.</i>
 
 profile:
   align: right
-  image: pic_cyx.png
+  image: pic_cyx.jpeg
   image_circular: true # crops the image to make it circular
   more_info: 
 
