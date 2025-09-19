@@ -6,15 +6,20 @@ subtitle: <i>Hakuna Matata.</i>
 
 profile:
   align: right
-  image: prof_pic.png
+  image: pic_cyx.png
   image_circular: false # crops the image to make it circular
   more_info: 
 
 education: 
+  - degree: " Ph.D. in Computer Science and Engineering"
+    institution:  "Hong Kong University of Science and Technology"
+    start_date: "2025.09"
+    end_date: "Present"
+    
   - degree: "Master in Computer Science and Technology"
     institution: "Zhejiang University"
     start_date: "2022.09"
-    end_date: "Present"
+    end_date: "2025.04"
 
   - degree: "Bachelor in Computer Science and Technology"
     institution: "Zhejiang University"
@@ -52,7 +57,7 @@ latest_posts:
 ---
 
 I am a first-year Ph.D. student in Computer Science at [HKUST](https://hkust.edu.hk/zh-hant), supervised by Prof. [Junxian He](https://jxhe.github.io/). Before that, I got my masters' degree in Computer Science and Technology Department at Zhejiang University, advised by Prof. [Yang Yang](http://yangy.org/) and Prof. [Jiarong Xu](https://galina0217.github.io/). 
-I also collaborated with Prof. [Carl Yang](https://www.cs.emory.edu/~jyang71/) during my 
+I also collaborated with Prof. [Carl Yang](https://www.cs.emory.edu/~jyang71/) on various aspects of graph-related research topics. 
 
 My current research interest primarily lies in LLM post-training and LLM reasoning.
 I am also interested in graph data mining and its specialized applications in real-world scenarios.
