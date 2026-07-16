@@ -499,10 +499,10 @@
             </iframe>
           </div>
           <div class="reference-pane">
-            <h3>OpenStreetMap mcbots/Shun Lee area</h3>
+            <h3>OpenStreetMap for active Minecraft point</h3>
             <iframe
               id="osmMapFrame"
-              title="OpenStreetMap reference for the Shun Lee mcbots area"
+              title="OpenStreetMap reference for active Minecraft point"
               src="about:blank"
               loading="eager"
               referrerpolicy="no-referrer-when-downgrade">
@@ -564,7 +564,7 @@
             <button type="button" id="teleportEditedButton">Teleport current coords</button>
             <button type="button" id="resetCoordsButton">Reset to anchor coords</button>
           </div>
-          <p class="note">This replaces the separate summary control page. The dropdown, Google view, OSM marker, VNC teleport, coordinate edits, and sign teleport actions all use the same selected point state. The OSM panel stays fixed to the Shun Lee mcbots area; its marker follows the active MC point.</p>
+          <p class="note">This replaces the separate summary control page. The dropdown, Google view, OSM map, VNC teleport, coordinate edits, and sign teleport actions all use the same selected point state. Google/OSM use the exact OSM point at registered anchor coords, then follow edited MC X/Z or text-sign waypoints by a local 65-anchor estimate.</p>
         </div>
       </section>
     </aside>
@@ -607,7 +607,6 @@
     let reviewAnchors = [];
     let anchorsByPrompt = new Map();
     let mcToGeoModel = null;
-    let osmAreaBounds = null;
     let mcTextLabels = null;
     let mcTextMatchesByPrompt = new Map();
     let mcTextMatchesByLabel = new Map();
@@ -648,35 +647,13 @@
       return `https://www.openstreetmap.org/?mlat=${anchor.lat}&mlon=${anchor.lon}#map=19/${anchor.lat}/${anchor.lon}`;
     }
 
-    function fitOsmAreaBounds(anchors) {
-      const lats = anchors.map((anchor) => Number(anchor.lat)).filter(Number.isFinite);
-      const lons = anchors.map((anchor) => Number(anchor.lon)).filter(Number.isFinite);
-      if (!lats.length || !lons.length) return null;
-      const minLat = Math.min(...lats);
-      const maxLat = Math.max(...lats);
-      const minLon = Math.min(...lons);
-      const maxLon = Math.max(...lons);
-      const latPad = Math.max((maxLat - minLat) * 0.18, 0.00045);
-      const lonPad = Math.max((maxLon - minLon) * 0.18, 0.00055);
-      return {
-        minLat: minLat - latPad,
-        maxLat: maxLat + latPad,
-        minLon: minLon - lonPad,
-        maxLon: maxLon + lonPad,
-      };
-    }
-
     function osmEmbedUrl(anchor) {
       const lat = Number(anchor.lat);
       const lon = Number(anchor.lon);
-      const bounds = osmAreaBounds || {
-        minLat: lat - 0.00055,
-        maxLat: lat + 0.00055,
-        minLon: lon - 0.00075,
-        maxLon: lon + 0.00075,
-      };
+      const latPad = 0.00055;
+      const lonPad = 0.00075;
       const url = new URL("https://www.openstreetmap.org/export/embed.html");
-      url.searchParams.set("bbox", `${bounds.minLon},${bounds.minLat},${bounds.maxLon},${bounds.maxLat}`);
+      url.searchParams.set("bbox", `${lon - lonPad},${lat - latPad},${lon + lonPad},${lat + latPad}`);
       url.searchParams.set("layer", "mapnik");
       url.searchParams.set("marker", `${lat},${lon}`);
       return url.toString();
@@ -1264,7 +1241,6 @@
         reviewAnchors = anchors;
         anchorsByPrompt = new Map(anchors.map((anchor) => [anchor.prompt_id, anchor]));
         mcToGeoModel = fitMcToGeoModel(anchors);
-        osmAreaBounds = fitOsmAreaBounds(anchors);
         renderAnchorOptions();
         if (mcTextLabels) renderAllTextLabels(mcTextLabels);
         anchorSelect.addEventListener("change", () => {
