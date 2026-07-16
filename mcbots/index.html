@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>mcbots · Shun Lee Dynamic Review</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #071018;
+      --panel: #101923;
+      --panel-2: #151f2b;
+      --line: #2c3d50;
+      --ink: #eef7fb;
+      --muted: #9cb0bd;
+      --cyan: #35d0c4;
+      --amber: #ffc567;
+      --red: #ff7b72;
+      --green: #7ee787;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(53, 208, 196, .16), transparent 26rem),
+        radial-gradient(circle at 88% 8%, rgba(255, 197, 103, .12), transparent 24rem),
+        var(--bg);
+      color: var(--ink);
+    }
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: end;
+      width: min(1800px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 1.2rem 0 1rem;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 3vw, 2.65rem);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+    .lede {
+      margin: .55rem 0 0;
+      max-width: 920px;
+      color: var(--muted);
+      font-size: .98rem;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      justify-content: flex-end;
+    }
+    a.button, button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: .55rem .75rem;
+      border: 1px solid #3f5368;
+      border-radius: 8px;
+      background: #162332;
+      color: var(--ink);
+      text-decoration: none;
+      font: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    a.button.primary { border-color: #168d85; background: #0e6c65; }
+    a.button.warn { border-color: #8e6a1d; background: #5b4316; }
+    main {
+      display: grid;
+      grid-template-columns: minmax(520px, 1.15fr) minmax(420px, .85fr);
+      gap: .8rem;
+      width: min(1800px, calc(100% - 28px));
+      margin: 0 auto 1.2rem;
+    }
+    .panel {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(16, 25, 35, .94);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .36);
+    }
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .8rem;
+      min-height: 48px;
+      padding: .65rem .8rem;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #162331, #101923);
+    }
+    .panel-head h2 {
+      margin: 0;
+      font-size: .98rem;
+      letter-spacing: .02em;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      color: var(--green);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+    .dot {
+      width: .55rem;
+      height: .55rem;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 12px currentColor;
+    }
+    iframe {
+      display: block;
+      width: 100%;
+      height: calc(100vh - 138px);
+      min-height: 650px;
+      border: 0;
+      background: #0a0f14;
+    }
+    .side {
+      display: grid;
+      grid-template-rows: auto minmax(420px, 1fr);
+      gap: .8rem;
+      min-width: 0;
+    }
+    .map-card {
+      display: grid;
+      grid-template-columns: minmax(180px, .8fr) minmax(0, 1fr);
+      gap: .8rem;
+      padding: .8rem;
+    }
+    .map-card img {
+      width: 100%;
+      height: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #d9e2ec;
+    }
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .5rem;
+    }
+    .fact {
+      min-width: 0;
+      padding: .55rem .65rem;
+      border: 1px solid #28394b;
+      border-radius: 8px;
+      background: var(--panel-2);
+    }
+    .fact strong {
+      display: block;
+      margin-bottom: .16rem;
+      color: var(--cyan);
+      font-size: 1.25rem;
+      line-height: 1.1;
+    }
+    .fact span {
+      color: var(--muted);
+      font-size: .78rem;
+    }
+    .note {
+      margin: .7rem 0 0;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+    .control-frame iframe {
+      height: calc(100vh - 435px);
+      min-height: 440px;
+    }
+    footer {
+      width: min(1800px, calc(100% - 28px));
+      margin: 0 auto 1.2rem;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+    code {
+      color: #d4e9ff;
+      background: #0e1721;
+      border: 1px solid #243547;
+      border-radius: 5px;
+      padding: .1rem .28rem;
+    }
+    @media (max-width: 1180px) {
+      header { grid-template-columns: 1fr; }
+      .actions { justify-content: flex-start; }
+      main { grid-template-columns: 1fr; }
+      iframe { height: 72vh; }
+      .control-frame iframe { height: 70vh; }
+    }
+    @media (max-width: 720px) {
+      main, header, footer { width: min(100% - 18px, 1800px); }
+      .map-card { grid-template-columns: 1fr; }
+      .facts { grid-template-columns: 1fr 1fr; }
+      iframe { min-height: 560px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Shun Lee clean-v3 dynamic review</h1>
+      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 65 个 clean-v3 OSM/Minecraft teleport 控制页；当前 Minecraft player 是 <code>ShunLeeV3</code>。</p>
+    </div>
+    <nav class="actions" aria-label="direct links">
+      <a class="button primary" href="https://directories-res-firefox-village.trycloudflare.com/vnc.html?autoconnect=1&amp;resize=scale" target="_blank" rel="noopener">单独打开 VNC</a>
+      <a class="button" href="https://approve-schemes-brad-eval.trycloudflare.com/eval/results/natural-scene-route-review/shun-lee-clean-osm-prompt-packet-control-latest.html" target="_blank" rel="noopener">单独打开控制页</a>
+      <a class="button warn" href="https://approve-schemes-brad-eval.trycloudflare.com/api/health" target="_blank" rel="noopener">检查 API health</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Live noVNC · Minecraft ShunLeeV3</h2>
+        <span class="badge"><span class="dot"></span>HTTPS tunnel</span>
+      </div>
+      <iframe
+        title="Shun Lee clean-v3 noVNC"
+        src="https://directories-res-firefox-village.trycloudflare.com/vnc.html?autoconnect=1&amp;resize=scale"
+        allow="clipboard-read; clipboard-write; fullscreen"
+        referrerpolicy="no-referrer">
+      </iframe>
+    </section>
+
+    <aside class="side">
+      <section class="panel map-card">
+        <img src="assets/shun-lee-clean-v3-topdown-65.png" alt="Shun Lee clean-v3 top-down map with 65 retained anchor points">
+        <div>
+          <div class="facts">
+            <div class="fact"><strong>65</strong><span>active review anchors</span></div>
+            <div class="fact"><strong>v3</strong><span>clean world package</span></div>
+            <div class="fact"><strong>20,640</strong><span>natural-surface columns removed</span></div>
+            <div class="fact"><strong>0</strong><span>grass/dirt top surfaces left</span></div>
+          </div>
+          <p class="note">绿色仍可能出现为树、球场、green carpet/terracotta 等结构或景观材料；已删除的是草地/泥土/沙等自然地形 top surface。</p>
+        </div>
+      </section>
+
+      <section class="panel control-frame">
+        <div class="panel-head">
+          <h2>Teleport / prompt control · 65 anchors</h2>
+          <span class="badge"><span class="dot"></span>RCON-backed API</span>
+        </div>
+        <iframe
+          title="Shun Lee clean-v3 teleport control"
+          src="https://approve-schemes-brad-eval.trycloudflare.com/eval/results/natural-scene-route-review/shun-lee-clean-osm-prompt-packet-control-latest.html"
+          allow="clipboard-read; clipboard-write"
+          referrerpolicy="no-referrer">
+        </iframe>
+      </section>
+    </aside>
+  </main>
+
+  <footer>
+    Runtime tunnel created 2026-07-16 Asia/Hong_Kong. This dynamic page depends on the running server sessions on <code>jxcpu1</code>: cloudflared VNC, cloudflared control, two local ncat loopback forwards, the noVNC client, and the Shun Lee control API.
+  </footer>
+</body>
+</html>
