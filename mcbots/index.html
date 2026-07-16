@@ -71,6 +71,29 @@
     }
     a.button.primary { border-color: #168d85; background: #0e6c65; }
     a.button.warn { border-color: #8e6a1d; background: #5b4316; }
+    button:disabled {
+      opacity: .58;
+      cursor: wait;
+    }
+    .review-toolbar {
+      display: grid;
+      grid-template-columns: minmax(340px, 1.35fr) minmax(260px, auto) minmax(420px, 1fr);
+      gap: .75rem;
+      align-items: end;
+      width: min(1800px, calc(100% - 28px));
+      margin: 0 auto .8rem;
+      padding: .75rem .8rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(16, 25, 35, .96);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, .28);
+    }
+    .review-toolbar label {
+      display: block;
+      margin: 0 0 .28rem;
+      color: var(--muted);
+      font-size: .78rem;
+    }
     main {
       display: grid;
       grid-template-columns: minmax(520px, 1.15fr) minmax(420px, .85fr);
@@ -119,8 +142,8 @@
     iframe {
       display: block;
       width: 100%;
-      height: calc(100vh - 138px);
-      min-height: 650px;
+      height: calc(100vh - 224px);
+      min-height: 560px;
       border: 0;
       background: #0a0f14;
     }
@@ -173,19 +196,6 @@
       color: var(--muted);
       font-size: .84rem;
     }
-    .reference-controls {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      gap: .65rem;
-      padding: .75rem .8rem;
-      border-bottom: 1px solid var(--line);
-    }
-    .reference-controls label {
-      display: block;
-      margin: 0 0 .28rem;
-      color: var(--muted);
-      font-size: .78rem;
-    }
     select {
       width: 100%;
       min-height: 40px;
@@ -200,18 +210,18 @@
       display: flex;
       flex-wrap: wrap;
       gap: .45rem;
+      align-items: center;
     }
-    .reference-actions a.button {
+    .reference-actions a.button, .reference-actions button {
       min-height: 34px;
       padding: .45rem .62rem;
       font-size: .84rem;
     }
     .reference-meta {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: .5rem;
-      padding: .65rem .8rem;
-      border-bottom: 1px solid var(--line);
+      padding: 0;
       color: var(--muted);
       font-size: .78rem;
     }
@@ -223,8 +233,8 @@
       overflow-wrap: anywhere;
     }
     .reference-frame iframe {
-      height: calc(100vh - 138px);
-      min-height: 650px;
+      height: calc(100vh - 224px);
+      min-height: 560px;
       background: #101923;
     }
     .control-frame iframe {
@@ -247,12 +257,14 @@
     @media (max-width: 1180px) {
       header { grid-template-columns: 1fr; }
       .actions { justify-content: flex-start; }
+      .review-toolbar { grid-template-columns: 1fr; }
+      .reference-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       main { grid-template-columns: 1fr; }
       iframe { height: 72vh; }
       .control-frame iframe { height: 70vh; }
     }
     @media (max-width: 720px) {
-      main, header, footer { width: min(100% - 18px, 1800px); }
+      main, header, footer, .review-toolbar { width: min(100% - 18px, 1800px); }
       .map-card { grid-template-columns: 1fr; }
       .facts { grid-template-columns: 1fr 1fr; }
       iframe { min-height: 560px; }
@@ -274,6 +286,26 @@
     </nav>
   </header>
 
+  <section class="review-toolbar" aria-label="anchor and teleport controls">
+    <div>
+      <label for="anchorSelect">OSM/Minecraft anchor</label>
+      <select id="anchorSelect">
+        <option>Loading clean-v3 anchors...</option>
+      </select>
+    </div>
+    <div class="reference-actions" aria-label="real-world map links">
+      <button type="button" id="teleportButton">同步 Minecraft</button>
+      <a class="button primary" id="streetViewLink" href="#" target="_blank" rel="noopener">打开 Google 全景</a>
+      <a class="button" id="googleMapLink" href="#" target="_blank" rel="noopener">打开 Google 地图</a>
+      <a class="button" id="osmLink" href="#" target="_blank" rel="noopener">打开 OSM</a>
+      <span class="badge" id="syncStatus"><span class="dot"></span>Google ready</span>
+    </div>
+    <div class="reference-meta" id="anchorMeta">
+      <div><span>selected</span><strong>Loading...</strong></div>
+      <div><span>coordinates</span><strong>Loading...</strong></div>
+    </div>
+  </section>
+
   <main>
     <section class="panel">
       <div class="panel-head">
@@ -292,7 +324,7 @@
       <section class="panel reference-frame">
         <div class="panel-head">
           <h2>Google Street View / map reference</h2>
-          <span class="badge" id="syncStatus"><span class="dot"></span>Google ready</span>
+          <span class="badge"><span class="dot"></span>65 anchors</span>
         </div>
         <iframe
           id="streetViewFrame"
@@ -302,24 +334,6 @@
           loading="eager"
           referrerpolicy="no-referrer-when-downgrade">
         </iframe>
-        <div class="reference-controls">
-          <div>
-            <label for="anchorSelect">OSM/Minecraft anchor</label>
-            <select id="anchorSelect">
-              <option>Loading clean-v3 anchors...</option>
-            </select>
-          </div>
-          <div class="reference-actions" aria-label="real-world map links">
-            <button type="button" id="teleportButton">同步 Minecraft</button>
-            <a class="button primary" id="streetViewLink" href="#" target="_blank" rel="noopener">打开 Google 全景</a>
-            <a class="button" id="googleMapLink" href="#" target="_blank" rel="noopener">打开 Google 地图</a>
-            <a class="button" id="osmLink" href="#" target="_blank" rel="noopener">打开 OSM</a>
-          </div>
-        </div>
-        <div class="reference-meta" id="anchorMeta">
-          <div><span>selected</span><strong>Loading...</strong></div>
-          <div><span>coordinates</span><strong>Loading...</strong></div>
-        </div>
       </section>
 
       <section class="panel map-card">
