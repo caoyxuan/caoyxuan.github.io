@@ -278,6 +278,32 @@
       margin-right: .35rem;
       color: var(--cyan);
     }
+    .text-entry-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .32rem;
+      margin-top: .42rem;
+      color: var(--muted);
+      font-size: .72rem;
+      line-height: 1.2;
+    }
+    .text-entry-links span {
+      flex-basis: 100%;
+    }
+    .entry-jump {
+      min-height: 0;
+      padding: .22rem .34rem;
+      border-radius: 6px;
+      border-color: #31465b;
+      background: #0d1722;
+      color: var(--ink);
+      font-size: .72rem;
+      line-height: 1.15;
+      cursor: pointer;
+    }
+    .entry-jump:hover {
+      border-color: var(--cyan);
+    }
     .text-empty {
       color: var(--muted);
       font-size: .82rem;
@@ -407,13 +433,13 @@
         </div>
         <div class="text-evidence">
           <section>
-            <h3>Selected anchor nearby text</h3>
+            <h3>Selected anchor matched MC text</h3>
             <div class="text-list" id="nearbyTextList">
               <div class="text-empty">Loading MC text labels...</div>
             </div>
           </section>
           <section>
-            <h3>All sign text labels</h3>
+            <h3>All sign text labels + linked entries</h3>
             <div class="text-list" id="allTextLabels">
               <div class="text-empty">Loading scanned labels...</div>
             </div>
@@ -454,8 +480,11 @@
     const CONTROL_API_BASE = "https://jerusalem-nurse-seventh-items.trycloudflare.com";
     const USEFUL_TEXT_CATEGORIES = new Set(["building_or_institution", "park_or_transport"]);
     let selectedAnchor = null;
+    let reviewAnchors = [];
+    let anchorsByPrompt = new Map();
     let mcTextLabels = null;
     let mcTextMatchesByPrompt = new Map();
+    let mcTextMatchesByLabel = new Map();
 
     function googleStreetViewEmbedUrl(anchor) {
       const url = new URL("https://maps.google.com/maps");
@@ -492,6 +521,10 @@
       return promptId.replace("shun-lee-clean-osm-prompt-v1-", "#");
     }
 
+    function compactLabelId(labelId) {
+      return String(labelId || "").replace("shun-lee-clean-v3-mc-text-v1-", "text #");
+    }
+
     function escapeHtml(value) {
       return String(value).replace(/[&<>"']/g, (char) => ({
         "&": "&amp;",
@@ -519,15 +552,70 @@
       return Number.isFinite(distance) ? `${distance.toFixed(1)} blocks` : "";
     }
 
+    function sortTextMatches(matches) {
+      return matches.slice().sort((left, right) => {
+        const leftUseful = left.match_status === "useful_label_near_anchor" ? 0 : 1;
+        const rightUseful = right.match_status === "useful_label_near_anchor" ? 0 : 1;
+        return leftUseful - rightUseful || Number(left.horizontal_distance_blocks) - Number(right.horizontal_distance_blocks);
+      });
+    }
+
+    function anchorTextSuffix(anchor) {
+      if (!mcTextLabels) return "";
+      const matches = mcTextMatchesByPrompt.get(anchor.prompt_id) || [];
+      if (!matches.length) return "";
+      const useful = matches.filter((match) => match.match_status === "useful_label_near_anchor").length;
+      return useful ? ` · text ${useful}/${matches.length}` : ` · text ${matches.length}`;
+    }
+
+    function renderAnchorOptions() {
+      const previous = anchorSelect.value;
+      anchorSelect.innerHTML = "";
+      reviewAnchors.forEach((anchor) => {
+        const option = document.createElement("option");
+        option.value = anchor.prompt_id;
+        option.textContent = `${compactPromptId(anchor.prompt_id)} · ${anchor.name} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}${anchorTextSuffix(anchor)}`;
+        anchorSelect.appendChild(option);
+      });
+      if (previous && anchorsByPrompt.has(previous)) anchorSelect.value = previous;
+    }
+
+    function entryButtonHtml(match) {
+      const promptId = match.prompt_id || "";
+      const anchor = anchorsByPrompt.get(promptId);
+      const anchorName = match.anchor_name || (anchor ? anchor.name : "");
+      const distance = matchDistanceText(match);
+      return `<button type="button" class="entry-jump" data-prompt-id="${escapeHtml(promptId)}">${escapeHtml(compactPromptId(promptId))} · ${escapeHtml(anchorName)} · ${escapeHtml(distance)}</button>`;
+    }
+
+    function linkedEntriesHtml(matches, limit = 6) {
+      if (!matches.length) return '<div class="text-entry-links"><span>matched entries: none</span></div>';
+      const ordered = sortTextMatches(matches);
+      const visible = ordered.slice(0, limit);
+      const rest = ordered.length - visible.length;
+      return `
+        <div class="text-entry-links">
+          <span>matched entries: ${ordered.length}</span>
+          ${visible.map(entryButtonHtml).join("")}
+          ${rest > 0 ? `<span>+${rest} more matched entries</span>` : ""}
+        </div>
+      `;
+    }
+
     function textItemHtml(item, options = {}) {
       const text = item.text || item.label_text || "";
       const category = item.text_category || item.label_category || "text";
       const distance = options.match ? ` · ${matchDistanceText(item)}` : "";
       const status = item.match_status === "useful_label_near_anchor" ? "near useful text" : "near text";
+      const labelId = item.label_id ? ` · ${compactLabelId(item.label_id)}` : "";
+      const entryLine = options.match ? `<small>entry ${escapeHtml(compactPromptId(item.prompt_id))} · ${escapeHtml(item.anchor_name || "")}</small>` : "";
+      const linkedEntries = options.labelMatches ? linkedEntriesHtml(options.labelMatches) : "";
       return `
         <div class="text-item">
           <strong>${escapeHtml(text)}</strong>
-          <small><span class="text-category">${escapeHtml(categoryText(category))}</span>MC ${escapeHtml(mcPositionText(item))}${distance}${options.match ? ` · ${escapeHtml(status)}` : ""}</small>
+          <small><span class="text-category">${escapeHtml(categoryText(category))}</span>MC ${escapeHtml(mcPositionText(item))}${escapeHtml(labelId)}${distance}${options.match ? ` · ${escapeHtml(status)}` : ""}</small>
+          ${entryLine}
+          ${linkedEntries}
         </div>
       `;
     }
@@ -539,20 +627,17 @@
         nearbyTextList.innerHTML = '<div class="text-empty">Loading MC text labels...</div>';
         return;
       }
-      const matches = (mcTextMatchesByPrompt.get(anchor.prompt_id) || []).slice().sort((left, right) => {
-        const leftUseful = left.match_status === "useful_label_near_anchor" ? 0 : 1;
-        const rightUseful = right.match_status === "useful_label_near_anchor" ? 0 : 1;
-        return leftUseful - rightUseful || Number(left.horizontal_distance_blocks) - Number(right.horizontal_distance_blocks);
-      });
+      const matches = sortTextMatches(mcTextMatchesByPrompt.get(anchor.prompt_id) || []);
       if (!matches.length) {
         if (summary) summary.textContent = "No sign text within 80 blocks";
         nearbyTextList.innerHTML = '<div class="text-empty">No sign text within 80 blocks for this anchor.</div>';
         return;
       }
       const useful = matches.filter((match) => USEFUL_TEXT_CATEGORIES.has(match.label_category));
-      const top = (useful.length ? useful : matches).slice(0, 5);
+      const top = (useful.length ? useful : matches).slice(0, 8);
       if (summary) {
-        summary.textContent = top.slice(0, 3).map((match) => `${match.label_text} (${matchDistanceText(match)})`).join(" · ");
+        const usefulCount = matches.filter((match) => match.match_status === "useful_label_near_anchor").length;
+        summary.textContent = `${matches.length} linked MC signs${usefulCount ? `, ${usefulCount} useful` : ""}: ${top.slice(0, 3).map((match) => `${match.label_text} (${matchDistanceText(match)})`).join(" · ")}`;
       }
       nearbyTextList.innerHTML = top.map((match) => textItemHtml(match, { match: true })).join("");
     }
@@ -561,7 +646,9 @@
       const labels = payload.labels || [];
       const summary = payload.summary || {};
       textLabelCount.innerHTML = `<span class="dot"></span>${labels.length} signs`;
-      allTextLabels.innerHTML = labels.map((label) => textItemHtml(label)).join("") || '<div class="text-empty">No MC sign text found.</div>';
+      allTextLabels.innerHTML = labels.map((label) => textItemHtml(label, {
+        labelMatches: mcTextMatchesByLabel.get(label.label_id) || [],
+      })).join("") || '<div class="text-empty">No MC sign text found.</div>';
       if (summary.anchors_with_useful_nearby_text != null) {
         textLabelCount.title = `${summary.anchors_with_useful_nearby_text} anchors have nearby useful text`;
       }
@@ -624,10 +711,14 @@
       .then((payload) => {
         mcTextLabels = payload;
         mcTextMatchesByPrompt = new Map();
+        mcTextMatchesByLabel = new Map();
         (payload.anchor_matches || []).forEach((match) => {
           if (!mcTextMatchesByPrompt.has(match.prompt_id)) mcTextMatchesByPrompt.set(match.prompt_id, []);
           mcTextMatchesByPrompt.get(match.prompt_id).push(match);
+          if (!mcTextMatchesByLabel.has(match.label_id)) mcTextMatchesByLabel.set(match.label_id, []);
+          mcTextMatchesByLabel.get(match.label_id).push(match);
         });
+        if (reviewAnchors.length) renderAnchorOptions();
         renderAllTextLabels(payload);
         if (selectedAnchor) renderNearbyText(selectedAnchor);
       })
@@ -644,15 +735,11 @@
       })
       .then((payload) => {
         const anchors = payload.anchors || [];
-        anchorSelect.innerHTML = "";
-        anchors.forEach((anchor) => {
-          const option = document.createElement("option");
-          option.value = anchor.prompt_id;
-          option.textContent = `${compactPromptId(anchor.prompt_id)} · ${anchor.name} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}`;
-          anchorSelect.appendChild(option);
-        });
-        const byId = new Map(anchors.map((anchor) => [anchor.prompt_id, anchor]));
-        anchorSelect.addEventListener("change", () => selectAnchor(byId.get(anchorSelect.value), { syncMinecraft: true }));
+        reviewAnchors = anchors;
+        anchorsByPrompt = new Map(anchors.map((anchor) => [anchor.prompt_id, anchor]));
+        renderAnchorOptions();
+        if (mcTextLabels) renderAllTextLabels(mcTextLabels);
+        anchorSelect.addEventListener("change", () => selectAnchor(anchorsByPrompt.get(anchorSelect.value), { syncMinecraft: true }));
         teleportButton.addEventListener("click", () => {
           if (selectedAnchor) teleportMinecraft(selectedAnchor);
         });
@@ -662,6 +749,15 @@
         anchorSelect.innerHTML = "<option>Failed to load anchors</option>";
         anchorMeta.innerHTML = `<div><span>error</span><strong>${error.message}</strong></div>`;
       });
+
+    allTextLabels.addEventListener("click", (event) => {
+      const button = event.target && event.target.closest ? event.target.closest(".entry-jump") : null;
+      if (!button) return;
+      const anchor = anchorsByPrompt.get(button.dataset.promptId);
+      if (!anchor) return;
+      anchorSelect.value = anchor.prompt_id;
+      selectAnchor(anchor, { syncMinecraft: true });
+    });
   </script>
 </body>
 </html>
