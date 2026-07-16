@@ -273,10 +273,30 @@
       font-size: .74rem;
       line-height: 1.25;
     }
+    .text-shot {
+      display: block;
+      margin-top: .48rem;
+      overflow: hidden;
+      border: 1px solid #31465b;
+      border-radius: 7px;
+      background: #08111a;
+    }
+    .text-shot img {
+      display: block;
+      width: 100%;
+      max-height: 190px;
+      object-fit: cover;
+    }
     .text-category {
       display: inline-flex;
       margin-right: .35rem;
       color: var(--cyan);
+    }
+    .match-kind {
+      display: inline-flex;
+      margin-right: .35rem;
+      color: var(--green);
+      font-weight: 600;
     }
     .text-entry-links {
       display: flex;
@@ -478,15 +498,15 @@
           <span class="badge" id="textLabelCount"><span class="dot"></span>Loading</span>
         </div>
         <div class="text-evidence">
-          <p class="note">These are exact sign-block coordinates. The entry links below are radius matches, so a sign may not be visible from the OSM anchor point; use <code>tp exact sign</code> to inspect the text itself.</p>
+          <p class="note">The primary links below are semantic landmark matches: a BUS STATION sign is attached only to bus-stop/shelter anchors, not to nearby roads. Radius matches remain proximity clues only.</p>
           <section>
-            <h3>Selected anchor radius-matched MC text</h3>
+            <h3>Selected anchor landmark-matched MC text</h3>
             <div class="text-list" id="nearbyTextList">
               <div class="text-empty">Loading MC text labels...</div>
             </div>
           </section>
           <section>
-            <h3>All sign text labels + linked entries</h3>
+            <h3>All sign text labels + landmark entries</h3>
             <div class="text-list" id="allTextLabels">
               <div class="text-empty">Loading scanned labels...</div>
             </div>
@@ -556,6 +576,9 @@
     let mcTextLabels = null;
     let mcTextMatchesByPrompt = new Map();
     let mcTextMatchesByLabel = new Map();
+    let mcSemanticMatchesByPrompt = new Map();
+    let mcSemanticMatchesByLabel = new Map();
+    let mcLabelsById = new Map();
 
     function googleStreetViewEmbedUrl(anchor) {
       const url = new URL("https://maps.google.com/maps");
@@ -752,6 +775,15 @@
     }
 
     function signViewpoint(item) {
+      const override = item.coordinate_override || item.semantic_coordinate_override;
+      if (override) {
+        const x = Number(override.x);
+        const y = Number(override.y);
+        const z = Number(override.z);
+        const yaw = Number(override.yaw);
+        const pitch = Number(override.pitch);
+        if ([x, y, z, yaw, pitch].every(Number.isFinite)) return { x, y, z, yaw, pitch };
+      }
       const coord = signCoordinate(item);
       if (!coord) return null;
       const view = SIGN_VIEWPOINT_BY_FACING[coord.facing] || { dx: 0, dz: 0, yaw: 0 };
@@ -769,20 +801,36 @@
       return Number.isFinite(distance) ? `${distance.toFixed(1)} blocks` : "";
     }
 
+    function semanticRoleText(role) {
+      return String(role || "landmark").replaceAll("_", " ");
+    }
+
+    function distanceValue(match) {
+      const distance = Number(match.horizontal_distance_blocks);
+      return Number.isFinite(distance) ? distance : Number.POSITIVE_INFINITY;
+    }
+
     function sortTextMatches(matches) {
       return matches.slice().sort((left, right) => {
         const leftUseful = left.match_status === "useful_label_near_anchor" ? 0 : 1;
         const rightUseful = right.match_status === "useful_label_near_anchor" ? 0 : 1;
-        return leftUseful - rightUseful || Number(left.horizontal_distance_blocks) - Number(right.horizontal_distance_blocks);
+        return leftUseful - rightUseful || distanceValue(left) - distanceValue(right);
+      });
+    }
+
+    function sortSemanticMatches(matches) {
+      return matches.slice().sort((left, right) => {
+        const leftPrimary = left.prompt_id === left.primary_prompt_id ? 0 : 1;
+        const rightPrimary = right.prompt_id === right.primary_prompt_id ? 0 : 1;
+        return leftPrimary - rightPrimary || distanceValue(left) - distanceValue(right) || String(left.prompt_id).localeCompare(String(right.prompt_id));
       });
     }
 
     function anchorTextSuffix(anchor) {
       if (!mcTextLabels) return "";
-      const matches = mcTextMatchesByPrompt.get(anchor.prompt_id) || [];
+      const matches = mcSemanticMatchesByPrompt.get(anchor.prompt_id) || [];
       if (!matches.length) return "";
-      const useful = matches.filter((match) => match.match_status === "useful_label_near_anchor").length;
-      return useful ? ` · text ${useful}/${matches.length}` : ` · text ${matches.length}`;
+      return ` · landmark text ${matches.length}`;
     }
 
     function renderAnchorOptions() {
@@ -802,7 +850,8 @@
       const anchor = anchorsByPrompt.get(promptId);
       const anchorName = match.anchor_name || (anchor ? anchor.name : "");
       const distance = matchDistanceText(match);
-      return `<button type="button" class="entry-jump" data-prompt-id="${escapeHtml(promptId)}">${escapeHtml(compactPromptId(promptId))} · ${escapeHtml(anchorName)} · ${escapeHtml(distance)}</button>`;
+      const distanceSuffix = distance ? ` · ${distance}` : "";
+      return `<button type="button" class="entry-jump" data-prompt-id="${escapeHtml(promptId)}">${escapeHtml(compactPromptId(promptId))} · ${escapeHtml(anchorName)}${escapeHtml(distanceSuffix)}</button>`;
     }
 
     function signButtonHtml(item, promptId) {
@@ -813,36 +862,65 @@
       return `<button type="button" class="sign-jump" data-prompt-id="${escapeHtml(promptId)}" data-label-id="${escapeHtml(labelId)}" data-label-text="${escapeHtml(labelText)}" data-x="${view.x}" data-y="${view.y}" data-z="${view.z}" data-yaw="${view.yaw}" data-pitch="${view.pitch}" title="view MC ${view.x}, ${view.y}, ${view.z}">tp exact sign</button>`;
     }
 
-    function linkedEntriesHtml(matches, limit = 6) {
-      if (!matches.length) return '<div class="text-entry-links"><span>matched entries: none</span></div>';
-      const ordered = sortTextMatches(matches);
+    function linkedEntriesHtml(matches, limit = 6, label = "matched entries", sorter = sortTextMatches) {
+      if (!matches.length) return `<div class="text-entry-links"><span>${escapeHtml(label)}: none</span></div>`;
+      const ordered = sorter(matches);
       const visible = ordered.slice(0, limit);
       const rest = ordered.length - visible.length;
       return `
         <div class="text-entry-links">
-          <span>matched entries: ${ordered.length}</span>
+          <span>${escapeHtml(label)}: ${ordered.length}</span>
           ${visible.map(entryButtonHtml).join("")}
-          ${rest > 0 ? `<span>+${rest} more matched entries</span>` : ""}
+          ${rest > 0 ? `<span>+${rest} more ${escapeHtml(label)}</span>` : ""}
         </div>
+      `;
+    }
+
+    function screenshotPath(item) {
+      return item.semantic_screenshot_path || item.screenshot_path || item.image || "";
+    }
+
+    function textShotHtml(item, altText) {
+      const path = screenshotPath(item);
+      if (!path) return "";
+      return `
+        <a class="text-shot" href="${escapeHtml(path)}" target="_blank" rel="noopener">
+          <img src="${escapeHtml(path)}" alt="${escapeHtml(altText)}">
+        </a>
       `;
     }
 
     function textItemHtml(item, options = {}) {
       const text = item.text || item.label_text || "";
       const category = item.text_category || item.label_category || "text";
-      const distance = options.match ? ` · ${matchDistanceText(item)}` : "";
-      const status = item.match_status === "useful_label_near_anchor" ? "near useful text" : "near text";
+      const distanceText = matchDistanceText(item);
+      const distance = options.match && distanceText ? ` · ${distanceText}` : "";
+      const isLandmark = options.matchKind === "landmark" || item.match_kind === "semantic_landmark" || Boolean(item.semantic_primary_prompt_id);
+      const status = isLandmark
+        ? `landmark: ${semanticRoleText(item.semantic_role || item.role)}`
+        : (item.match_status === "useful_label_near_anchor" ? "near useful text" : "near text");
       const labelId = item.label_id ? ` · ${compactLabelId(item.label_id)}` : "";
-      const entryLine = options.match ? `<small>entry ${escapeHtml(compactPromptId(item.prompt_id))} · ${escapeHtml(item.anchor_name || "")}</small>` : "";
-      const signPromptId = item.prompt_id || (options.labelMatches && options.labelMatches[0] ? options.labelMatches[0].prompt_id : "");
+      const kind = isLandmark ? '<span class="match-kind">landmark match</span>' : '<span class="text-category">proximity clue</span>';
+      const entryLine = options.match ? `<small>${kind}entry ${escapeHtml(compactPromptId(item.prompt_id))} · ${escapeHtml(item.anchor_name || "")}</small>` : "";
+      const signPromptId = item.primary_prompt_id
+        || item.semantic_primary_prompt_id
+        || item.prompt_id
+        || (options.semanticLabelMatches && options.semanticLabelMatches[0] ? options.semanticLabelMatches[0].prompt_id : "")
+        || (options.labelMatches && options.labelMatches[0] ? options.labelMatches[0].prompt_id : "");
       const signButton = signButtonHtml(item, signPromptId);
       const signActions = signButton ? `<div class="text-entry-links">${signButton}</div>` : "";
-      const linkedEntries = options.labelMatches ? linkedEntriesHtml(options.labelMatches) : "";
+      const linkedEntries = options.semanticLabelMatches
+        ? linkedEntriesHtml(options.semanticLabelMatches, 6, "landmark entries", sortSemanticMatches)
+        : "";
+      const shot = textShotHtml(item, `Minecraft sign screenshot for ${text}`);
+      const reason = isLandmark && item.semantic_reason ? `<small>${escapeHtml(item.semantic_reason)}</small>` : "";
       return `
         <div class="text-item">
           <strong>${escapeHtml(text)}</strong>
           <small><span class="text-category">${escapeHtml(categoryText(category))}</span>MC ${escapeHtml(mcPositionText(item))}${escapeHtml(labelId)}${distance}${options.match ? ` · ${escapeHtml(status)}` : ""}</small>
           ${entryLine}
+          ${reason}
+          ${shot}
           ${signActions}
           ${linkedEntries}
         </div>
@@ -856,30 +934,32 @@
         nearbyTextList.innerHTML = '<div class="text-empty">Loading MC text labels...</div>';
         return;
       }
-      const matches = sortTextMatches(mcTextMatchesByPrompt.get(anchor.prompt_id) || []);
+      const matches = sortSemanticMatches(mcSemanticMatchesByPrompt.get(anchor.prompt_id) || []);
       if (!matches.length) {
-        if (summary) summary.textContent = "No sign text within 80 blocks";
-        nearbyTextList.innerHTML = '<div class="text-empty">No sign text within 80 blocks for this anchor.</div>';
+        const proximityCount = (mcTextMatchesByPrompt.get(anchor.prompt_id) || []).length;
+        if (summary) summary.textContent = proximityCount
+          ? `No landmark-matched MC text. ${proximityCount} nearby sign(s) exist as proximity clues only.`
+          : "No landmark-matched MC text";
+        nearbyTextList.innerHTML = `<div class="text-empty">No landmark-matched MC text for this anchor.${proximityCount ? ` ${proximityCount} nearby sign(s) were hidden because they are not identity matches.` : ""}</div>`;
         return;
       }
-      const useful = matches.filter((match) => USEFUL_TEXT_CATEGORIES.has(match.label_category));
-      const top = (useful.length ? useful : matches).slice(0, 8);
+      const top = matches.slice(0, 8);
       if (summary) {
-        const usefulCount = matches.filter((match) => match.match_status === "useful_label_near_anchor").length;
-        summary.textContent = `${matches.length} linked MC signs${usefulCount ? `, ${usefulCount} useful` : ""}: ${top.slice(0, 3).map((match) => `${match.label_text} (${matchDistanceText(match)})`).join(" · ")}`;
+        summary.textContent = `${matches.length} landmark-matched MC sign(s): ${top.slice(0, 3).map((match) => `${match.label_text || match.text} -> ${semanticRoleText(match.semantic_role || match.role)}`).join(" · ")}`;
       }
-      nearbyTextList.innerHTML = top.map((match) => textItemHtml(match, { match: true })).join("");
+      nearbyTextList.innerHTML = top.map((match) => textItemHtml(match, { match: true, matchKind: "landmark" })).join("");
     }
 
     function renderAllTextLabels(payload) {
       const labels = payload.labels || [];
       const summary = payload.summary || {};
-      textLabelCount.innerHTML = `<span class="dot"></span>${labels.length} signs`;
+      const semanticCount = summary.semantic_label_count || 0;
+      textLabelCount.innerHTML = `<span class="dot"></span>${semanticCount}/${labels.length} linked`;
       allTextLabels.innerHTML = labels.map((label) => textItemHtml(label, {
-        labelMatches: mcTextMatchesByLabel.get(label.label_id) || [],
+        semanticLabelMatches: mcSemanticMatchesByLabel.get(label.label_id) || [],
       })).join("") || '<div class="text-empty">No MC sign text found.</div>';
-      if (summary.anchors_with_useful_nearby_text != null) {
-        textLabelCount.title = `${summary.anchors_with_useful_nearby_text} anchors have nearby useful text`;
+      if (summary.semantic_anchor_count != null) {
+        textLabelCount.title = `${summary.semantic_anchor_count} anchors have landmark-matched MC text`;
       }
     }
 
@@ -954,7 +1034,7 @@
         <div><span>Google target</span><strong>${googleTarget.lat.toFixed(7)}, ${googleTarget.lon.toFixed(7)}</strong></div>
         <div><span>active Minecraft</span><strong>${escapeHtml(coordinateDisplay(coordinate))}</strong></div>
         <div><span>semantic</span><strong>${escapeHtml(selectedAnchor.scenario_id)} / ${escapeHtml(selectedAnchor.endpoint_affordance)}</strong></div>
-        <div class="wide-meta"><span>radius-matched MC text</span><strong id="anchorTextSummary">Loading MC text labels...</strong></div>
+        <div class="wide-meta"><span>landmark-matched MC text</span><strong id="anchorTextSummary">Loading MC text labels...</strong></div>
       `;
       promptDetail.innerHTML = `
         <strong>${escapeHtml(compactPromptId(selectedAnchor.prompt_id))} · ${escapeHtml(selectedAnchor.name)}</strong>
@@ -983,11 +1063,49 @@
         mcTextLabels = payload;
         mcTextMatchesByPrompt = new Map();
         mcTextMatchesByLabel = new Map();
+        mcSemanticMatchesByPrompt = new Map();
+        mcSemanticMatchesByLabel = new Map();
+        mcLabelsById = new Map((payload.labels || []).map((label) => [label.label_id, label]));
+        const addMapValue = (map, key, value) => {
+          if (!key) return;
+          if (!map.has(key)) map.set(key, []);
+          map.get(key).push(value);
+        };
         (payload.anchor_matches || []).forEach((match) => {
-          if (!mcTextMatchesByPrompt.has(match.prompt_id)) mcTextMatchesByPrompt.set(match.prompt_id, []);
-          mcTextMatchesByPrompt.get(match.prompt_id).push(match);
-          if (!mcTextMatchesByLabel.has(match.label_id)) mcTextMatchesByLabel.set(match.label_id, []);
-          mcTextMatchesByLabel.get(match.label_id).push(match);
+          addMapValue(mcTextMatchesByPrompt, match.prompt_id, match);
+          addMapValue(mcTextMatchesByLabel, match.label_id, match);
+        });
+        (payload.semantic_anchor_links || []).forEach((link) => {
+          const label = mcLabelsById.get(link.label_id) || {};
+          const promptIds = link.prompt_ids || (link.prompt_id ? [link.prompt_id] : []);
+          promptIds.forEach((promptId) => {
+            const radiusMatch = (mcTextMatchesByPrompt.get(promptId) || []).find((match) => match.label_id === link.label_id) || {};
+            const anchor = anchorsByPrompt.get(promptId);
+            const match = {
+              ...label,
+              ...radiusMatch,
+              ...link,
+              prompt_id: promptId,
+              label_id: link.label_id || label.label_id,
+              text: link.text || label.text || radiusMatch.label_text || "",
+              label_text: link.text || label.text || radiusMatch.label_text || "",
+              text_category: link.text_category || label.text_category || radiusMatch.label_category || "text",
+              label_category: link.text_category || label.text_category || radiusMatch.label_category || "text",
+              label_x: link.label_x ?? label.x ?? radiusMatch.label_x,
+              label_y: link.label_y ?? label.y ?? radiusMatch.label_y,
+              label_z: link.label_z ?? label.z ?? radiusMatch.label_z,
+              label_facing: link.label_facing || label.facing || radiusMatch.label_facing,
+              anchor_name: link.anchor_name || (anchor ? anchor.name : radiusMatch.anchor_name || ""),
+              semantic_role: link.role,
+              semantic_reason: link.reason,
+              semantic_screenshot_path: link.screenshot_path || link.image,
+              screenshot_path: link.screenshot_path || link.image,
+              match_kind: "semantic_landmark",
+              match_status: "semantic_landmark_match",
+            };
+            addMapValue(mcSemanticMatchesByPrompt, promptId, match);
+            addMapValue(mcSemanticMatchesByLabel, match.label_id, match);
+          });
         });
         if (reviewAnchors.length) renderAnchorOptions();
         renderAllTextLabels(payload);
