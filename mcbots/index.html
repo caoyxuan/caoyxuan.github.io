@@ -223,8 +223,8 @@
       overflow-wrap: anywhere;
     }
     .reference-frame iframe {
-      height: 360px;
-      min-height: 320px;
+      height: calc(100vh - 138px);
+      min-height: 650px;
       background: #101923;
     }
     .control-frame iframe {
@@ -257,7 +257,7 @@
       .facts { grid-template-columns: 1fr 1fr; }
       iframe { min-height: 560px; }
       .reference-meta { grid-template-columns: 1fr; }
-      .reference-frame iframe { height: 58vh; min-height: 420px; }
+      .reference-frame iframe { height: 72vh; min-height: 560px; }
     }
   </style>
 </head>
@@ -289,24 +289,19 @@
     </section>
 
     <aside class="side">
-      <section class="panel map-card">
-        <img src="assets/shun-lee-clean-v3-topdown-65.png" alt="Shun Lee clean-v3 top-down map with 65 retained anchor points">
-        <div>
-          <div class="facts">
-            <div class="fact"><strong>65</strong><span>active review anchors</span></div>
-            <div class="fact"><strong>v3</strong><span>clean world package</span></div>
-            <div class="fact"><strong>20,640</strong><span>natural-surface columns removed</span></div>
-            <div class="fact"><strong>0</strong><span>grass/dirt top surfaces left</span></div>
-          </div>
-          <p class="note">绿色仍可能出现为树、球场、green carpet/terracotta 等结构或景观材料；已删除的是草地/泥土/沙等自然地形 top surface。</p>
-        </div>
-      </section>
-
       <section class="panel reference-frame">
         <div class="panel-head">
           <h2>Google Street View / map reference</h2>
           <span class="badge"><span class="dot"></span>65 anchors</span>
         </div>
+        <iframe
+          id="streetViewFrame"
+          title="Google Street View reference for selected Shun Lee anchor"
+          src="about:blank"
+          allowfullscreen
+          loading="eager"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
         <div class="reference-controls">
           <div>
             <label for="anchorSelect">OSM/Minecraft anchor</label>
@@ -324,14 +319,19 @@
           <div><span>selected</span><strong>Loading...</strong></div>
           <div><span>coordinates</span><strong>Loading...</strong></div>
         </div>
-        <iframe
-          id="streetViewFrame"
-          title="Google Street View reference for selected Shun Lee anchor"
-          src="about:blank"
-          allowfullscreen
-          loading="eager"
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+      </section>
+
+      <section class="panel map-card">
+        <img src="assets/shun-lee-clean-v3-topdown-65.png" alt="Shun Lee clean-v3 top-down map with 65 retained anchor points">
+        <div>
+          <div class="facts">
+            <div class="fact"><strong>65</strong><span>active review anchors</span></div>
+            <div class="fact"><strong>v3</strong><span>clean world package</span></div>
+            <div class="fact"><strong>20,640</strong><span>natural-surface columns removed</span></div>
+            <div class="fact"><strong>0</strong><span>grass/dirt top surfaces left</span></div>
+          </div>
+          <p class="note">绿色仍可能出现为树、球场、green carpet/terracotta 等结构或景观材料；已删除的是草地/泥土/沙等自然地形 top surface。</p>
+        </div>
       </section>
 
       <section class="panel control-frame">
