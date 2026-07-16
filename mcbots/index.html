@@ -310,7 +310,7 @@
     .text-entry-links span {
       flex-basis: 100%;
     }
-    .entry-jump, .sign-jump {
+    .entry-jump, .sign-jump, .text-waypoint-jump {
       min-height: 0;
       padding: .22rem .34rem;
       border-radius: 6px;
@@ -321,10 +321,10 @@
       line-height: 1.15;
       cursor: pointer;
     }
-    .entry-jump:hover, .sign-jump:hover {
+    .entry-jump:hover, .sign-jump:hover, .text-waypoint-jump:hover {
       border-color: var(--cyan);
     }
-    .sign-jump {
+    .sign-jump, .text-waypoint-jump {
       color: var(--cyan);
     }
     .text-empty {
@@ -498,15 +498,15 @@
           <span class="badge" id="textLabelCount"><span class="dot"></span>Loading</span>
         </div>
         <div class="text-evidence">
-          <p class="note">The primary links below are semantic landmark matches: a BUS STATION sign is attached only to bus-stop/shelter anchors, not to nearby roads. Radius matches remain proximity clues only.</p>
+          <p class="note">MC text signs are separate waypoint coordinates. OSM anchors such as #022/#023 remain the source OSM bus-stop nodes; select a <code>text #...</code> waypoint to stand at the visible sign itself.</p>
           <section>
-            <h3>Selected anchor landmark-matched MC text</h3>
+            <h3>Selected point MC text evidence</h3>
             <div class="text-list" id="nearbyTextList">
               <div class="text-empty">Loading MC text labels...</div>
             </div>
           </section>
           <section>
-            <h3>All sign text labels + landmark entries</h3>
+            <h3>All sign text labels + MC text waypoints</h3>
             <div class="text-list" id="allTextLabels">
               <div class="text-empty">Loading scanned labels...</div>
             </div>
@@ -570,14 +570,17 @@
       north: { dx: 0, dz: -2, yaw: 0 },
     };
     let selectedAnchor = null;
+    let selectedTextWaypoint = null;
     let reviewAnchors = [];
     let anchorsByPrompt = new Map();
     let mcToGeoModel = null;
     let mcTextLabels = null;
     let mcTextMatchesByPrompt = new Map();
     let mcTextMatchesByLabel = new Map();
-    let mcSemanticMatchesByPrompt = new Map();
-    let mcSemanticMatchesByLabel = new Map();
+    let mcTextWaypoints = [];
+    let mcTextWaypointById = new Map();
+    let mcTextWaypointsByPrompt = new Map();
+    let mcTextWaypointsByLabel = new Map();
     let mcLabelsById = new Map();
 
     function googleStreetViewEmbedUrl(anchor) {
@@ -828,21 +831,43 @@
 
     function anchorTextSuffix(anchor) {
       if (!mcTextLabels) return "";
-      const matches = mcSemanticMatchesByPrompt.get(anchor.prompt_id) || [];
-      if (!matches.length) return "";
-      return ` · landmark text ${matches.length}`;
+      const waypoints = mcTextWaypointsByPrompt.get(anchor.prompt_id) || [];
+      if (!waypoints.length) return "";
+      return ` · related text waypoint ${waypoints.length}`;
+    }
+
+    function waypointCoordinate(waypoint) {
+      const override = waypoint.coordinate_override || waypoint.semantic_coordinate_override;
+      if (override) return override;
+      return signViewpoint(waypoint);
     }
 
     function renderAnchorOptions() {
       const previous = anchorSelect.value;
       anchorSelect.innerHTML = "";
+      const anchorGroup = document.createElement("optgroup");
+      anchorGroup.label = "OSM / MC anchors";
       reviewAnchors.forEach((anchor) => {
         const option = document.createElement("option");
         option.value = anchor.prompt_id;
         option.textContent = `${compactPromptId(anchor.prompt_id)} · ${anchor.name} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}${anchorTextSuffix(anchor)}`;
-        anchorSelect.appendChild(option);
+        anchorGroup.appendChild(option);
       });
-      if (previous && anchorsByPrompt.has(previous)) anchorSelect.value = previous;
+      anchorSelect.appendChild(anchorGroup);
+      if (mcTextWaypoints.length) {
+        const textGroup = document.createElement("optgroup");
+        textGroup.label = "MC text landmark waypoints";
+        mcTextWaypoints.forEach((waypoint) => {
+          const coord = waypointCoordinate(waypoint);
+          const primary = waypoint.primary_prompt_id ? ` · candidate ${compactPromptId(waypoint.primary_prompt_id)}` : "";
+          const option = document.createElement("option");
+          option.value = `text:${waypoint.label_id}`;
+          option.textContent = `${compactLabelId(waypoint.label_id)} · ${waypoint.text || waypoint.label_text}${coord ? ` · MC ${coord.x},${coord.y},${coord.z}` : ""}${primary}`;
+          textGroup.appendChild(option);
+        });
+        anchorSelect.appendChild(textGroup);
+      }
+      if (previous && (anchorsByPrompt.has(previous) || previous.startsWith("text:"))) anchorSelect.value = previous;
     }
 
     function entryButtonHtml(match) {
@@ -895,13 +920,13 @@
       const category = item.text_category || item.label_category || "text";
       const distanceText = matchDistanceText(item);
       const distance = options.match && distanceText ? ` · ${distanceText}` : "";
-      const isLandmark = options.matchKind === "landmark" || item.match_kind === "semantic_landmark" || Boolean(item.semantic_primary_prompt_id);
-      const status = isLandmark
-        ? `landmark: ${semanticRoleText(item.semantic_role || item.role)}`
+      const isWaypoint = options.matchKind === "waypoint" || item.match_kind === "mc_text_waypoint" || Boolean(item.semantic_primary_prompt_id);
+      const status = isWaypoint
+        ? `waypoint: ${semanticRoleText(item.semantic_role || item.role)}`
         : (item.match_status === "useful_label_near_anchor" ? "near useful text" : "near text");
       const labelId = item.label_id ? ` · ${compactLabelId(item.label_id)}` : "";
-      const kind = isLandmark ? '<span class="match-kind">landmark match</span>' : '<span class="text-category">proximity clue</span>';
-      const entryLine = options.match ? `<small>${kind}entry ${escapeHtml(compactPromptId(item.prompt_id))} · ${escapeHtml(item.anchor_name || "")}</small>` : "";
+      const kind = isWaypoint ? '<span class="match-kind">MC text waypoint</span>' : '<span class="text-category">proximity clue</span>';
+      const entryLine = options.match ? `<small>${kind}${item.prompt_id ? `candidate OSM ${escapeHtml(compactPromptId(item.prompt_id))} · ${escapeHtml(item.anchor_name || "")}` : "sign coordinate"}</small>` : "";
       const signPromptId = item.primary_prompt_id
         || item.semantic_primary_prompt_id
         || item.prompt_id
@@ -910,10 +935,13 @@
       const signButton = signButtonHtml(item, signPromptId);
       const signActions = signButton ? `<div class="text-entry-links">${signButton}</div>` : "";
       const linkedEntries = options.semanticLabelMatches
-        ? linkedEntriesHtml(options.semanticLabelMatches, 6, "landmark entries", sortSemanticMatches)
+        ? linkedEntriesHtml(options.semanticLabelMatches, 6, "candidate OSM anchors", sortSemanticMatches)
         : "";
       const shot = textShotHtml(item, `Minecraft sign screenshot for ${text}`);
-      const reason = isLandmark && item.semantic_reason ? `<small>${escapeHtml(item.semantic_reason)}</small>` : "";
+      const reason = isWaypoint && item.semantic_reason ? `<small>${escapeHtml(item.semantic_reason)}</small>` : "";
+      const waypointButton = item.label_id && options.showWaypointButton
+        ? `<button type="button" class="text-waypoint-jump" data-label-id="${escapeHtml(item.label_id)}">select text waypoint</button>`
+        : "";
       return `
         <div class="text-item">
           <strong>${escapeHtml(text)}</strong>
@@ -921,7 +949,7 @@
           ${entryLine}
           ${reason}
           ${shot}
-          ${signActions}
+          ${waypointButton ? `<div class="text-entry-links">${waypointButton}</div>` : signActions}
           ${linkedEntries}
         </div>
       `;
@@ -934,32 +962,45 @@
         nearbyTextList.innerHTML = '<div class="text-empty">Loading MC text labels...</div>';
         return;
       }
-      const matches = sortSemanticMatches(mcSemanticMatchesByPrompt.get(anchor.prompt_id) || []);
+      if (selectedTextWaypoint) {
+        if (summary) summary.textContent = `${selectedTextWaypoint.text || selectedTextWaypoint.label_text} is using the MC sign coordinate as the active point.`;
+        nearbyTextList.innerHTML = textItemHtml(selectedTextWaypoint, {
+          match: true,
+          matchKind: "waypoint",
+          semanticLabelMatches: mcTextWaypointsByLabel.get(selectedTextWaypoint.label_id) || [],
+        });
+        return;
+      }
+      const matches = sortSemanticMatches(mcTextWaypointsByPrompt.get(anchor.prompt_id) || []);
       if (!matches.length) {
         const proximityCount = (mcTextMatchesByPrompt.get(anchor.prompt_id) || []).length;
         if (summary) summary.textContent = proximityCount
-          ? `No landmark-matched MC text. ${proximityCount} nearby sign(s) exist as proximity clues only.`
-          : "No landmark-matched MC text";
-        nearbyTextList.innerHTML = `<div class="text-empty">No landmark-matched MC text for this anchor.${proximityCount ? ` ${proximityCount} nearby sign(s) were hidden because they are not identity matches.` : ""}</div>`;
+          ? `No sign waypoint at this anchor coordinate. ${proximityCount} nearby sign(s) exist as proximity clues only.`
+          : "No sign waypoint at this anchor coordinate";
+        nearbyTextList.innerHTML = `<div class="text-empty">No MC text sign is placed at this anchor coordinate.${proximityCount ? ` ${proximityCount} nearby sign(s) were hidden because they are proximity clues, not the active point.` : ""}</div>`;
         return;
       }
       const top = matches.slice(0, 8);
       if (summary) {
-        summary.textContent = `${matches.length} landmark-matched MC sign(s): ${top.slice(0, 3).map((match) => `${match.label_text || match.text} -> ${semanticRoleText(match.semantic_role || match.role)}`).join(" · ")}`;
+        summary.textContent = `${matches.length} related MC text waypoint(s), but not at this anchor coordinate: ${top.slice(0, 3).map((match) => match.label_text || match.text).join(" · ")}`;
       }
-      nearbyTextList.innerHTML = top.map((match) => textItemHtml(match, { match: true, matchKind: "landmark" })).join("");
+      nearbyTextList.innerHTML = top.map((match) => textItemHtml(match, {
+        match: true,
+        matchKind: "waypoint",
+        showWaypointButton: true,
+      })).join("");
     }
 
     function renderAllTextLabels(payload) {
       const labels = payload.labels || [];
       const summary = payload.summary || {};
       const semanticCount = summary.semantic_label_count || 0;
-      textLabelCount.innerHTML = `<span class="dot"></span>${semanticCount}/${labels.length} linked`;
+      textLabelCount.innerHTML = `<span class="dot"></span>${semanticCount}/${labels.length} waypoints`;
       allTextLabels.innerHTML = labels.map((label) => textItemHtml(label, {
-        semanticLabelMatches: mcSemanticMatchesByLabel.get(label.label_id) || [],
+        semanticLabelMatches: mcTextWaypointsByLabel.get(label.label_id) || [],
       })).join("") || '<div class="text-empty">No MC sign text found.</div>';
       if (summary.semantic_anchor_count != null) {
-        textLabelCount.title = `${summary.semantic_anchor_count} anchors have landmark-matched MC text`;
+        textLabelCount.title = `${summary.semantic_anchor_count} OSM anchors are candidate references for MC text waypoints`;
       }
     }
 
@@ -1022,33 +1063,48 @@
       let coordinateNote = "registered anchor coords";
       try {
         coordinate = readCoordinateInputs();
-        if (!coordinateMatchesAnchor(selectedAnchor, coordinate)) coordinateNote = "edited coordinate override";
+        if (selectedTextWaypoint) {
+          coordinateNote = "MC text sign coordinate";
+        } else if (!coordinateMatchesAnchor(selectedAnchor, coordinate)) {
+          coordinateNote = "edited coordinate override";
+        }
       } catch (error) {
         coordinate = anchorCoordinate(selectedAnchor);
         coordinateNote = `invalid coordinate input: ${error.message}`;
       }
       const googleTarget = googleTargetForCoordinate(selectedAnchor, coordinate);
       updateGoogleReference(googleTarget);
+      const candidateIds = selectedTextWaypoint && selectedTextWaypoint.candidate_prompt_ids
+        ? selectedTextWaypoint.candidate_prompt_ids.map(compactPromptId).join(", ")
+        : "";
+      const selectedName = selectedTextWaypoint
+        ? `${compactLabelId(selectedTextWaypoint.label_id)} · ${selectedTextWaypoint.text || selectedTextWaypoint.label_text}`
+        : `${compactPromptId(selectedAnchor.prompt_id)} · ${selectedAnchor.name}`;
+      const semanticLine = selectedTextWaypoint
+        ? `MC text waypoint / ${semanticRoleText(selectedTextWaypoint.semantic_role || selectedTextWaypoint.role)}`
+        : `${selectedAnchor.scenario_id} / ${selectedAnchor.endpoint_affordance}`;
       anchorMeta.innerHTML = `
-        <div><span>selected</span><strong>${escapeHtml(compactPromptId(selectedAnchor.prompt_id))} · ${escapeHtml(selectedAnchor.name)}</strong></div>
+        <div><span>selected</span><strong>${escapeHtml(selectedName)}</strong></div>
         <div><span>Google target</span><strong>${googleTarget.lat.toFixed(7)}, ${googleTarget.lon.toFixed(7)}</strong></div>
         <div><span>active Minecraft</span><strong>${escapeHtml(coordinateDisplay(coordinate))}</strong></div>
-        <div><span>semantic</span><strong>${escapeHtml(selectedAnchor.scenario_id)} / ${escapeHtml(selectedAnchor.endpoint_affordance)}</strong></div>
-        <div class="wide-meta"><span>landmark-matched MC text</span><strong id="anchorTextSummary">Loading MC text labels...</strong></div>
+        <div><span>semantic</span><strong>${escapeHtml(semanticLine)}</strong></div>
+        <div class="wide-meta"><span>MC text evidence</span><strong id="anchorTextSummary">Loading MC text labels...</strong></div>
       `;
       promptDetail.innerHTML = `
-        <strong>${escapeHtml(compactPromptId(selectedAnchor.prompt_id))} · ${escapeHtml(selectedAnchor.name)}</strong>
+        <strong>${escapeHtml(selectedName)}</strong>
         active MC: ${escapeHtml(coordinateDisplay(coordinate))}<br>
-        registered MC: ${selectedAnchor.mc_x}, ${selectedAnchor.mc_y}, ${selectedAnchor.mc_z}<br>
+        ${selectedTextWaypoint ? `candidate OSM anchors: ${escapeHtml(candidateIds || compactPromptId(selectedAnchor.prompt_id))}<br>` : ""}
+        registered MC anchor: ${selectedAnchor.mc_x}, ${selectedAnchor.mc_y}, ${selectedAnchor.mc_z}<br>
         coordinate mode: ${escapeHtml(coordinateNote)}<br>
         Google target: ${googleTarget.lat.toFixed(7)}, ${googleTarget.lon.toFixed(7)} (${escapeHtml(googleTarget.mode)})<br>
-        scenario: ${escapeHtml(selectedAnchor.scenario_id)} / ${escapeHtml(selectedAnchor.endpoint_affordance)}
+        scenario: ${escapeHtml(semanticLine)}
       `;
       renderNearbyText(selectedAnchor);
     }
 
     function selectAnchor(anchor, options = {}) {
       selectedAnchor = anchor;
+      selectedTextWaypoint = options.textWaypoint || null;
       writeCoordinateInputs(options.coordinateOverride || anchorCoordinate(anchor));
       renderSelectedState();
       if (options.syncMinecraft) teleportCurrentSelection({ targetLabel: options.targetLabel });
@@ -1063,8 +1119,10 @@
         mcTextLabels = payload;
         mcTextMatchesByPrompt = new Map();
         mcTextMatchesByLabel = new Map();
-        mcSemanticMatchesByPrompt = new Map();
-        mcSemanticMatchesByLabel = new Map();
+        mcTextWaypoints = [];
+        mcTextWaypointById = new Map();
+        mcTextWaypointsByPrompt = new Map();
+        mcTextWaypointsByLabel = new Map();
         mcLabelsById = new Map((payload.labels || []).map((label) => [label.label_id, label]));
         const addMapValue = (map, key, value) => {
           if (!key) return;
@@ -1078,33 +1136,43 @@
         (payload.semantic_anchor_links || []).forEach((link) => {
           const label = mcLabelsById.get(link.label_id) || {};
           const promptIds = link.prompt_ids || (link.prompt_id ? [link.prompt_id] : []);
+          const primaryPromptId = link.primary_prompt_id || promptIds[0] || "";
+          const primaryAnchor = anchorsByPrompt.get(primaryPromptId);
+          const waypoint = {
+            ...label,
+            ...link,
+            prompt_id: primaryPromptId,
+            label_id: link.label_id || label.label_id,
+            text: link.text || label.text || "",
+            label_text: link.text || label.text || "",
+            text_category: link.text_category || label.text_category || "text",
+            label_category: link.text_category || label.text_category || "text",
+            label_x: link.label_x ?? label.x,
+            label_y: link.label_y ?? label.y,
+            label_z: link.label_z ?? label.z,
+            label_facing: link.label_facing || label.facing,
+            anchor_name: primaryAnchor ? primaryAnchor.name : "",
+            semantic_role: link.role,
+            semantic_reason: link.reason,
+            semantic_screenshot_path: link.screenshot_path || link.image,
+            screenshot_path: link.screenshot_path || link.image,
+            candidate_prompt_ids: promptIds,
+            match_kind: "mc_text_waypoint",
+            match_status: "mc_text_waypoint",
+          };
+          mcTextWaypoints.push(waypoint);
+          mcTextWaypointById.set(waypoint.label_id, waypoint);
           promptIds.forEach((promptId) => {
             const radiusMatch = (mcTextMatchesByPrompt.get(promptId) || []).find((match) => match.label_id === link.label_id) || {};
             const anchor = anchorsByPrompt.get(promptId);
             const match = {
-              ...label,
               ...radiusMatch,
-              ...link,
+              ...waypoint,
               prompt_id: promptId,
-              label_id: link.label_id || label.label_id,
-              text: link.text || label.text || radiusMatch.label_text || "",
-              label_text: link.text || label.text || radiusMatch.label_text || "",
-              text_category: link.text_category || label.text_category || radiusMatch.label_category || "text",
-              label_category: link.text_category || label.text_category || radiusMatch.label_category || "text",
-              label_x: link.label_x ?? label.x ?? radiusMatch.label_x,
-              label_y: link.label_y ?? label.y ?? radiusMatch.label_y,
-              label_z: link.label_z ?? label.z ?? radiusMatch.label_z,
-              label_facing: link.label_facing || label.facing || radiusMatch.label_facing,
               anchor_name: link.anchor_name || (anchor ? anchor.name : radiusMatch.anchor_name || ""),
-              semantic_role: link.role,
-              semantic_reason: link.reason,
-              semantic_screenshot_path: link.screenshot_path || link.image,
-              screenshot_path: link.screenshot_path || link.image,
-              match_kind: "semantic_landmark",
-              match_status: "semantic_landmark_match",
             };
-            addMapValue(mcSemanticMatchesByPrompt, promptId, match);
-            addMapValue(mcSemanticMatchesByLabel, match.label_id, match);
+            addMapValue(mcTextWaypointsByPrompt, promptId, match);
+            addMapValue(mcTextWaypointsByLabel, match.label_id, match);
           });
         });
         if (reviewAnchors.length) renderAnchorOptions();
@@ -1129,7 +1197,25 @@
         mcToGeoModel = fitMcToGeoModel(anchors);
         renderAnchorOptions();
         if (mcTextLabels) renderAllTextLabels(mcTextLabels);
-        anchorSelect.addEventListener("change", () => selectAnchor(anchorsByPrompt.get(anchorSelect.value), { syncMinecraft: true }));
+        anchorSelect.addEventListener("change", () => {
+          const value = anchorSelect.value;
+          if (value.startsWith("text:")) {
+            const labelId = value.slice(5);
+            const waypoint = mcTextWaypointById.get(labelId);
+            const anchor = waypoint ? anchorsByPrompt.get(waypoint.primary_prompt_id || waypoint.prompt_id) : null;
+            const coordinate = waypoint ? waypointCoordinate(waypoint) : null;
+            if (anchor && coordinate) {
+              selectAnchor(anchor, {
+                coordinateOverride: coordinate,
+                textWaypoint: waypoint,
+                syncMinecraft: true,
+                targetLabel: waypoint.label_id,
+              });
+            }
+            return;
+          }
+          selectAnchor(anchorsByPrompt.get(value), { syncMinecraft: true });
+        });
         teleportButton.addEventListener("click", () => {
           teleportCurrentSelection();
         });
@@ -1152,9 +1238,27 @@
       });
 
     function handleTextActionClick(event) {
+      const waypointButton = event.target && event.target.closest ? event.target.closest(".text-waypoint-jump") : null;
+      if (waypointButton) {
+        const waypoint = mcTextWaypointById.get(waypointButton.dataset.labelId);
+        const anchor = waypoint ? anchorsByPrompt.get(waypoint.primary_prompt_id || waypoint.prompt_id) : null;
+        const coordinate = waypoint ? waypointCoordinate(waypoint) : null;
+        if (!anchor || !coordinate) return;
+        anchorSelect.value = `text:${waypoint.label_id}`;
+        selectAnchor(anchor, {
+          coordinateOverride: coordinate,
+          textWaypoint: waypoint,
+          syncMinecraft: true,
+          targetLabel: waypoint.label_id,
+        });
+        return;
+      }
       const signButton = event.target && event.target.closest ? event.target.closest(".sign-jump") : null;
       if (signButton) {
-        const anchor = anchorsByPrompt.get(signButton.dataset.promptId);
+        const waypoint = mcTextWaypointById.get(signButton.dataset.labelId);
+        const anchor = waypoint
+          ? anchorsByPrompt.get(waypoint.primary_prompt_id || waypoint.prompt_id)
+          : anchorsByPrompt.get(signButton.dataset.promptId);
         if (!anchor) return;
         const coordinateOverride = {
           x: Number(signButton.dataset.x),
@@ -1163,8 +1267,8 @@
           yaw: Number(signButton.dataset.yaw),
           pitch: Number(signButton.dataset.pitch),
         };
-        anchorSelect.value = anchor.prompt_id;
-        selectAnchor(anchor, { coordinateOverride });
+        anchorSelect.value = waypoint ? `text:${waypoint.label_id}` : anchor.prompt_id;
+        selectAnchor(anchor, { coordinateOverride, textWaypoint: waypoint || null });
         teleportCurrentSelection({ targetLabel: signButton.dataset.labelId || "sign" });
         return;
       }

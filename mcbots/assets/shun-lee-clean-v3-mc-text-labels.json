@@ -21,7 +21,8 @@
     "semantic_link_count": 5,
     "semantic_label_count": 4,
     "semantic_anchor_count": 5,
-    "semantic_link_policy": "semantic landmark links are identity evidence; radius anchor_matches remain proximity-only and do not assert landmark identity"
+    "semantic_link_policy": "MC text label/sign coordinates are the active landmark waypoint; prompt_ids are candidate OSM reference anchors only and do not imply the sign is visible at the OSM anchor coordinate",
+    "mc_text_waypoint_count": 4
   },
   "labels": [
     {
@@ -113,7 +114,7 @@
         "shun-lee-clean-osm-prompt-v1-022"
       ],
       "semantic_role": "bus_stop_or_shelter",
-      "semantic_reason": "sign text says BUS STATION; linked only to bus_stop_or_shelter anchors, not nearby road anchors",
+      "semantic_reason": "sign text says BUS STATION; the active landmark point is this MC sign coordinate, with #023/#022 kept only as candidate OSM bus-stop references",
       "semantic_screenshot_path": "assets/mc-text-shots/shun-lee-clean-v3-mc-text-v1-006.png",
       "semantic_coordinate_override": {
         "x": -163,
@@ -4333,7 +4334,7 @@
       ],
       "primary_prompt_id": "shun-lee-clean-osm-prompt-v1-023",
       "role": "bus_stop_or_shelter",
-      "reason": "sign text says BUS STATION; linked only to bus_stop_or_shelter anchors, not nearby road anchors",
+      "reason": "sign text says BUS STATION; the active landmark point is this MC sign coordinate, with #023/#022 kept only as candidate OSM bus-stop references",
       "screenshot_path": "assets/mc-text-shots/shun-lee-clean-v3-mc-text-v1-006.png",
       "coordinate_override": {
         "x": -163,
@@ -4347,7 +4348,8 @@
       "label_x": -165,
       "label_y": -1,
       "label_z": -697,
-      "label_facing": "east"
+      "label_facing": "east",
+      "waypoint_policy": "active point is the MC sign coordinate/coordinate_override; prompt_ids are candidate OSM references"
     },
     {
       "label_id": "shun-lee-clean-v3-mc-text-v1-026",
@@ -4370,7 +4372,8 @@
       "label_x": -112,
       "label_y": 0,
       "label_z": -635,
-      "label_facing": "west"
+      "label_facing": "west",
+      "waypoint_policy": "active point is the MC sign coordinate/coordinate_override; prompt_ids are candidate OSM references"
     },
     {
       "label_id": "shun-lee-clean-v3-mc-text-v1-031",
@@ -4393,7 +4396,8 @@
       "label_x": -48,
       "label_y": -1,
       "label_z": -612,
-      "label_facing": "north"
+      "label_facing": "north",
+      "waypoint_policy": "active point is the MC sign coordinate/coordinate_override; prompt_ids are candidate OSM references"
     },
     {
       "label_id": "shun-lee-clean-v3-mc-text-v1-014",
@@ -4416,7 +4420,8 @@
       "label_x": -138,
       "label_y": 3,
       "label_z": -607,
-      "label_facing": "north"
+      "label_facing": "north",
+      "waypoint_policy": "active point is the MC sign coordinate/coordinate_override; prompt_ids are candidate OSM references"
     }
   ]
 }

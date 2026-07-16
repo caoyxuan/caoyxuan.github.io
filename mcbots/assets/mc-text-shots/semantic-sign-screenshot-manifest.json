@@ -7,7 +7,7 @@
     ],
     "primary_prompt_id": "shun-lee-clean-osm-prompt-v1-023",
     "role": "bus_stop_or_shelter",
-    "reason": "sign text says BUS STATION; linked only to bus_stop_or_shelter anchors, not nearby road anchors",
+    "reason": "sign text says BUS STATION; the active landmark point is this MC sign coordinate, with #023/#022 kept only as candidate OSM bus-stop references",
     "screenshot_path": "assets/mc-text-shots/shun-lee-clean-v3-mc-text-v1-006.png",
     "coordinate_override": {
       "x": -163,
@@ -16,7 +16,8 @@
       "yaw": 90,
       "pitch": 10
     },
-    "text": "FLAG / BUS STATION"
+    "text": "FLAG / BUS STATION",
+    "waypoint_policy": "active point is the MC sign coordinate/coordinate_override; prompt_ids are candidate OSM references"
   },
   {
     "label_id": "shun-lee-clean-v3-mc-text-v1-026",
@@ -34,7 +35,8 @@
       "yaw": -90,
       "pitch": 10
     },
-    "text": "HK / Shun Lee / Fire Station"
+    "text": "HK / Shun Lee / Fire Station",
+    "waypoint_policy": "active point is the MC sign coordinate/coordinate_override; prompt_ids are candidate OSM references"
   },
   {
     "label_id": "shun-lee-clean-v3-mc-text-v1-031",
@@ -52,7 +54,8 @@
       "yaw": 0,
       "pitch": 10
     },
-    "text": "Saint Too / Canaan / College / ???"
+    "text": "Saint Too / Canaan / College / ???",
+    "waypoint_policy": "active point is the MC sign coordinate/coordinate_override; prompt_ids are candidate OSM references"
   },
   {
     "label_id": "shun-lee-clean-v3-mc-text-v1-014",
@@ -70,6 +73,7 @@
       "yaw": 0,
       "pitch": 10
     },
-    "text": "United"
+    "text": "United",
+    "waypoint_policy": "active point is the MC sign coordinate/coordinate_override; prompt_ids are candidate OSM references"
   }
 ]
