@@ -316,9 +316,52 @@
       min-height: 560px;
       background: #101923;
     }
-    .control-frame iframe {
-      height: calc(100vh - 435px);
-      min-height: 440px;
+    .synced-control .control-body {
+      display: grid;
+      gap: .75rem;
+      padding: .8rem;
+    }
+    .prompt-card {
+      padding: .6rem .65rem;
+      border: 1px solid #28394b;
+      border-radius: 8px;
+      background: #111d29;
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.35;
+    }
+    .prompt-card strong {
+      display: block;
+      color: var(--ink);
+      font-size: .9rem;
+      overflow-wrap: anywhere;
+    }
+    .coord-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: .45rem;
+    }
+    .coord-grid label {
+      display: grid;
+      gap: .22rem;
+      color: var(--muted);
+      font-size: .72rem;
+    }
+    .coord-grid input {
+      min-width: 0;
+      min-height: 34px;
+      border: 1px solid #3f5368;
+      border-radius: 8px;
+      background: #0d1722;
+      color: var(--ink);
+      font: inherit;
+      padding: .35rem .45rem;
+    }
+    .control-actions {
+      align-items: stretch;
+    }
+    .control-actions button {
+      flex: 1 1 150px;
     }
     footer {
       width: min(1800px, calc(100% - 28px));
@@ -340,7 +383,7 @@
       .reference-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       main { grid-template-columns: 1fr; }
       iframe { height: 72vh; }
-      .control-frame iframe { height: 70vh; }
+      .coord-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
     @media (max-width: 720px) {
       main, header, footer, .review-toolbar { width: min(100% - 18px, 1800px); }
@@ -350,6 +393,7 @@
       .reference-meta { grid-template-columns: 1fr; }
       .reference-meta .wide-meta { grid-column: auto; }
       .reference-frame iframe { height: 72vh; min-height: 560px; }
+      .coord-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
 </head>
@@ -357,11 +401,10 @@
   <header>
     <div>
       <h1>Shun Lee clean-v3 dynamic review</h1>
-      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 65 个 clean-v3 OSM/Minecraft teleport 控制页；当前 Minecraft player 是 <code>ShunLeeV3</code>。</p>
+      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 Google Street View、MC text labels、以及同一个 selected anchor 驱动的同步 teleport/坐标控制；当前 Minecraft player 是 <code>ShunLeeV3</code>。</p>
     </div>
     <nav class="actions" aria-label="direct links">
       <a class="button primary" href="https://directories-res-firefox-village.trycloudflare.com/vnc.html?autoconnect=1&amp;resize=scale" target="_blank" rel="noopener">单独打开 VNC</a>
-      <a class="button" href="https://jerusalem-nurse-seventh-items.trycloudflare.com/eval/results/natural-scene-route-review/shun-lee-clean-osm-prompt-packet-control-latest.html" target="_blank" rel="noopener">单独打开控制页</a>
       <a class="button warn" href="https://jerusalem-nurse-seventh-items.trycloudflare.com/api/health" target="_blank" rel="noopener">检查 API health</a>
     </nav>
   </header>
@@ -451,17 +494,26 @@
         </div>
       </section>
 
-      <section class="panel control-frame">
+      <section class="panel synced-control">
         <div class="panel-head">
-          <h2>Teleport / prompt control · 65 anchors</h2>
-          <span class="badge"><span class="dot"></span>RCON-backed API</span>
+          <h2>Synced teleport / prompt control</h2>
+          <span class="badge"><span class="dot"></span>same selected anchor</span>
         </div>
-        <iframe
-          title="Shun Lee clean-v3 teleport control"
-          src="https://jerusalem-nurse-seventh-items.trycloudflare.com/eval/results/natural-scene-route-review/shun-lee-clean-osm-prompt-packet-control-latest.html"
-          allow="clipboard-read; clipboard-write"
-          referrerpolicy="no-referrer">
-        </iframe>
+        <div class="control-body">
+          <div class="prompt-card" id="promptDetail">Loading selected anchor...</div>
+          <div class="coord-grid" aria-label="Minecraft coordinate editor">
+            <label>X <input id="mcXInput" type="number" step="1" inputmode="numeric"></label>
+            <label>Y <input id="mcYInput" type="number" step="1" inputmode="numeric"></label>
+            <label>Z <input id="mcZInput" type="number" step="1" inputmode="numeric"></label>
+            <label>Yaw <input id="mcYawInput" type="number" step="1" placeholder="auto"></label>
+            <label>Pitch <input id="mcPitchInput" type="number" step="1" placeholder="auto"></label>
+          </div>
+          <div class="reference-actions control-actions">
+            <button type="button" id="teleportEditedButton">Teleport current coords</button>
+            <button type="button" id="resetCoordsButton">Reset to anchor coords</button>
+          </div>
+          <p class="note">This replaces the separate summary control page. The dropdown, Google view, VNC teleport, coordinate edits, and sign teleport actions all use the same selected anchor state.</p>
+        </div>
       </section>
     </aside>
   </main>
@@ -478,6 +530,14 @@
     const osmLink = document.getElementById("osmLink");
     const syncStatus = document.getElementById("syncStatus");
     const teleportButton = document.getElementById("teleportButton");
+    const teleportEditedButton = document.getElementById("teleportEditedButton");
+    const resetCoordsButton = document.getElementById("resetCoordsButton");
+    const promptDetail = document.getElementById("promptDetail");
+    const mcXInput = document.getElementById("mcXInput");
+    const mcYInput = document.getElementById("mcYInput");
+    const mcZInput = document.getElementById("mcZInput");
+    const mcYawInput = document.getElementById("mcYawInput");
+    const mcPitchInput = document.getElementById("mcPitchInput");
     const textLabelCount = document.getElementById("textLabelCount");
     const nearbyTextList = document.getElementById("nearbyTextList");
     const allTextLabels = document.getElementById("allTextLabels");
@@ -555,6 +615,55 @@
 
     function mcPositionText(item) {
       return `${item.x ?? item.label_x}, ${item.y ?? item.label_y}, ${item.z ?? item.label_z}`;
+    }
+
+    function anchorCoordinate(anchor) {
+      return { x: anchor.mc_x, y: anchor.mc_y, z: anchor.mc_z, yaw: "", pitch: "" };
+    }
+
+    function writeCoordinateInputs(coordinate) {
+      mcXInput.value = coordinate.x;
+      mcYInput.value = coordinate.y;
+      mcZInput.value = coordinate.z;
+      mcYawInput.value = coordinate.yaw ?? "";
+      mcPitchInput.value = coordinate.pitch ?? "";
+    }
+
+    function readCoordinateInputs() {
+      if (!String(mcXInput.value).trim() || !String(mcYInput.value).trim() || !String(mcZInput.value).trim()) {
+        throw new Error("MC X/Y/Z cannot be empty");
+      }
+      const values = {
+        x: Number(mcXInput.value),
+        y: Number(mcYInput.value),
+        z: Number(mcZInput.value),
+      };
+      if (!Number.isFinite(values.x) || !Number.isFinite(values.y) || !Number.isFinite(values.z)) {
+        throw new Error("MC X/Y/Z must be numeric");
+      }
+      const yawRaw = String(mcYawInput.value).trim();
+      const pitchRaw = String(mcPitchInput.value).trim();
+      if (yawRaw || pitchRaw) {
+        values.yaw = yawRaw ? Number(yawRaw) : 0;
+        values.pitch = pitchRaw ? Number(pitchRaw) : 0;
+        if (!Number.isFinite(values.yaw) || !Number.isFinite(values.pitch)) {
+          throw new Error("MC yaw/pitch must be numeric");
+        }
+      }
+      return values;
+    }
+
+    function coordinateMatchesAnchor(anchor, coordinate) {
+      return Number(coordinate.x) === Number(anchor.mc_x)
+        && Number(coordinate.y) === Number(anchor.mc_y)
+        && Number(coordinate.z) === Number(anchor.mc_z)
+        && coordinate.yaw == null
+        && coordinate.pitch == null;
+    }
+
+    function coordinateDisplay(coordinate) {
+      const rotation = coordinate.yaw == null ? "" : ` · yaw ${coordinate.yaw}, pitch ${coordinate.pitch ?? 0}`;
+      return `${coordinate.x}, ${coordinate.y}, ${coordinate.z}${rotation}`;
     }
 
     function signCoordinate(item) {
@@ -702,6 +811,24 @@
       }
     }
 
+    function currentCoordinateOverride() {
+      if (!selectedAnchor) return null;
+      const coordinate = readCoordinateInputs();
+      return coordinateMatchesAnchor(selectedAnchor, coordinate) ? null : coordinate;
+    }
+
+    async function teleportCurrentSelection(options = {}) {
+      if (!selectedAnchor) return;
+      try {
+        await teleportMinecraft(selectedAnchor, {
+          coordinateOverride: currentCoordinateOverride(),
+          targetLabel: options.targetLabel,
+        });
+      } catch (error) {
+        setSyncStatus(error.message);
+      }
+    }
+
     async function teleportMinecraft(anchor, options = {}) {
       const target = options.targetLabel ? `sign ${options.targetLabel}` : compactPromptId(anchor.prompt_id);
       setSyncStatus(`Teleporting ${target}...`);
@@ -737,21 +864,43 @@
       }
     }
 
+    function renderSelectedState() {
+      if (!selectedAnchor) return;
+      let coordinate;
+      let coordinateNote = "registered anchor coords";
+      try {
+        coordinate = readCoordinateInputs();
+        if (!coordinateMatchesAnchor(selectedAnchor, coordinate)) coordinateNote = "edited coordinate override";
+      } catch (error) {
+        coordinate = anchorCoordinate(selectedAnchor);
+        coordinateNote = `invalid coordinate input: ${error.message}`;
+      }
+      anchorMeta.innerHTML = `
+        <div><span>selected</span><strong>${escapeHtml(compactPromptId(selectedAnchor.prompt_id))} · ${escapeHtml(selectedAnchor.name)}</strong></div>
+        <div><span>real-world</span><strong>${selectedAnchor.lat.toFixed(7)}, ${selectedAnchor.lon.toFixed(7)}</strong></div>
+        <div><span>active Minecraft</span><strong>${escapeHtml(coordinateDisplay(coordinate))}</strong></div>
+        <div><span>semantic</span><strong>${escapeHtml(selectedAnchor.scenario_id)} / ${escapeHtml(selectedAnchor.endpoint_affordance)}</strong></div>
+        <div class="wide-meta"><span>radius-matched MC text</span><strong id="anchorTextSummary">Loading MC text labels...</strong></div>
+      `;
+      promptDetail.innerHTML = `
+        <strong>${escapeHtml(compactPromptId(selectedAnchor.prompt_id))} · ${escapeHtml(selectedAnchor.name)}</strong>
+        active MC: ${escapeHtml(coordinateDisplay(coordinate))}<br>
+        registered MC: ${selectedAnchor.mc_x}, ${selectedAnchor.mc_y}, ${selectedAnchor.mc_z}<br>
+        coordinate mode: ${escapeHtml(coordinateNote)}<br>
+        scenario: ${escapeHtml(selectedAnchor.scenario_id)} / ${escapeHtml(selectedAnchor.endpoint_affordance)}
+      `;
+      renderNearbyText(selectedAnchor);
+    }
+
     function selectAnchor(anchor, options = {}) {
       selectedAnchor = anchor;
       streetViewFrame.src = googleStreetViewEmbedUrl(anchor);
       streetViewLink.href = googleStreetViewUrl(anchor);
       googleMapLink.href = googleMapUrl(anchor);
       osmLink.href = osmUrl(anchor);
-      anchorMeta.innerHTML = `
-        <div><span>selected</span><strong>${escapeHtml(compactPromptId(anchor.prompt_id))} · ${escapeHtml(anchor.name)}</strong></div>
-        <div><span>coordinates</span><strong>${anchor.lat.toFixed(7)}, ${anchor.lon.toFixed(7)}</strong></div>
-        <div><span>Minecraft</span><strong>${anchor.mc_x}, ${anchor.mc_y}, ${anchor.mc_z}</strong></div>
-        <div><span>semantic</span><strong>${escapeHtml(anchor.scenario_id)} / ${escapeHtml(anchor.endpoint_affordance)}</strong></div>
-        <div class="wide-meta"><span>radius-matched MC text</span><strong id="anchorTextSummary">Loading MC text labels...</strong></div>
-      `;
-      renderNearbyText(anchor);
-      if (options.syncMinecraft) teleportMinecraft(anchor);
+      writeCoordinateInputs(options.coordinateOverride || anchorCoordinate(anchor));
+      renderSelectedState();
+      if (options.syncMinecraft) teleportCurrentSelection({ targetLabel: options.targetLabel });
     }
 
     fetch("assets/shun-lee-clean-v3-mc-text-labels.json", { cache: "no-store" })
@@ -792,7 +941,18 @@
         if (mcTextLabels) renderAllTextLabels(mcTextLabels);
         anchorSelect.addEventListener("change", () => selectAnchor(anchorsByPrompt.get(anchorSelect.value), { syncMinecraft: true }));
         teleportButton.addEventListener("click", () => {
-          if (selectedAnchor) teleportMinecraft(selectedAnchor);
+          teleportCurrentSelection();
+        });
+        teleportEditedButton.addEventListener("click", () => {
+          teleportCurrentSelection({ targetLabel: "current coords" });
+        });
+        resetCoordsButton.addEventListener("click", () => {
+          if (!selectedAnchor) return;
+          writeCoordinateInputs(anchorCoordinate(selectedAnchor));
+          renderSelectedState();
+        });
+        [mcXInput, mcYInput, mcZInput, mcYawInput, mcPitchInput].forEach((input) => {
+          input.addEventListener("input", renderSelectedState);
         });
         if (anchors.length) selectAnchor(anchors[0]);
       })
@@ -814,11 +974,8 @@
           pitch: Number(signButton.dataset.pitch),
         };
         anchorSelect.value = anchor.prompt_id;
-        selectAnchor(anchor);
-        teleportMinecraft(anchor, {
-          coordinateOverride,
-          targetLabel: signButton.dataset.labelId || "sign",
-        });
+        selectAnchor(anchor, { coordinateOverride });
+        teleportCurrentSelection({ targetLabel: signButton.dataset.labelId || "sign" });
         return;
       }
       const button = event.target && event.target.closest ? event.target.closest(".entry-jump") : null;
