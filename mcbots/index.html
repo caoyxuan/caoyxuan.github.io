@@ -232,6 +232,56 @@
       font-weight: 600;
       overflow-wrap: anywhere;
     }
+    .reference-meta .wide-meta {
+      grid-column: 1 / -1;
+    }
+    .text-evidence {
+      display: grid;
+      gap: .75rem;
+      padding: .75rem .8rem;
+    }
+    .text-evidence h3 {
+      margin: 0 0 .45rem;
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 600;
+    }
+    .text-list {
+      display: grid;
+      gap: .45rem;
+      max-height: 250px;
+      overflow: auto;
+    }
+    .text-item {
+      min-width: 0;
+      padding: .5rem .55rem;
+      border: 1px solid #28394b;
+      border-radius: 8px;
+      background: #111d29;
+    }
+    .text-item strong {
+      display: block;
+      color: var(--ink);
+      font-size: .84rem;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+    .text-item small {
+      display: block;
+      margin-top: .22rem;
+      color: var(--muted);
+      font-size: .74rem;
+      line-height: 1.25;
+    }
+    .text-category {
+      display: inline-flex;
+      margin-right: .35rem;
+      color: var(--cyan);
+    }
+    .text-empty {
+      color: var(--muted);
+      font-size: .82rem;
+    }
     .reference-frame iframe {
       height: calc(100vh - 224px);
       min-height: 560px;
@@ -269,6 +319,7 @@
       .facts { grid-template-columns: 1fr 1fr; }
       iframe { min-height: 560px; }
       .reference-meta { grid-template-columns: 1fr; }
+      .reference-meta .wide-meta { grid-column: auto; }
       .reference-frame iframe { height: 72vh; min-height: 560px; }
     }
   </style>
@@ -349,6 +400,27 @@
         </div>
       </section>
 
+      <section class="panel text-label-panel">
+        <div class="panel-head">
+          <h2>MC text labels · sign scan</h2>
+          <span class="badge" id="textLabelCount"><span class="dot"></span>Loading</span>
+        </div>
+        <div class="text-evidence">
+          <section>
+            <h3>Selected anchor nearby text</h3>
+            <div class="text-list" id="nearbyTextList">
+              <div class="text-empty">Loading MC text labels...</div>
+            </div>
+          </section>
+          <section>
+            <h3>All sign text labels</h3>
+            <div class="text-list" id="allTextLabels">
+              <div class="text-empty">Loading scanned labels...</div>
+            </div>
+          </section>
+        </div>
+      </section>
+
       <section class="panel control-frame">
         <div class="panel-head">
           <h2>Teleport / prompt control · 65 anchors</h2>
@@ -376,8 +448,14 @@
     const osmLink = document.getElementById("osmLink");
     const syncStatus = document.getElementById("syncStatus");
     const teleportButton = document.getElementById("teleportButton");
+    const textLabelCount = document.getElementById("textLabelCount");
+    const nearbyTextList = document.getElementById("nearbyTextList");
+    const allTextLabels = document.getElementById("allTextLabels");
     const CONTROL_API_BASE = "https://jerusalem-nurse-seventh-items.trycloudflare.com";
+    const USEFUL_TEXT_CATEGORIES = new Set(["building_or_institution", "park_or_transport"]);
     let selectedAnchor = null;
+    let mcTextLabels = null;
+    let mcTextMatchesByPrompt = new Map();
 
     function googleStreetViewEmbedUrl(anchor) {
       const url = new URL("https://maps.google.com/maps");
@@ -428,6 +506,67 @@
       syncStatus.innerHTML = `<span class="dot"></span>${escapeHtml(message)}`;
     }
 
+    function categoryText(category) {
+      return String(category || "text").replaceAll("_", " ");
+    }
+
+    function mcPositionText(item) {
+      return `${item.x ?? item.label_x}, ${item.y ?? item.label_y}, ${item.z ?? item.label_z}`;
+    }
+
+    function matchDistanceText(match) {
+      const distance = Number(match.horizontal_distance_blocks);
+      return Number.isFinite(distance) ? `${distance.toFixed(1)} blocks` : "";
+    }
+
+    function textItemHtml(item, options = {}) {
+      const text = item.text || item.label_text || "";
+      const category = item.text_category || item.label_category || "text";
+      const distance = options.match ? ` · ${matchDistanceText(item)}` : "";
+      const status = item.match_status === "useful_label_near_anchor" ? "near useful text" : "near text";
+      return `
+        <div class="text-item">
+          <strong>${escapeHtml(text)}</strong>
+          <small><span class="text-category">${escapeHtml(categoryText(category))}</span>MC ${escapeHtml(mcPositionText(item))}${distance}${options.match ? ` · ${escapeHtml(status)}` : ""}</small>
+        </div>
+      `;
+    }
+
+    function renderNearbyText(anchor) {
+      const summary = document.getElementById("anchorTextSummary");
+      if (!mcTextLabels) {
+        if (summary) summary.textContent = "Loading MC text labels...";
+        nearbyTextList.innerHTML = '<div class="text-empty">Loading MC text labels...</div>';
+        return;
+      }
+      const matches = (mcTextMatchesByPrompt.get(anchor.prompt_id) || []).slice().sort((left, right) => {
+        const leftUseful = left.match_status === "useful_label_near_anchor" ? 0 : 1;
+        const rightUseful = right.match_status === "useful_label_near_anchor" ? 0 : 1;
+        return leftUseful - rightUseful || Number(left.horizontal_distance_blocks) - Number(right.horizontal_distance_blocks);
+      });
+      if (!matches.length) {
+        if (summary) summary.textContent = "No sign text within 80 blocks";
+        nearbyTextList.innerHTML = '<div class="text-empty">No sign text within 80 blocks for this anchor.</div>';
+        return;
+      }
+      const useful = matches.filter((match) => USEFUL_TEXT_CATEGORIES.has(match.label_category));
+      const top = (useful.length ? useful : matches).slice(0, 5);
+      if (summary) {
+        summary.textContent = top.slice(0, 3).map((match) => `${match.label_text} (${matchDistanceText(match)})`).join(" · ");
+      }
+      nearbyTextList.innerHTML = top.map((match) => textItemHtml(match, { match: true })).join("");
+    }
+
+    function renderAllTextLabels(payload) {
+      const labels = payload.labels || [];
+      const summary = payload.summary || {};
+      textLabelCount.innerHTML = `<span class="dot"></span>${labels.length} signs`;
+      allTextLabels.innerHTML = labels.map((label) => textItemHtml(label)).join("") || '<div class="text-empty">No MC sign text found.</div>';
+      if (summary.anchors_with_useful_nearby_text != null) {
+        textLabelCount.title = `${summary.anchors_with_useful_nearby_text} anchors have nearby useful text`;
+      }
+    }
+
     async function teleportMinecraft(anchor) {
       setSyncStatus(`Teleporting ${compactPromptId(anchor.prompt_id)}...`);
       teleportButton.disabled = true;
@@ -471,9 +610,32 @@
         <div><span>coordinates</span><strong>${anchor.lat.toFixed(7)}, ${anchor.lon.toFixed(7)}</strong></div>
         <div><span>Minecraft</span><strong>${anchor.mc_x}, ${anchor.mc_y}, ${anchor.mc_z}</strong></div>
         <div><span>semantic</span><strong>${escapeHtml(anchor.scenario_id)} / ${escapeHtml(anchor.endpoint_affordance)}</strong></div>
+        <div class="wide-meta"><span>nearby MC text</span><strong id="anchorTextSummary">Loading MC text labels...</strong></div>
       `;
+      renderNearbyText(anchor);
       if (options.syncMinecraft) teleportMinecraft(anchor);
     }
+
+    fetch("assets/shun-lee-clean-v3-mc-text-labels.json", { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then((payload) => {
+        mcTextLabels = payload;
+        mcTextMatchesByPrompt = new Map();
+        (payload.anchor_matches || []).forEach((match) => {
+          if (!mcTextMatchesByPrompt.has(match.prompt_id)) mcTextMatchesByPrompt.set(match.prompt_id, []);
+          mcTextMatchesByPrompt.get(match.prompt_id).push(match);
+        });
+        renderAllTextLabels(payload);
+        if (selectedAnchor) renderNearbyText(selectedAnchor);
+      })
+      .catch((error) => {
+        textLabelCount.innerHTML = '<span class="dot"></span>Text failed';
+        allTextLabels.innerHTML = `<div class="text-empty">${escapeHtml(error.message)}</div>`;
+        nearbyTextList.innerHTML = `<div class="text-empty">${escapeHtml(error.message)}</div>`;
+      });
 
     fetch("assets/shun-lee-clean-v3-google-anchors.json", { cache: "no-store" })
       .then((response) => {
