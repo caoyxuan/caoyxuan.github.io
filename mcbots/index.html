@@ -290,7 +290,7 @@
     .text-entry-links span {
       flex-basis: 100%;
     }
-    .entry-jump {
+    .entry-jump, .sign-jump {
       min-height: 0;
       padding: .22rem .34rem;
       border-radius: 6px;
@@ -301,8 +301,11 @@
       line-height: 1.15;
       cursor: pointer;
     }
-    .entry-jump:hover {
+    .entry-jump:hover, .sign-jump:hover {
       border-color: var(--cyan);
+    }
+    .sign-jump {
+      color: var(--cyan);
     }
     .text-empty {
       color: var(--muted);
@@ -432,8 +435,9 @@
           <span class="badge" id="textLabelCount"><span class="dot"></span>Loading</span>
         </div>
         <div class="text-evidence">
+          <p class="note">These are exact sign-block coordinates. The entry links below are radius matches, so a sign may not be visible from the OSM anchor point; use <code>tp exact sign</code> to inspect the text itself.</p>
           <section>
-            <h3>Selected anchor matched MC text</h3>
+            <h3>Selected anchor radius-matched MC text</h3>
             <div class="text-list" id="nearbyTextList">
               <div class="text-empty">Loading MC text labels...</div>
             </div>
@@ -479,6 +483,12 @@
     const allTextLabels = document.getElementById("allTextLabels");
     const CONTROL_API_BASE = "https://jerusalem-nurse-seventh-items.trycloudflare.com";
     const USEFUL_TEXT_CATEGORIES = new Set(["building_or_institution", "park_or_transport"]);
+    const SIGN_VIEWPOINT_BY_FACING = {
+      east: { dx: 2, dz: 0, yaw: 90 },
+      west: { dx: -2, dz: 0, yaw: -90 },
+      south: { dx: 0, dz: 2, yaw: 180 },
+      north: { dx: 0, dz: -2, yaw: 0 },
+    };
     let selectedAnchor = null;
     let reviewAnchors = [];
     let anchorsByPrompt = new Map();
@@ -547,6 +557,32 @@
       return `${item.x ?? item.label_x}, ${item.y ?? item.label_y}, ${item.z ?? item.label_z}`;
     }
 
+    function signCoordinate(item) {
+      const x = Number(item.label_x ?? item.x);
+      const y = Number(item.label_y ?? item.y);
+      const z = Number(item.label_z ?? item.z);
+      if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(z)) return null;
+      return {
+        x,
+        y,
+        z,
+        facing: String(item.label_facing || item.facing || "").toLowerCase(),
+      };
+    }
+
+    function signViewpoint(item) {
+      const coord = signCoordinate(item);
+      if (!coord) return null;
+      const view = SIGN_VIEWPOINT_BY_FACING[coord.facing] || { dx: 0, dz: 0, yaw: 0 };
+      return {
+        x: coord.x + view.dx,
+        y: coord.y,
+        z: coord.z + view.dz,
+        yaw: view.yaw,
+        pitch: 10,
+      };
+    }
+
     function matchDistanceText(match) {
       const distance = Number(match.horizontal_distance_blocks);
       return Number.isFinite(distance) ? `${distance.toFixed(1)} blocks` : "";
@@ -588,6 +624,14 @@
       return `<button type="button" class="entry-jump" data-prompt-id="${escapeHtml(promptId)}">${escapeHtml(compactPromptId(promptId))} · ${escapeHtml(anchorName)} · ${escapeHtml(distance)}</button>`;
     }
 
+    function signButtonHtml(item, promptId) {
+      const view = signViewpoint(item);
+      if (!view || !promptId) return "";
+      const labelId = item.label_id || "";
+      const labelText = item.text || item.label_text || "sign";
+      return `<button type="button" class="sign-jump" data-prompt-id="${escapeHtml(promptId)}" data-label-id="${escapeHtml(labelId)}" data-label-text="${escapeHtml(labelText)}" data-x="${view.x}" data-y="${view.y}" data-z="${view.z}" data-yaw="${view.yaw}" data-pitch="${view.pitch}" title="view MC ${view.x}, ${view.y}, ${view.z}">tp exact sign</button>`;
+    }
+
     function linkedEntriesHtml(matches, limit = 6) {
       if (!matches.length) return '<div class="text-entry-links"><span>matched entries: none</span></div>';
       const ordered = sortTextMatches(matches);
@@ -609,12 +653,16 @@
       const status = item.match_status === "useful_label_near_anchor" ? "near useful text" : "near text";
       const labelId = item.label_id ? ` · ${compactLabelId(item.label_id)}` : "";
       const entryLine = options.match ? `<small>entry ${escapeHtml(compactPromptId(item.prompt_id))} · ${escapeHtml(item.anchor_name || "")}</small>` : "";
+      const signPromptId = item.prompt_id || (options.labelMatches && options.labelMatches[0] ? options.labelMatches[0].prompt_id : "");
+      const signButton = signButtonHtml(item, signPromptId);
+      const signActions = signButton ? `<div class="text-entry-links">${signButton}</div>` : "";
       const linkedEntries = options.labelMatches ? linkedEntriesHtml(options.labelMatches) : "";
       return `
         <div class="text-item">
           <strong>${escapeHtml(text)}</strong>
           <small><span class="text-category">${escapeHtml(categoryText(category))}</span>MC ${escapeHtml(mcPositionText(item))}${escapeHtml(labelId)}${distance}${options.match ? ` · ${escapeHtml(status)}` : ""}</small>
           ${entryLine}
+          ${signActions}
           ${linkedEntries}
         </div>
       `;
@@ -654,10 +702,13 @@
       }
     }
 
-    async function teleportMinecraft(anchor) {
-      setSyncStatus(`Teleporting ${compactPromptId(anchor.prompt_id)}...`);
+    async function teleportMinecraft(anchor, options = {}) {
+      const target = options.targetLabel ? `sign ${options.targetLabel}` : compactPromptId(anchor.prompt_id);
+      setSyncStatus(`Teleporting ${target}...`);
       teleportButton.disabled = true;
-      const body = JSON.stringify({ anchor_review_id: anchor.prompt_id });
+      const request = { anchor_review_id: anchor.prompt_id };
+      if (options.coordinateOverride) request.coordinate_override = options.coordinateOverride;
+      const body = JSON.stringify(request);
       try {
         const response = await fetch(`${CONTROL_API_BASE}/api/teleport`, {
           method: "POST",
@@ -668,7 +719,7 @@
         if (!response.ok || !payload.success) {
           throw new Error(payload.error || `HTTP ${response.status}`);
         }
-        setSyncStatus(`Minecraft synced ${compactPromptId(anchor.prompt_id)}`);
+        setSyncStatus(`Minecraft synced ${target}`);
       } catch (error) {
         try {
           await fetch(`${CONTROL_API_BASE}/api/teleport`, {
@@ -677,7 +728,7 @@
             headers: { "Content-Type": "text/plain;charset=UTF-8" },
             body,
           });
-          setSyncStatus(`Minecraft sync sent ${compactPromptId(anchor.prompt_id)}`);
+          setSyncStatus(`Minecraft sync sent ${target}`);
         } catch (fallbackError) {
           setSyncStatus(`Minecraft sync failed: ${fallbackError.message}`);
         }
@@ -697,7 +748,7 @@
         <div><span>coordinates</span><strong>${anchor.lat.toFixed(7)}, ${anchor.lon.toFixed(7)}</strong></div>
         <div><span>Minecraft</span><strong>${anchor.mc_x}, ${anchor.mc_y}, ${anchor.mc_z}</strong></div>
         <div><span>semantic</span><strong>${escapeHtml(anchor.scenario_id)} / ${escapeHtml(anchor.endpoint_affordance)}</strong></div>
-        <div class="wide-meta"><span>nearby MC text</span><strong id="anchorTextSummary">Loading MC text labels...</strong></div>
+        <div class="wide-meta"><span>radius-matched MC text</span><strong id="anchorTextSummary">Loading MC text labels...</strong></div>
       `;
       renderNearbyText(anchor);
       if (options.syncMinecraft) teleportMinecraft(anchor);
@@ -750,14 +801,36 @@
         anchorMeta.innerHTML = `<div><span>error</span><strong>${error.message}</strong></div>`;
       });
 
-    allTextLabels.addEventListener("click", (event) => {
+    function handleTextActionClick(event) {
+      const signButton = event.target && event.target.closest ? event.target.closest(".sign-jump") : null;
+      if (signButton) {
+        const anchor = anchorsByPrompt.get(signButton.dataset.promptId);
+        if (!anchor) return;
+        const coordinateOverride = {
+          x: Number(signButton.dataset.x),
+          y: Number(signButton.dataset.y),
+          z: Number(signButton.dataset.z),
+          yaw: Number(signButton.dataset.yaw),
+          pitch: Number(signButton.dataset.pitch),
+        };
+        anchorSelect.value = anchor.prompt_id;
+        selectAnchor(anchor);
+        teleportMinecraft(anchor, {
+          coordinateOverride,
+          targetLabel: signButton.dataset.labelId || "sign",
+        });
+        return;
+      }
       const button = event.target && event.target.closest ? event.target.closest(".entry-jump") : null;
       if (!button) return;
       const anchor = anchorsByPrompt.get(button.dataset.promptId);
       if (!anchor) return;
       anchorSelect.value = anchor.prompt_id;
       selectAnchor(anchor, { syncMinecraft: true });
-    });
+    }
+
+    nearbyTextList.addEventListener("click", handleTextActionClick);
+    allTextLabels.addEventListener("click", handleTextActionClick);
   </script>
 </body>
 </html>
