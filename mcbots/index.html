@@ -331,25 +331,9 @@
       color: var(--muted);
       font-size: .82rem;
     }
-    .reference-frames {
-      display: grid;
-      gap: .65rem;
-      padding: .65rem;
-    }
-    .reference-pane {
-      min-width: 0;
-    }
-    .reference-pane h3 {
-      margin: 0 0 .38rem;
-      color: var(--muted);
-      font-size: .78rem;
-      font-weight: 600;
-    }
-    .reference-pane iframe {
-      height: calc((100vh - 292px) / 2);
-      min-height: 275px;
-      border: 1px solid #28394b;
-      border-radius: 8px;
+    .reference-frame iframe {
+      height: calc(100vh - 224px);
+      min-height: 560px;
       background: #101923;
     }
     .synced-control .control-body {
@@ -419,7 +403,6 @@
       .reference-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       main { grid-template-columns: 1fr; }
       iframe { height: 72vh; }
-      .reference-pane iframe { height: 42vh; min-height: 300px; }
       .coord-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
     @media (max-width: 720px) {
@@ -429,7 +412,7 @@
       iframe { min-height: 560px; }
       .reference-meta { grid-template-columns: 1fr; }
       .reference-meta .wide-meta { grid-column: auto; }
-      .reference-pane iframe { height: 52vh; min-height: 320px; }
+      .reference-frame iframe { height: 72vh; min-height: 560px; }
       .coord-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
@@ -438,7 +421,7 @@
   <header>
     <div>
       <h1>Shun Lee clean-v3 dynamic review</h1>
-      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 Google Street View、OSM map、MC text labels、以及同一个 selected point 驱动的同步 teleport/坐标控制；当前 Minecraft player 是 <code>ShunLeeV3</code>。</p>
+      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 Google Street View、MC text labels、以及同一个 selected anchor 驱动的同步 teleport/坐标控制；当前 Minecraft player 是 <code>ShunLeeV3</code>。</p>
     </div>
     <nav class="actions" aria-label="direct links">
       <a class="button primary" href="https://directories-res-firefox-village.trycloudflare.com/vnc.html?autoconnect=1&amp;resize=scale" target="_blank" rel="noopener">单独打开 VNC</a>
@@ -458,7 +441,7 @@
       <a class="button primary" id="streetViewLink" href="#" target="_blank" rel="noopener">打开 Google 全景</a>
       <a class="button" id="googleMapLink" href="#" target="_blank" rel="noopener">打开 Google 地图</a>
       <a class="button" id="osmLink" href="#" target="_blank" rel="noopener">打开 OSM</a>
-      <span class="badge" id="syncStatus"><span class="dot"></span>Maps ready</span>
+      <span class="badge" id="syncStatus"><span class="dot"></span>Google ready</span>
     </div>
     <div class="reference-meta" id="anchorMeta">
       <div><span>selected</span><strong>Loading...</strong></div>
@@ -483,32 +466,17 @@
     <aside class="side">
       <section class="panel reference-frame">
         <div class="panel-head">
-          <h2>Google Street View / OSM map reference</h2>
-          <span class="badge"><span class="dot"></span>synced point</span>
+          <h2>Google Street View / map reference</h2>
+          <span class="badge"><span class="dot"></span>65 anchors</span>
         </div>
-        <div class="reference-frames">
-          <div class="reference-pane">
-            <h3>Google Street View / map</h3>
-            <iframe
-              id="streetViewFrame"
-              title="Google Street View reference for selected Shun Lee point"
-              src="about:blank"
-              allowfullscreen
-              loading="eager"
-              referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-          </div>
-          <div class="reference-pane">
-            <h3>OpenStreetMap for active Minecraft point</h3>
-            <iframe
-              id="osmMapFrame"
-              title="OpenStreetMap reference for active Minecraft point"
-              src="about:blank"
-              loading="eager"
-              referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-          </div>
-        </div>
+        <iframe
+          id="streetViewFrame"
+          title="Google Street View reference for selected Shun Lee anchor"
+          src="about:blank"
+          allowfullscreen
+          loading="eager"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
       </section>
 
       <section class="panel map-card">
@@ -564,7 +532,7 @@
             <button type="button" id="teleportEditedButton">Teleport current coords</button>
             <button type="button" id="resetCoordsButton">Reset to anchor coords</button>
           </div>
-          <p class="note">This replaces the separate summary control page. The dropdown, Google view, OSM map, VNC teleport, coordinate edits, and sign teleport actions all use the same selected point state. Google/OSM use the exact OSM point at registered anchor coords, then follow edited MC X/Z or text-sign waypoints by a local 65-anchor estimate.</p>
+          <p class="note">This replaces the separate summary control page. The dropdown, Google view, VNC teleport, coordinate edits, and sign teleport actions all use the same selected anchor state. Google uses the exact OSM point at registered anchor coords, then follows edited MC X/Z by a local 65-anchor estimate.</p>
         </div>
       </section>
     </aside>
@@ -577,7 +545,6 @@
     const anchorSelect = document.getElementById("anchorSelect");
     const anchorMeta = document.getElementById("anchorMeta");
     const streetViewFrame = document.getElementById("streetViewFrame");
-    const osmMapFrame = document.getElementById("osmMapFrame");
     const streetViewLink = document.getElementById("streetViewLink");
     const googleMapLink = document.getElementById("googleMapLink");
     const osmLink = document.getElementById("osmLink");
@@ -647,21 +614,8 @@
       return `https://www.openstreetmap.org/?mlat=${anchor.lat}&mlon=${anchor.lon}#map=19/${anchor.lat}/${anchor.lon}`;
     }
 
-    function osmEmbedUrl(anchor) {
-      const lat = Number(anchor.lat);
-      const lon = Number(anchor.lon);
-      const latPad = 0.00055;
-      const lonPad = 0.00075;
-      const url = new URL("https://www.openstreetmap.org/export/embed.html");
-      url.searchParams.set("bbox", `${lon - lonPad},${lat - latPad},${lon + lonPad},${lat + latPad}`);
-      url.searchParams.set("layer", "mapnik");
-      url.searchParams.set("marker", `${lat},${lon}`);
-      return url.toString();
-    }
-
     function updateGoogleReference(target) {
       streetViewFrame.src = googleStreetViewEmbedUrl(target);
-      osmMapFrame.src = osmEmbedUrl(target);
       streetViewLink.href = googleStreetViewUrl(target);
       googleMapLink.href = googleMapUrl(target);
       osmLink.href = osmUrl(target);
