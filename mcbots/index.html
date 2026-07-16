@@ -24,10 +24,7 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background:
-        radial-gradient(circle at 12% 0%, rgba(53, 208, 196, .16), transparent 26rem),
-        radial-gradient(circle at 88% 8%, rgba(255, 197, 103, .12), transparent 24rem),
-        var(--bg);
+      background: var(--bg);
       color: var(--ink);
     }
     header {
@@ -129,7 +126,7 @@
     }
     .side {
       display: grid;
-      grid-template-rows: auto minmax(420px, 1fr);
+      grid-template-rows: auto auto minmax(420px, 1fr);
       gap: .8rem;
       min-width: 0;
     }
@@ -176,6 +173,60 @@
       color: var(--muted);
       font-size: .84rem;
     }
+    .reference-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: .65rem;
+      padding: .75rem .8rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .reference-controls label {
+      display: block;
+      margin: 0 0 .28rem;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+    select {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid #3f5368;
+      border-radius: 8px;
+      background: #0d1722;
+      color: var(--ink);
+      font: inherit;
+      padding: .45rem .55rem;
+    }
+    .reference-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+    }
+    .reference-actions a.button {
+      min-height: 34px;
+      padding: .45rem .62rem;
+      font-size: .84rem;
+    }
+    .reference-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .5rem;
+      padding: .65rem .8rem;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .78rem;
+    }
+    .reference-meta strong {
+      display: block;
+      color: var(--ink);
+      font-size: .86rem;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+    .reference-frame iframe {
+      height: 360px;
+      min-height: 320px;
+      background: #101923;
+    }
     .control-frame iframe {
       height: calc(100vh - 435px);
       min-height: 440px;
@@ -205,6 +256,8 @@
       .map-card { grid-template-columns: 1fr; }
       .facts { grid-template-columns: 1fr 1fr; }
       iframe { min-height: 560px; }
+      .reference-meta { grid-template-columns: 1fr; }
+      .reference-frame iframe { height: 58vh; min-height: 420px; }
     }
   </style>
 </head>
@@ -249,6 +302,38 @@
         </div>
       </section>
 
+      <section class="panel reference-frame">
+        <div class="panel-head">
+          <h2>Google Street View / map reference</h2>
+          <span class="badge"><span class="dot"></span>65 anchors</span>
+        </div>
+        <div class="reference-controls">
+          <div>
+            <label for="anchorSelect">OSM/Minecraft anchor</label>
+            <select id="anchorSelect">
+              <option>Loading clean-v3 anchors...</option>
+            </select>
+          </div>
+          <div class="reference-actions" aria-label="real-world map links">
+            <a class="button primary" id="streetViewLink" href="#" target="_blank" rel="noopener">打开 Google 全景</a>
+            <a class="button" id="googleMapLink" href="#" target="_blank" rel="noopener">打开 Google 地图</a>
+            <a class="button" id="osmLink" href="#" target="_blank" rel="noopener">打开 OSM</a>
+          </div>
+        </div>
+        <div class="reference-meta" id="anchorMeta">
+          <div><span>selected</span><strong>Loading...</strong></div>
+          <div><span>coordinates</span><strong>Loading...</strong></div>
+        </div>
+        <iframe
+          id="streetViewFrame"
+          title="Google Street View reference for selected Shun Lee anchor"
+          src="about:blank"
+          allowfullscreen
+          loading="eager"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </section>
+
       <section class="panel control-frame">
         <div class="panel-head">
           <h2>Teleport / prompt control · 65 anchors</h2>
@@ -267,5 +352,94 @@
   <footer>
     Runtime tunnel created 2026-07-16 Asia/Hong_Kong. This dynamic page depends on the running server sessions on <code>jxcpu1</code>: cloudflared VNC, cloudflared control, two local ncat loopback forwards, the noVNC client, and the Shun Lee control API.
   </footer>
+  <script>
+    const anchorSelect = document.getElementById("anchorSelect");
+    const anchorMeta = document.getElementById("anchorMeta");
+    const streetViewFrame = document.getElementById("streetViewFrame");
+    const streetViewLink = document.getElementById("streetViewLink");
+    const googleMapLink = document.getElementById("googleMapLink");
+    const osmLink = document.getElementById("osmLink");
+
+    function googleStreetViewEmbedUrl(anchor) {
+      const url = new URL("https://maps.google.com/maps");
+      url.searchParams.set("layer", "c");
+      url.searchParams.set("cbll", `${anchor.lat},${anchor.lon}`);
+      url.searchParams.set("cbp", "11,0,0,0,0");
+      url.searchParams.set("output", "svembed");
+      return url.toString();
+    }
+
+    function googleStreetViewUrl(anchor) {
+      const url = new URL("https://www.google.com/maps/@");
+      url.searchParams.set("api", "1");
+      url.searchParams.set("map_action", "pano");
+      url.searchParams.set("viewpoint", `${anchor.lat},${anchor.lon}`);
+      url.searchParams.set("heading", "0");
+      url.searchParams.set("pitch", "0");
+      url.searchParams.set("fov", "80");
+      return url.toString();
+    }
+
+    function googleMapUrl(anchor) {
+      const url = new URL("https://www.google.com/maps/search/");
+      url.searchParams.set("api", "1");
+      url.searchParams.set("query", `${anchor.lat},${anchor.lon}`);
+      return url.toString();
+    }
+
+    function osmUrl(anchor) {
+      return `https://www.openstreetmap.org/?mlat=${anchor.lat}&mlon=${anchor.lon}#map=19/${anchor.lat}/${anchor.lon}`;
+    }
+
+    function compactPromptId(promptId) {
+      return promptId.replace("shun-lee-clean-osm-prompt-v1-", "#");
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      }[char]));
+    }
+
+    function selectAnchor(anchor) {
+      streetViewFrame.src = googleStreetViewEmbedUrl(anchor);
+      streetViewLink.href = googleStreetViewUrl(anchor);
+      googleMapLink.href = googleMapUrl(anchor);
+      osmLink.href = osmUrl(anchor);
+      anchorMeta.innerHTML = `
+        <div><span>selected</span><strong>${escapeHtml(compactPromptId(anchor.prompt_id))} · ${escapeHtml(anchor.name)}</strong></div>
+        <div><span>coordinates</span><strong>${anchor.lat.toFixed(7)}, ${anchor.lon.toFixed(7)}</strong></div>
+        <div><span>Minecraft</span><strong>${anchor.mc_x}, ${anchor.mc_y}, ${anchor.mc_z}</strong></div>
+        <div><span>semantic</span><strong>${escapeHtml(anchor.scenario_id)} / ${escapeHtml(anchor.endpoint_affordance)}</strong></div>
+      `;
+    }
+
+    fetch("assets/shun-lee-clean-v3-google-anchors.json", { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then((payload) => {
+        const anchors = payload.anchors || [];
+        anchorSelect.innerHTML = "";
+        anchors.forEach((anchor) => {
+          const option = document.createElement("option");
+          option.value = anchor.prompt_id;
+          option.textContent = `${compactPromptId(anchor.prompt_id)} · ${anchor.name} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}`;
+          anchorSelect.appendChild(option);
+        });
+        const byId = new Map(anchors.map((anchor) => [anchor.prompt_id, anchor]));
+        anchorSelect.addEventListener("change", () => selectAnchor(byId.get(anchorSelect.value)));
+        if (anchors.length) selectAnchor(anchors[0]);
+      })
+      .catch((error) => {
+        anchorSelect.innerHTML = "<option>Failed to load anchors</option>";
+        anchorMeta.innerHTML = `<div><span>error</span><strong>${error.message}</strong></div>`;
+      });
+  </script>
 </body>
 </html>
