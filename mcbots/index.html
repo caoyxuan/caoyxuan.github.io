@@ -465,7 +465,7 @@
   <header>
     <div>
       <h1>Shun Lee clean-v3 dynamic review</h1>
-      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 Google Street View、OSM map、MC text labels、以及同一个 selected point 驱动的同步 teleport/坐标控制；当前 Minecraft player 是 <code>ShunLeeV3</code>。</p>
+      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 Google Street View、OSM map、MC text labels、以及同一个 selected point 驱动的同步 teleport/坐标控制；当前 Minecraft player 是 <code>ShunLeeV3</code>。普通 OSM anchors 是 S1 自动投影候选点，不是 exact anchor；<code>text #...</code> 才是已按 MC 文字牌坐标单独设定的 waypoint。</p>
     </div>
     <nav class="actions" aria-label="direct links">
       <a class="button primary" href="https://exposed-portrait-parade-immigration.trycloudflare.com/vnc.html?autoconnect=1&amp;resize=scale" target="_blank" rel="noopener">单独打开 VNC</a>
@@ -475,7 +475,7 @@
 
   <section class="review-toolbar" aria-label="anchor and teleport controls">
     <div>
-      <label for="anchorSelect">OSM/Minecraft anchor</label>
+      <label for="anchorSelect">OSM candidate probe / MC text waypoint</label>
       <select id="anchorSelect">
         <option>Loading clean-v3 anchors...</option>
       </select>
@@ -542,12 +542,12 @@
         <img src="assets/shun-lee-clean-v3-topdown-65.png" alt="Shun Lee clean-v3 top-down map with 65 retained anchor points">
         <div>
           <div class="facts">
-            <div class="fact"><strong>65</strong><span>active review anchors</span></div>
+            <div class="fact"><strong>65</strong><span>S1 OSM candidate probes</span></div>
             <div class="fact"><strong>v3</strong><span>clean world package</span></div>
             <div class="fact"><strong>20,640</strong><span>natural-surface columns removed</span></div>
-            <div class="fact"><strong>0</strong><span>grass/dirt top surfaces left</span></div>
+            <div class="fact"><strong>0</strong><span>certified exact anchors</span></div>
           </div>
-          <p class="note">绿色仍可能出现为树、球场、green carpet/terracotta 等结构或景观材料；已删除的是草地/泥土/沙等自然地形 top surface。</p>
+          <p class="note">这些 OSM 点用于语义筛选和人工审查启动；MC 坐标多为 affine projection/probe，不能直接视为建筑、入口或边界的精确坐标。</p>
         </div>
       </section>
 
@@ -932,9 +932,12 @@
       return ` · related text waypoint ${waypoints.length}`;
     }
 
+    const DEFAULT_OSM_ANCHOR_ALIGNMENT_LABEL = "S1 probe, not exact";
+    const DEFAULT_OSM_ANCHOR_ALIGNMENT_NOTE = "This OSM anchor is a semantic review candidate with an automatic/probe Minecraft coordinate. It has not been human-confirmed as the exact building, entrance, sign, or boundary point.";
+
     function anchorAlignmentLabel(anchor) {
       return anchor.mc_alignment_label
-        || (anchor.mc_alignment_status ? String(anchor.mc_alignment_status).replaceAll("_", " ") : "");
+        || (anchor.mc_alignment_status ? String(anchor.mc_alignment_status).replaceAll("_", " ") : DEFAULT_OSM_ANCHOR_ALIGNMENT_LABEL);
     }
 
     function anchorOptionWarningSuffix(anchor) {
@@ -945,15 +948,16 @@
     function anchorAlignmentMetaHtml(anchor) {
       const label = anchorAlignmentLabel(anchor);
       if (!label) return "";
-      const note = anchor.mc_alignment_note || "This Minecraft point is not a confirmed exact OSM alignment.";
+      const note = anchor.mc_alignment_note || DEFAULT_OSM_ANCHOR_ALIGNMENT_NOTE;
       return `<div class="wide-meta anchor-warning-meta"><span>alignment warning</span><strong>${escapeHtml(label)}: ${escapeHtml(note)}</strong></div>`;
     }
 
     function anchorAlignmentWarningHtml(anchor) {
       const label = anchorAlignmentLabel(anchor);
       if (!label) return "";
-      const note = anchor.mc_alignment_note || "This Minecraft point is not a confirmed exact OSM alignment.";
-      const action = anchor.mc_alignment_action ? `<span>Action: ${escapeHtml(anchor.mc_alignment_action)}</span>` : "";
+      const note = anchor.mc_alignment_note || DEFAULT_OSM_ANCHOR_ALIGNMENT_NOTE;
+      const actionText = anchor.mc_alignment_action || "Use this as a review/probe point only; re-pick or edit MC coordinates before treating it as an exact anchor.";
+      const action = `<span>Action: ${escapeHtml(actionText)}</span>`;
       const shot = anchor.review_screenshot_path
         ? `<span><a href="${escapeHtml(anchor.review_screenshot_path)}" target="_blank" rel="noopener">open prior MC capture</a></span>`
         : "";
