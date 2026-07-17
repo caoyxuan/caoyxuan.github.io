@@ -465,7 +465,7 @@
   <header>
     <div>
       <h1>Shun Lee clean-v3 dynamic review</h1>
-      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 Google Street View、OSM map、MC text labels、以及同一个 selected point 驱动的同步 teleport/坐标控制；当前 Minecraft player 是 <code>ShunLeeV3</code>。普通 OSM anchors 是 S1 自动投影候选点，不是 exact anchor；<code>text #...</code> 才是已按 MC 文字牌坐标单独设定的 waypoint。</p>
+      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 Google Street View、OSM map、MC text labels、以及同一个 selected point 驱动的同步 teleport/坐标控制；当前 Minecraft player 是 <code>ShunLeeV3</code>。普通 OSM anchors 已重算为 v2 clean-filtered S1 投影候选点，不是 exact anchor；<code>text #...</code> 才是已按 MC 文字牌坐标单独设定的 waypoint。</p>
     </div>
     <nav class="actions" aria-label="direct links">
       <a class="button primary" href="https://exposed-portrait-parade-immigration.trycloudflare.com/vnc.html?autoconnect=1&amp;resize=scale" target="_blank" rel="noopener">单独打开 VNC</a>
@@ -542,7 +542,7 @@
         <img src="assets/shun-lee-clean-v3-topdown-65.png" alt="Shun Lee clean-v3 top-down map with 65 retained anchor points">
         <div>
           <div class="facts">
-            <div class="fact"><strong>65</strong><span>S1 OSM candidate probes</span></div>
+            <div class="fact"><strong>65</strong><span>v2 clean-filtered S1 probes</span></div>
             <div class="fact"><strong>v3</strong><span>clean world package</span></div>
             <div class="fact"><strong>20,640</strong><span>natural-surface columns removed</span></div>
             <div class="fact"><strong>0</strong><span>certified exact anchors</span></div>
@@ -964,6 +964,25 @@
       return `<div class="anchor-warning"><strong>${escapeHtml(label)}</strong><span>${escapeHtml(note)}</span>${action}${shot}</div>`;
     }
 
+    function anchorAlignmentDebugHtml(anchor) {
+      if (!anchor) return "";
+      const rows = [];
+      if (anchor.alignment_v1_mc_x != null) {
+        rows.push(`v1 MC: ${anchor.alignment_v1_mc_x}, ${anchor.alignment_v1_mc_y}, ${anchor.alignment_v1_mc_z}`);
+      }
+      if (anchor.alignment_v2_raw_mc_x != null) {
+        const rawY = anchor.alignment_v2_raw_mc_y == null ? "n/a" : anchor.alignment_v2_raw_mc_y;
+        rows.push(`v2 raw: ${anchor.alignment_v2_raw_mc_x}, ${rawY}, ${anchor.alignment_v2_raw_mc_z} · top ${anchor.alignment_v2_raw_top_block || "unknown"}`);
+      }
+      if (anchor.alignment_v2_filter_distance_blocks != null) {
+        rows.push(`clean filter move: ${anchor.alignment_v2_filter_distance_blocks} blocks · top ${anchor.alignment_v2_top_block || anchor.top_block || "unknown"}`);
+      }
+      if (anchor.alignment_status) {
+        rows.push(`status: ${String(anchor.alignment_status).replaceAll("_", " ")}`);
+      }
+      return rows.length ? `${rows.map((row) => escapeHtml(row)).join("<br>")}<br>` : "";
+    }
+
     function waypointCoordinate(waypoint) {
       const override = waypoint.coordinate_override || waypoint.semantic_coordinate_override;
       if (override) return override;
@@ -1134,8 +1153,7 @@
 
     function currentCoordinateOverride() {
       if (!selectedAnchor) return null;
-      const coordinate = readCoordinateInputs();
-      return coordinateMatchesAnchor(selectedAnchor, coordinate) ? null : coordinate;
+      return readCoordinateInputs();
     }
 
     async function teleportCurrentSelection(options = {}) {
@@ -1195,6 +1213,8 @@
           coordinateNote = "MC text sign coordinate";
         } else if (!coordinateMatchesAnchor(selectedAnchor, coordinate)) {
           coordinateNote = "edited coordinate override";
+        } else if (selectedAnchor.alignment_version) {
+          coordinateNote = `${selectedAnchor.alignment_version} override`;
         }
       } catch (error) {
         coordinate = anchorCoordinate(selectedAnchor);
@@ -1226,6 +1246,7 @@
         ${selectedTextWaypoint ? `candidate OSM anchors: ${escapeHtml(candidateIds || compactPromptId(selectedAnchor.prompt_id))}<br>` : ""}
         registered MC anchor: ${selectedAnchor.mc_x}, ${selectedAnchor.mc_y}, ${selectedAnchor.mc_z}<br>
         coordinate mode: ${escapeHtml(coordinateNote)}<br>
+        ${selectedTextWaypoint ? "" : anchorAlignmentDebugHtml(selectedAnchor)}
         Google target: ${googleTarget.lat.toFixed(7)}, ${googleTarget.lon.toFixed(7)} (${escapeHtml(googleTarget.mode)})<br>
         scenario: ${escapeHtml(semanticLine)}
       `;
