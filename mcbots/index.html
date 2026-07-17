@@ -465,7 +465,7 @@
   <header>
     <div>
       <h1>Shun Lee clean-v3 dynamic review</h1>
-      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 Google Street View、OSM map、MC text labels、以及同一个 selected point 驱动的同步 teleport/坐标控制；当前 Minecraft player 是 <code>ShunLeeV3</code>。普通 OSM anchors 已重算为 v2 clean-filtered S1 投影候选点，不是 exact anchor；<code>text #...</code> 才是已按 MC 文字牌坐标单独设定的 waypoint。</p>
+      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 Google Street View、OSM map、MC text labels、以及同一个 selected point 驱动的同步 teleport/坐标控制；当前 Minecraft player 是 <code>ShunLeeV3</code>。普通 OSM anchors 已重算为 v3 label-anchored S1 review points，不是 exact anchor；<code>text #...</code> 才是已按 MC 文字牌坐标单独设定的 waypoint。</p>
     </div>
     <nav class="actions" aria-label="direct links">
       <a class="button primary" href="https://exposed-portrait-parade-immigration.trycloudflare.com/vnc.html?autoconnect=1&amp;resize=scale" target="_blank" rel="noopener">单独打开 VNC</a>
@@ -539,15 +539,15 @@
       </section>
 
       <section class="panel map-card">
-        <img src="assets/shun-lee-clean-v3-topdown-65.png?v=20260717-v2-clean-filtered" alt="Shun Lee clean-v3 top-down map with 65 retained anchor points">
+        <img src="assets/shun-lee-clean-v3-topdown-65.png?v=20260717-v3-label-anchored" alt="Shun Lee clean-v3 top-down map with 65 retained anchor points">
         <div>
           <div class="facts">
-            <div class="fact"><strong>65</strong><span>v2 clean-filtered S1 probes</span></div>
+            <div class="fact"><strong>65</strong><span>v3 label-anchored S1 points</span></div>
             <div class="fact"><strong>v3</strong><span>clean world package</span></div>
             <div class="fact"><strong>20,640</strong><span>natural-surface columns removed</span></div>
             <div class="fact"><strong>0</strong><span>certified exact anchors</span></div>
           </div>
-          <p class="note">这些 OSM 点用于语义筛选和人工审查启动；MC 坐标多为 affine projection/probe，不能直接视为建筑、入口或边界的精确坐标。</p>
+          <p class="note">这些 OSM 点用于语义筛选和人工审查启动；黄色点是直接使用 MC text waypoint 的牌子坐标，蓝色点是 v3 residual-warp + clean filter 的 review 坐标。非文字牌点仍不能直接视为建筑、入口或边界的精确坐标。</p>
         </div>
       </section>
 
@@ -970,12 +970,22 @@
       if (anchor.alignment_v1_mc_x != null) {
         rows.push(`v1 MC: ${anchor.alignment_v1_mc_x}, ${anchor.alignment_v1_mc_y}, ${anchor.alignment_v1_mc_z}`);
       }
+      if (anchor.alignment_v2_clean_filtered_mc_x != null) {
+        rows.push(`v2 clean: ${anchor.alignment_v2_clean_filtered_mc_x}, ${anchor.alignment_v2_clean_filtered_mc_y}, ${anchor.alignment_v2_clean_filtered_mc_z}`);
+      }
+      if (anchor.alignment_v3_raw_mc_x != null) {
+        const rawY = anchor.alignment_v3_raw_mc_y == null ? "n/a" : anchor.alignment_v3_raw_mc_y;
+        rows.push(`v3 raw: ${anchor.alignment_v3_raw_mc_x}, ${rawY}, ${anchor.alignment_v3_raw_mc_z} · top ${anchor.alignment_v3_raw_top_block || "unknown"}`);
+      }
+      if (anchor.alignment_v3_filter_distance_blocks != null) {
+        rows.push(`v3 clean filter move: ${anchor.alignment_v3_filter_distance_blocks} blocks · top ${anchor.alignment_v3_top_block || anchor.top_block || "unknown"}`);
+      }
       if (anchor.alignment_v2_raw_mc_x != null) {
         const rawY = anchor.alignment_v2_raw_mc_y == null ? "n/a" : anchor.alignment_v2_raw_mc_y;
-        rows.push(`v2 raw: ${anchor.alignment_v2_raw_mc_x}, ${rawY}, ${anchor.alignment_v2_raw_mc_z} · top ${anchor.alignment_v2_raw_top_block || "unknown"}`);
+        rows.push(`legacy v2 raw: ${anchor.alignment_v2_raw_mc_x}, ${rawY}, ${anchor.alignment_v2_raw_mc_z} · top ${anchor.alignment_v2_raw_top_block || "unknown"}`);
       }
-      if (anchor.alignment_v2_filter_distance_blocks != null) {
-        rows.push(`clean filter move: ${anchor.alignment_v2_filter_distance_blocks} blocks · top ${anchor.alignment_v2_top_block || anchor.top_block || "unknown"}`);
+      if (anchor.alignment_v2_filter_distance_blocks != null && anchor.alignment_v3_filter_distance_blocks == null) {
+        rows.push(`legacy clean filter move: ${anchor.alignment_v2_filter_distance_blocks} blocks · top ${anchor.alignment_v2_top_block || anchor.top_block || "unknown"}`);
       }
       if (anchor.alignment_status) {
         rows.push(`status: ${String(anchor.alignment_status).replaceAll("_", " ")}`);
