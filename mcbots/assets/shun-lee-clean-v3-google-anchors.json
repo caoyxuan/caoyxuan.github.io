@@ -384,7 +384,12 @@
       "top_block": "minecraft:white_concrete",
       "surface_class": "hard_or_built_surface",
       "priority_rank": 41,
-      "priority_score": 150.25
+      "priority_score": 150.25,
+      "mc_alignment_status": "weak_projection_unreviewed",
+      "mc_alignment_label": "weak MC/Google alignment",
+      "mc_alignment_note": "OSM/Google target is the Community Garden polygon center, but the Minecraft coordinate is only an automatic affine projection/probe point. Prior MC capture gave weak visual support and this is not a confirmed exact garden anchor; expect visible offset until a garden entrance or boundary coordinate is re-picked in Minecraft.",
+      "mc_alignment_action": "Re-pick a visible Community Garden entrance/boundary coordinate in live Minecraft before using this endpoint as an exact anchor.",
+      "review_screenshot_path": "assets/review-shots/09-shun-lee-anchor-packet-v0-endpoint-65bb1048aa5f.jpg"
     },
     {
       "prompt_id": "shun-lee-clean-osm-prompt-v1-058",
