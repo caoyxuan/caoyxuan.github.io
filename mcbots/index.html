@@ -196,6 +196,33 @@
       color: var(--muted);
       font-size: .84rem;
     }
+    .anchor-warning {
+      margin: .5rem 0;
+      padding: .55rem .62rem;
+      border: 1px solid #8e6a1d;
+      border-radius: 8px;
+      background: rgba(91, 67, 22, .58);
+      color: #f9d38a;
+    }
+    .anchor-warning strong {
+      display: block;
+      color: var(--amber);
+      font-size: .84rem;
+    }
+    .anchor-warning span {
+      display: block;
+      margin-top: .22rem;
+      color: #f1d49a;
+      font-size: .78rem;
+      line-height: 1.35;
+    }
+    .anchor-warning a {
+      color: #ffe0a3;
+      text-decoration: underline;
+    }
+    .anchor-warning-meta strong {
+      color: var(--amber);
+    }
     select {
       width: 100%;
       min-height: 40px;
@@ -905,6 +932,34 @@
       return ` · related text waypoint ${waypoints.length}`;
     }
 
+    function anchorAlignmentLabel(anchor) {
+      return anchor.mc_alignment_label
+        || (anchor.mc_alignment_status ? String(anchor.mc_alignment_status).replaceAll("_", " ") : "");
+    }
+
+    function anchorOptionWarningSuffix(anchor) {
+      const label = anchorAlignmentLabel(anchor);
+      return label ? ` · [${label}]` : "";
+    }
+
+    function anchorAlignmentMetaHtml(anchor) {
+      const label = anchorAlignmentLabel(anchor);
+      if (!label) return "";
+      const note = anchor.mc_alignment_note || "This Minecraft point is not a confirmed exact OSM alignment.";
+      return `<div class="wide-meta anchor-warning-meta"><span>alignment warning</span><strong>${escapeHtml(label)}: ${escapeHtml(note)}</strong></div>`;
+    }
+
+    function anchorAlignmentWarningHtml(anchor) {
+      const label = anchorAlignmentLabel(anchor);
+      if (!label) return "";
+      const note = anchor.mc_alignment_note || "This Minecraft point is not a confirmed exact OSM alignment.";
+      const action = anchor.mc_alignment_action ? `<span>Action: ${escapeHtml(anchor.mc_alignment_action)}</span>` : "";
+      const shot = anchor.review_screenshot_path
+        ? `<span><a href="${escapeHtml(anchor.review_screenshot_path)}" target="_blank" rel="noopener">open prior MC capture</a></span>`
+        : "";
+      return `<div class="anchor-warning"><strong>${escapeHtml(label)}</strong><span>${escapeHtml(note)}</span>${action}${shot}</div>`;
+    }
+
     function waypointCoordinate(waypoint) {
       const override = waypoint.coordinate_override || waypoint.semantic_coordinate_override;
       if (override) return override;
@@ -919,7 +974,7 @@
       reviewAnchors.forEach((anchor) => {
         const option = document.createElement("option");
         option.value = anchor.prompt_id;
-        option.textContent = `${compactPromptId(anchor.prompt_id)} · ${anchor.name} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}${anchorTextSuffix(anchor)}`;
+        option.textContent = `${compactPromptId(anchor.prompt_id)} · ${anchor.name} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}${anchorTextSuffix(anchor)}${anchorOptionWarningSuffix(anchor)}`;
         anchorGroup.appendChild(option);
       });
       anchorSelect.appendChild(anchorGroup);
@@ -1157,10 +1212,12 @@
         <div><span>Google target</span><strong>${googleTarget.lat.toFixed(7)}, ${googleTarget.lon.toFixed(7)}</strong></div>
         <div><span>active Minecraft</span><strong>${escapeHtml(coordinateDisplay(coordinate))}</strong></div>
         <div><span>semantic</span><strong>${escapeHtml(semanticLine)}</strong></div>
+        ${selectedTextWaypoint ? "" : anchorAlignmentMetaHtml(selectedAnchor)}
         <div class="wide-meta"><span>MC text evidence</span><strong id="anchorTextSummary">Loading MC text labels...</strong></div>
       `;
       promptDetail.innerHTML = `
         <strong>${escapeHtml(selectedName)}</strong>
+        ${selectedTextWaypoint ? "" : anchorAlignmentWarningHtml(selectedAnchor)}
         active MC: ${escapeHtml(coordinateDisplay(coordinate))}<br>
         ${selectedTextWaypoint ? `candidate OSM anchors: ${escapeHtml(candidateIds || compactPromptId(selectedAnchor.prompt_id))}<br>` : ""}
         registered MC anchor: ${selectedAnchor.mc_x}, ${selectedAnchor.mc_y}, ${selectedAnchor.mc_z}<br>
