@@ -223,7 +223,7 @@
     .anchor-warning-meta strong {
       color: var(--amber);
     }
-    select {
+    select, input[type="url"] {
       width: 100%;
       min-height: 40px;
       border: 1px solid #3f5368;
@@ -240,6 +240,26 @@
       align-items: center;
     }
     .reference-actions a.button, .reference-actions button {
+      min-height: 34px;
+      padding: .45rem .62rem;
+      font-size: .84rem;
+    }
+    .vnc-switch {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) auto auto;
+      gap: .45rem;
+      align-items: center;
+      padding: .55rem .65rem;
+      border-bottom: 1px solid var(--line);
+      background: #0c1520;
+    }
+    .vnc-switch label {
+      display: grid;
+      gap: .2rem;
+      color: var(--muted);
+      font-size: .72rem;
+    }
+    .vnc-switch button {
       min-height: 34px;
       padding: .45rem .62rem;
       font-size: .84rem;
@@ -446,6 +466,7 @@
       .reference-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       main { grid-template-columns: 1fr; }
       iframe { height: 72vh; }
+      .vnc-switch { grid-template-columns: 1fr; }
       .reference-pane iframe { height: 42vh; min-height: 300px; }
       .coord-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
@@ -496,10 +517,19 @@
   <main>
     <section class="panel">
       <div class="panel-head">
-        <h2>Live noVNC · Minecraft ShunLeeV3</h2>
-        <span class="badge"><span class="dot"></span>HTTPS tunnel</span>
+        <h2 id="minecraftVncTitle">Live noVNC · Minecraft ShunLeeV3</h2>
+        <span class="badge" id="minecraftVncBadge"><span class="dot"></span>HTTPS tunnel</span>
+      </div>
+      <div class="vnc-switch" aria-label="Minecraft VNC source switch">
+        <label for="localVncUrlInput">
+          Local noVNC URL
+          <input id="localVncUrlInput" type="url" spellcheck="false" value="http://127.0.0.1:6080/vnc.html?autoconnect=1&amp;resize=scale">
+        </label>
+        <button type="button" id="useLocalVncButton">Use local noVNC</button>
+        <button type="button" id="useRemoteVncButton">Use server VNC</button>
       </div>
       <iframe
+        id="minecraftVncFrame"
         title="Shun Lee clean-v3 noVNC"
         src="https://exposed-portrait-parade-immigration.trycloudflare.com/vnc.html?autoconnect=1&amp;resize=scale"
         allow="clipboard-read; clipboard-write; fullscreen"
@@ -622,6 +652,16 @@
     const nearbyTextList = document.getElementById("nearbyTextList");
     const allTextLabels = document.getElementById("allTextLabels");
     const CONTROL_API_BASE = "https://shall-training-driven-intense.trycloudflare.com";
+    const REMOTE_VNC_URL = "https://exposed-portrait-parade-immigration.trycloudflare.com/vnc.html?autoconnect=1&resize=scale";
+    const DEFAULT_LOCAL_VNC_URL = "http://127.0.0.1:6080/vnc.html?autoconnect=1&resize=scale";
+    const LOCAL_VNC_URL_STORAGE_KEY = "shunLeeLocalVncUrl";
+    const USE_LOCAL_VNC_STORAGE_KEY = "shunLeeUseLocalVnc";
+    const minecraftVncFrame = document.getElementById("minecraftVncFrame");
+    const minecraftVncTitle = document.getElementById("minecraftVncTitle");
+    const minecraftVncBadge = document.getElementById("minecraftVncBadge");
+    const localVncUrlInput = document.getElementById("localVncUrlInput");
+    const useLocalVncButton = document.getElementById("useLocalVncButton");
+    const useRemoteVncButton = document.getElementById("useRemoteVncButton");
     const USEFUL_TEXT_CATEGORIES = new Set(["building_or_institution", "park_or_transport"]);
     const SIGN_VIEWPOINT_BY_FACING = {
       east: { dx: 2, dz: 0, yaw: 90 },
@@ -737,6 +777,72 @@
 
     function setSyncStatus(message) {
       syncStatus.innerHTML = `<span class="dot"></span>${escapeHtml(message)}`;
+    }
+
+    function isLoopbackHostname(hostname) {
+      const normalized = String(hostname || "").toLowerCase();
+      return normalized === "localhost" || normalized === "::1" || normalized.startsWith("127.");
+    }
+
+    function validateLocalVncUrl(value) {
+      let parsed;
+      try {
+        parsed = new URL(value);
+      } catch (error) {
+        throw new Error("Local noVNC URL is not valid");
+      }
+      if (!["http:", "https:"].includes(parsed.protocol)) {
+        throw new Error("Local noVNC URL must start with http:// or https://");
+      }
+      if (!isLoopbackHostname(parsed.hostname)) {
+        throw new Error("Local noVNC URL must use localhost or 127.x.x.x");
+      }
+      if (!parsed.pathname.endsWith("/vnc.html")) {
+        throw new Error("Local noVNC URL should point to vnc.html");
+      }
+      return parsed.toString();
+    }
+
+    function setMinecraftVncSource(url, mode) {
+      minecraftVncFrame.src = url;
+      if (mode === "local") {
+        minecraftVncTitle.textContent = "Live noVNC · Local Minecraft";
+        minecraftVncBadge.innerHTML = '<span class="dot"></span>local 127.0.0.1';
+      } else {
+        minecraftVncTitle.textContent = "Live noVNC · Minecraft ShunLeeV3";
+        minecraftVncBadge.innerHTML = '<span class="dot"></span>HTTPS tunnel';
+      }
+    }
+
+    function useLocalVnc() {
+      try {
+        const url = validateLocalVncUrl(localVncUrlInput.value || DEFAULT_LOCAL_VNC_URL);
+        localStorage.setItem(LOCAL_VNC_URL_STORAGE_KEY, url);
+        localStorage.setItem(USE_LOCAL_VNC_STORAGE_KEY, "true");
+        localVncUrlInput.value = url;
+        setMinecraftVncSource(url, "local");
+        setSyncStatus("Left panel switched to local noVNC");
+      } catch (error) {
+        setSyncStatus(error.message);
+      }
+    }
+
+    function useRemoteVnc() {
+      localStorage.setItem(USE_LOCAL_VNC_STORAGE_KEY, "false");
+      setMinecraftVncSource(REMOTE_VNC_URL, "remote");
+      setSyncStatus("Left panel switched to server VNC");
+    }
+
+    function initializeVncSource() {
+      const params = new URLSearchParams(window.location.search);
+      const paramLocalVnc = params.get("localVnc");
+      const savedLocalVnc = localStorage.getItem(LOCAL_VNC_URL_STORAGE_KEY);
+      localVncUrlInput.value = paramLocalVnc || savedLocalVnc || DEFAULT_LOCAL_VNC_URL;
+      if (paramLocalVnc || localStorage.getItem(USE_LOCAL_VNC_STORAGE_KEY) === "true") {
+        useLocalVnc();
+      } else {
+        setMinecraftVncSource(REMOTE_VNC_URL, "remote");
+      }
     }
 
     function categoryText(category) {
@@ -1270,6 +1376,13 @@
       renderSelectedState();
       if (options.syncMinecraft) teleportCurrentSelection({ targetLabel: options.targetLabel });
     }
+
+    useLocalVncButton.addEventListener("click", useLocalVnc);
+    useRemoteVncButton.addEventListener("click", useRemoteVnc);
+    localVncUrlInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") useLocalVnc();
+    });
+    initializeVncSource();
 
     fetch("assets/shun-lee-clean-v3-mc-text-labels.json", { cache: "no-store" })
       .then((response) => {
