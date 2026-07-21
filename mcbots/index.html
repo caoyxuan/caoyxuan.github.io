@@ -599,11 +599,13 @@
   <header>
     <div>
       <h1>Shun Lee clean-v3 dynamic review</h1>
-      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 Google Street View、OSM map、MC text labels、以及同一个 selected point 驱动的同步 teleport/坐标控制；当前 Minecraft player 是 <code>ShunLeeV3</code>。普通 OSM anchors 已重算为 v3 label-anchored S1 review points，不是 exact anchor；<code>text #...</code> 才是已按 MC 文字牌坐标单独设定的 waypoint。</p>
+      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 Google Street View、OSM map、MC text labels、以及同一个 selected point 驱动的同步 teleport/坐标控制；当前 Minecraft player 是 <code>ShunLeeV3</code>。普通 OSM anchors 已更新为 clean-v3 crop default 84 个 S1 review points；有 OSM tag 且在 clean crop 内的弱自然地面点会保留并标记风险，不是 exact anchor；<code>text #...</code> 才是已按 MC 文字牌坐标单独设定的 waypoint。</p>
     </div>
     <nav class="actions" aria-label="direct links">
       <a class="button primary" href="https://exposed-portrait-parade-immigration.trycloudflare.com/vnc.html?autoconnect=1&amp;resize=scale" target="_blank" rel="noopener">单独打开 VNC</a>
       <a class="button warn" href="https://shall-training-driven-intense.trycloudflare.com/api/health" target="_blank" rel="noopener">检查 API health</a>
+      <a class="button" href="prompts.html">84 点 prompt 审查</a>
+      <a class="button" href="prompts-full.html">104 点 full pool</a>
     </nav>
   </header>
 
@@ -673,9 +675,9 @@
       <div class="minecraft-map-strip" aria-label="Minecraft clean top-down map">
         <div class="panel-head">
           <h2>MC clean-v3 top-down map</h2>
-          <span class="badge"><span class="dot"></span>65 anchors</span>
+          <span class="badge"><span class="dot"></span>84 default anchors</span>
         </div>
-        <img src="assets/shun-lee-clean-v3-topdown-65.png?v=20260721-scene-map-split" alt="Shun Lee clean-v3 Minecraft top-down map with retained anchor points">
+        <img src="assets/shun-lee-clean-v3-topdown-default84.png?v=20260721-default84" alt="Shun Lee clean-v3 Minecraft top-down map with 84 default retained anchor points">
       </div>
     </section>
 
@@ -711,15 +713,15 @@
       </section>
 
       <section class="panel map-card">
-        <img src="assets/shun-lee-clean-v3-topdown-65.png?v=20260717-v3-label-anchored" alt="Shun Lee clean-v3 top-down map with 65 retained anchor points">
+        <img src="assets/shun-lee-clean-v3-topdown-default84.png?v=20260721-default84" alt="Shun Lee clean-v3 top-down map with 84 default retained anchor points">
         <div>
           <div class="facts">
-            <div class="fact"><strong>65</strong><span>v3 label-anchored S1 points</span></div>
+            <div class="fact"><strong>84</strong><span>default clean-crop S1 points</span></div>
             <div class="fact"><strong>v3</strong><span>clean world package</span></div>
-            <div class="fact"><strong>20,640</strong><span>natural-surface columns removed</span></div>
+            <div class="fact"><strong>25</strong><span>OSM-tagged weak-natural points kept</span></div>
             <div class="fact"><strong>0</strong><span>certified exact anchors</span></div>
           </div>
-          <p class="note">这些 OSM 点用于语义筛选和人工审查启动；黄色点是直接使用 MC text waypoint 的牌子坐标，蓝色点是 v3 residual-warp + clean filter 的 review 坐标。非文字牌点仍不能直接视为建筑、入口或边界的精确坐标。</p>
+          <p class="note">这些 OSM 点用于语义筛选和人工审查启动；弱自然地面点只有在 OSM 有 tag 且原始投影在 clean crop 内时保留。黄色/蓝色/粉色点表示不同 MC 表面类别，非文字牌点仍不能直接视为建筑、入口或边界的精确坐标。</p>
         </div>
       </section>
 
@@ -800,7 +802,7 @@
   </main>
 
   <footer>
-    Runtime tunnel refreshed 2026-07-17 Asia/Hong_Kong. This dynamic page depends on the running server sessions on <code>jxcpu1</code>: cloudflared VNC, cloudflared control, two local ncat loopback forwards, the noVNC client, and the Shun Lee control API.
+    Anchor data refreshed 2026-07-21 Asia/Hong_Kong. Runtime tunnel refreshed 2026-07-17 Asia/Hong_Kong. This dynamic page depends on the running server sessions on <code>jxcpu1</code>: cloudflared VNC, cloudflared control, two local ncat loopback forwards, the noVNC client, and the Shun Lee control API.
   </footer>
   <script>
     const anchorSelect = document.getElementById("anchorSelect");
@@ -955,6 +957,7 @@
 
     function compactPromptId(promptId) {
       if (String(promptId || "").startsWith("local-place-")) return `local ${String(promptId).slice(-6)}`;
+      if (String(promptId || "").startsWith("shun-lee-clean-v3-default84-prompt-v1-")) return `default #${String(promptId).slice(-3)}`;
       return promptId.replace("shun-lee-clean-osm-prompt-v1-", "#");
     }
 
@@ -1496,7 +1499,7 @@
       const previous = anchorSelect.value;
       anchorSelect.innerHTML = "";
       const anchorGroup = document.createElement("optgroup");
-      anchorGroup.label = "OSM / MC anchors";
+      anchorGroup.label = "OSM default84 / MC anchors";
       baseReviewAnchors.forEach((anchor) => {
         const option = document.createElement("option");
         option.value = anchor.prompt_id;
