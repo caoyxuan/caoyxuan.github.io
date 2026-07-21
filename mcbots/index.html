@@ -1318,7 +1318,8 @@
     }
 
     function knownControlAnchorId(anchor) {
-      const candidate = anchor && (anchor.control_anchor_id || anchor.source_prompt_id || anchor.prompt_id);
+      if (anchor && anchor.control_anchor_id) return anchor.control_anchor_id;
+      const candidate = anchor && (anchor.source_prompt_id || anchor.prompt_id);
       if (candidate && baseReviewAnchors.some((item) => item.prompt_id === candidate)) return candidate;
       return firstBaseAnchorId();
     }
