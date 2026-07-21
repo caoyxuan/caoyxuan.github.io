@@ -480,6 +480,47 @@
       font-size: .9rem;
       overflow-wrap: anywhere;
     }
+    .review-decision-card {
+      display: grid;
+      gap: .5rem;
+      padding: .6rem .65rem;
+      border: 1px solid #28394b;
+      border-radius: 8px;
+      background: #0f1a25;
+    }
+    .review-decision-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .65rem;
+    }
+    .review-decision-head strong {
+      font-size: .86rem;
+    }
+    .decision-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: .18rem .48rem;
+      border: 1px solid #3f5368;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: .75rem;
+    }
+    .decision-pill.pass {
+      border-color: #2b8f5a;
+      color: var(--green);
+    }
+    .decision-pill.modify {
+      border-color: #a07624;
+      color: var(--amber);
+    }
+    .review-decision-card label {
+      display: grid;
+      gap: .22rem;
+      color: var(--muted);
+      font-size: .72rem;
+    }
     .coord-grid {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -711,6 +752,18 @@
         </div>
         <div class="control-body">
           <div class="prompt-card" id="promptDetail">Loading selected anchor...</div>
+          <div class="review-decision-card" aria-label="selected point review decision">
+            <div class="review-decision-head">
+              <strong>Review decision</strong>
+              <span class="decision-pill" id="reviewDecisionBadge">unreviewed</span>
+            </div>
+            <label>Modify note <input id="reviewDecisionNoteInput" type="text" maxlength="180" placeholder="reason or fix needed"></label>
+            <div class="reference-actions control-actions">
+              <button type="button" id="markPassButton">Pass selected point</button>
+              <button type="button" id="markModifyButton">Mark modify</button>
+              <button type="button" id="clearReviewDecisionButton">Clear decision</button>
+            </div>
+          </div>
           <div class="coord-grid" aria-label="Minecraft coordinate editor">
             <label>X <input id="mcXInput" type="number" step="1" inputmode="numeric"></label>
             <label>Y <input id="mcYInput" type="number" step="1" inputmode="numeric"></label>
@@ -761,6 +814,11 @@
     const teleportButton = document.getElementById("teleportButton");
     const teleportEditedButton = document.getElementById("teleportEditedButton");
     const resetCoordsButton = document.getElementById("resetCoordsButton");
+    const reviewDecisionBadge = document.getElementById("reviewDecisionBadge");
+    const reviewDecisionNoteInput = document.getElementById("reviewDecisionNoteInput");
+    const markPassButton = document.getElementById("markPassButton");
+    const markModifyButton = document.getElementById("markModifyButton");
+    const clearReviewDecisionButton = document.getElementById("clearReviewDecisionButton");
     const useLivePositionButton = document.getElementById("useLivePositionButton");
     const newPlaceNameInput = document.getElementById("newPlaceNameInput");
     const newPlaceKindSelect = document.getElementById("newPlaceKindSelect");
@@ -783,6 +841,7 @@
     const USE_LOCAL_VNC_STORAGE_KEY = "shunLeeUseLocalVnc";
     const MINECRAFT_VIEW_MODE_STORAGE_KEY = "shunLeeMinecraftViewMode";
     const LOCAL_PLACES_STORAGE_KEY = "shunLeeLocalPlacesV1";
+    const REVIEW_DECISIONS_STORAGE_KEY = "shunLeeReviewDecisionsV1";
     const minecraftVncFrame = document.getElementById("minecraftVncFrame");
     const minecraftCaptureVideo = document.getElementById("minecraftCaptureVideo");
     const minecraftCapturePlaceholder = document.getElementById("minecraftCapturePlaceholder");
@@ -807,6 +866,7 @@
     let baseReviewAnchors = [];
     let reviewAnchors = [];
     let localPlaces = [];
+    let reviewDecisions = {};
     let anchorsByPrompt = new Map();
     let mcToGeoModel = null;
     let osmAreaBounds = null;
@@ -927,6 +987,36 @@
 
     function writeLocalStorageJson(key, value) {
       localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function loadReviewDecisions() {
+      const raw = localStorageJson(REVIEW_DECISIONS_STORAGE_KEY, {});
+      return raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {};
+    }
+
+    function saveReviewDecisions() {
+      writeLocalStorageJson(REVIEW_DECISIONS_STORAGE_KEY, reviewDecisions);
+    }
+
+    function pointKeyFor(anchor, textWaypoint = null) {
+      if (textWaypoint) return `text:${textWaypoint.label_id}`;
+      return anchor ? anchor.prompt_id : "";
+    }
+
+    function decisionForKey(key) {
+      const decision = key ? reviewDecisions[key] : null;
+      if (!decision || !["pass", "modify"].includes(decision.status)) return null;
+      return decision;
+    }
+
+    function decisionSuffixForKey(key) {
+      const decision = decisionForKey(key);
+      if (!decision) return "";
+      return decision.status === "pass" ? " · [PASS]" : " · [MODIFY]";
+    }
+
+    function currentPointKey() {
+      return pointKeyFor(selectedAnchor, selectedTextWaypoint);
     }
 
     function isLoopbackHostname(hostname) {
@@ -1410,7 +1500,7 @@
       baseReviewAnchors.forEach((anchor) => {
         const option = document.createElement("option");
         option.value = anchor.prompt_id;
-        option.textContent = `${compactPromptId(anchor.prompt_id)} · ${anchor.name} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}${anchorTextSuffix(anchor)}${anchorOptionWarningSuffix(anchor)}`;
+        option.textContent = `${compactPromptId(anchor.prompt_id)} · ${anchor.name} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}${anchorTextSuffix(anchor)}${anchorOptionWarningSuffix(anchor)}${decisionSuffixForKey(anchor.prompt_id)}`;
         anchorGroup.appendChild(option);
       });
       anchorSelect.appendChild(anchorGroup);
@@ -1420,7 +1510,7 @@
         localPlaces.forEach((anchor) => {
           const option = document.createElement("option");
           option.value = anchor.prompt_id;
-          option.textContent = `${compactPromptId(anchor.prompt_id)} · ${anchor.name} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z} · [local draft]`;
+          option.textContent = `${compactPromptId(anchor.prompt_id)} · ${anchor.name} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z} · [local draft]${decisionSuffixForKey(anchor.prompt_id)}`;
           localGroup.appendChild(option);
         });
         anchorSelect.appendChild(localGroup);
@@ -1433,7 +1523,7 @@
           const primary = waypoint.primary_prompt_id ? ` · candidate ${compactPromptId(waypoint.primary_prompt_id)}` : "";
           const option = document.createElement("option");
           option.value = `text:${waypoint.label_id}`;
-          option.textContent = `${compactLabelId(waypoint.label_id)} · ${waypoint.text || waypoint.label_text}${coord ? ` · MC ${coord.x},${coord.y},${coord.z}` : ""}${primary}`;
+          option.textContent = `${compactLabelId(waypoint.label_id)} · ${waypoint.text || waypoint.label_text}${coord ? ` · MC ${coord.x},${coord.y},${coord.z}` : ""}${primary}${decisionSuffixForKey(`text:${waypoint.label_id}`)}`;
           textGroup.appendChild(option);
         });
         anchorSelect.appendChild(textGroup);
@@ -1580,6 +1670,67 @@
       return readCoordinateInputs();
     }
 
+    function renderReviewDecisionControls() {
+      const key = currentPointKey();
+      const decision = decisionForKey(key);
+      reviewDecisionBadge.className = "decision-pill";
+      if (decision) {
+        reviewDecisionBadge.classList.add(decision.status);
+        reviewDecisionBadge.textContent = decision.status === "pass" ? "PASS" : "MODIFY";
+      } else {
+        reviewDecisionBadge.textContent = "unreviewed";
+      }
+      if (document.activeElement !== reviewDecisionNoteInput) {
+        reviewDecisionNoteInput.value = decision && decision.note ? decision.note : "";
+      }
+      markPassButton.disabled = !selectedAnchor;
+      markModifyButton.disabled = !selectedAnchor;
+      clearReviewDecisionButton.disabled = !decision;
+    }
+
+    function setReviewDecision(status) {
+      if (!selectedAnchor) return;
+      const key = currentPointKey();
+      if (!key) return;
+      const selectedName = selectedTextWaypoint
+        ? `${compactLabelId(selectedTextWaypoint.label_id)} · ${selectedTextWaypoint.text || selectedTextWaypoint.label_text}`
+        : `${compactPromptId(selectedAnchor.prompt_id)} · ${selectedAnchor.name}`;
+      reviewDecisions[key] = {
+        status,
+        note: String(reviewDecisionNoteInput.value || "").trim(),
+        name: selectedName,
+        mc_x: Number(mcXInput.value),
+        mc_y: Number(mcYInput.value),
+        mc_z: Number(mcZInput.value),
+        updated_at: new Date().toISOString(),
+      };
+      saveReviewDecisions();
+      renderReviewDecisionControls();
+      renderAnchorOptions();
+      anchorSelect.value = selectedTextWaypoint ? `text:${selectedTextWaypoint.label_id}` : selectedAnchor.prompt_id;
+      setSyncStatus(`${status === "pass" ? "Passed" : "Marked modify"}: ${selectedName}`);
+    }
+
+    function clearReviewDecision() {
+      const key = currentPointKey();
+      if (!key || !decisionForKey(key)) return;
+      delete reviewDecisions[key];
+      saveReviewDecisions();
+      renderReviewDecisionControls();
+      renderAnchorOptions();
+      anchorSelect.value = selectedTextWaypoint ? `text:${selectedTextWaypoint.label_id}` : selectedAnchor.prompt_id;
+      setSyncStatus("Cleared review decision");
+    }
+
+    function saveReviewDecisionNote() {
+      const key = currentPointKey();
+      const decision = decisionForKey(key);
+      if (!decision) return;
+      decision.note = String(reviewDecisionNoteInput.value || "").trim();
+      decision.updated_at = new Date().toISOString();
+      saveReviewDecisions();
+    }
+
     async function useLivePlayerPosition() {
       useLivePositionButton.disabled = true;
       setSyncStatus("Reading live Minecraft player position...");
@@ -1678,6 +1829,7 @@
         version: 1,
         exported_at: new Date().toISOString(),
         places: localPlaces,
+        review_decisions: reviewDecisions,
       };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
@@ -1789,6 +1941,7 @@
         scenario: ${escapeHtml(semanticLine)}
       `;
       deleteLocalPlaceButton.disabled = !selectedAnchor.is_local_place;
+      renderReviewDecisionControls();
       renderNearbyText(selectedAnchor);
     }
 
@@ -1810,6 +1963,10 @@
       if (event.key === "Enter") useLocalVnc();
     });
     useLivePositionButton.addEventListener("click", useLivePlayerPosition);
+    markPassButton.addEventListener("click", () => setReviewDecision("pass"));
+    markModifyButton.addEventListener("click", () => setReviewDecision("modify"));
+    clearReviewDecisionButton.addEventListener("click", clearReviewDecision);
+    reviewDecisionNoteInput.addEventListener("change", saveReviewDecisionNote);
     saveLocalPlaceButton.addEventListener("click", saveCurrentLocalPlace);
     deleteLocalPlaceButton.addEventListener("click", deleteSelectedLocalPlace);
     exportLocalPlacesButton.addEventListener("click", exportLocalPlaces);
@@ -1905,6 +2062,7 @@
         mcToGeoModel = fitMcToGeoModel(baseReviewAnchors);
         osmAreaBounds = fitOsmAreaBounds(baseReviewAnchors);
         localPlaces = loadLocalPlaces();
+        reviewDecisions = loadReviewDecisions();
         rebuildAnchorIndex();
         renderAnchorOptions();
         if (mcTextLabels) renderAllTextLabels(mcTextLabels);
