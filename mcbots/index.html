@@ -268,14 +268,37 @@
       height: 52vh;
       min-height: 360px;
     }
-    .minecraft-capture {
+    .minecraft-capture,
+    .minecraft-capture-placeholder {
       display: block;
       width: 100%;
       height: 52vh;
       min-height: 360px;
       border: 0;
       background: #0a0f14;
+    }
+    .minecraft-capture {
       object-fit: contain;
+    }
+    .minecraft-capture-placeholder {
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    .minecraft-capture-placeholder strong {
+      display: block;
+      margin-bottom: .35rem;
+      color: var(--ink);
+      font-size: 1rem;
+      font-weight: 650;
+    }
+    .minecraft-capture-placeholder span {
+      display: block;
+      max-width: 34rem;
+      font-size: .86rem;
+      line-height: 1.45;
     }
     .minecraft-map-strip {
       border-top: 1px solid var(--line);
@@ -584,6 +607,17 @@
         playsinline
         hidden>
       </video>
+      <div
+        id="minecraftCapturePlaceholder"
+        class="minecraft-capture-placeholder"
+        role="status"
+        aria-live="polite"
+        hidden>
+        <div>
+          <strong id="minecraftCapturePlaceholderTitle">等待本地 Minecraft 捕获</strong>
+          <span id="minecraftCapturePlaceholderBody">点击 Capture Minecraft window 后选择 Minecraft 窗口，左侧会显示本地画面的镜像。</span>
+        </div>
+      </div>
       <div class="minecraft-map-strip" aria-label="Minecraft clean top-down map">
         <div class="panel-head">
           <h2>MC clean-v3 top-down map</h2>
@@ -712,8 +746,12 @@
     const DEFAULT_LOCAL_VNC_URL = "http://127.0.0.1:6080/vnc.html?autoconnect=1&resize=scale";
     const LOCAL_VNC_URL_STORAGE_KEY = "shunLeeLocalVncUrl";
     const USE_LOCAL_VNC_STORAGE_KEY = "shunLeeUseLocalVnc";
+    const MINECRAFT_VIEW_MODE_STORAGE_KEY = "shunLeeMinecraftViewMode";
     const minecraftVncFrame = document.getElementById("minecraftVncFrame");
     const minecraftCaptureVideo = document.getElementById("minecraftCaptureVideo");
+    const minecraftCapturePlaceholder = document.getElementById("minecraftCapturePlaceholder");
+    const minecraftCapturePlaceholderTitle = document.getElementById("minecraftCapturePlaceholderTitle");
+    const minecraftCapturePlaceholderBody = document.getElementById("minecraftCapturePlaceholderBody");
     const minecraftVncTitle = document.getElementById("minecraftVncTitle");
     const minecraftVncBadge = document.getElementById("minecraftVncBadge");
     const localVncUrlInput = document.getElementById("localVncUrlInput");
@@ -863,9 +901,21 @@
       return parsed.toString();
     }
 
+    function showCapturePlaceholder(title = "等待本地 Minecraft 捕获", body = "点击 Capture Minecraft window 后选择 Minecraft 窗口，左侧会显示本地画面的镜像。") {
+      minecraftVncFrame.hidden = true;
+      minecraftCaptureVideo.hidden = true;
+      minecraftCapturePlaceholder.hidden = false;
+      minecraftCapturePlaceholderTitle.textContent = title;
+      minecraftCapturePlaceholderBody.textContent = body;
+      minecraftVncTitle.textContent = "Local Minecraft · Browser Capture";
+      minecraftVncBadge.innerHTML = '<span class="dot"></span>waiting';
+    }
+
     function setMinecraftVncSource(url, mode) {
       stopBrowserCapture({ switchToRemote: false, quiet: true });
+      localStorage.setItem(MINECRAFT_VIEW_MODE_STORAGE_KEY, mode);
       minecraftCaptureVideo.hidden = true;
+      minecraftCapturePlaceholder.hidden = true;
       minecraftVncFrame.hidden = false;
       minecraftVncFrame.src = url;
       if (mode === "local") {
@@ -885,12 +935,11 @@
       minecraftCaptureVideo.pause();
       minecraftCaptureVideo.srcObject = null;
       minecraftCaptureVideo.hidden = true;
+      minecraftCapturePlaceholder.hidden = true;
       if (options.switchToRemote) {
         setMinecraftVncSource(REMOTE_VNC_URL, "remote");
       } else if (!options.quiet) {
-        minecraftVncFrame.hidden = false;
-        minecraftVncTitle.textContent = "Live noVNC · Minecraft ShunLeeV3";
-        minecraftVncBadge.innerHTML = '<span class="dot"></span>HTTPS tunnel';
+        setMinecraftVncSource(REMOTE_VNC_URL, "remote");
         setSyncStatus("Local browser capture stopped");
       }
     }
@@ -900,6 +949,10 @@
         setSyncStatus("Browser capture is not available in this browser");
         return;
       }
+      localStorage.setItem(MINECRAFT_VIEW_MODE_STORAGE_KEY, "capture");
+      localStorage.setItem(USE_LOCAL_VNC_STORAGE_KEY, "false");
+      showCapturePlaceholder("选择本地 Minecraft 窗口", "授权成功后，这个位置会显示本地 Minecraft 画面的实时镜像。");
+      useBrowserCaptureButton.disabled = true;
       try {
         const stream = await navigator.mediaDevices.getDisplayMedia({
           video: {
@@ -909,10 +962,10 @@
           audio: false,
         });
         stopBrowserCapture({ switchToRemote: false, quiet: true });
-        localStorage.setItem(USE_LOCAL_VNC_STORAGE_KEY, "false");
         localCaptureStream = stream;
         minecraftCaptureVideo.srcObject = stream;
         minecraftVncFrame.hidden = true;
+        minecraftCapturePlaceholder.hidden = true;
         minecraftCaptureVideo.hidden = false;
         minecraftVncTitle.textContent = "Local Minecraft · Browser Capture";
         minecraftVncBadge.innerHTML = '<span class="dot"></span>window capture';
@@ -920,7 +973,8 @@
         if (videoTrack) {
           videoTrack.addEventListener("ended", () => {
             if (localCaptureStream === stream) {
-              stopBrowserCapture({ switchToRemote: true, quiet: true });
+              stopBrowserCapture({ switchToRemote: false, quiet: true });
+              showCapturePlaceholder("本地捕获已结束", "再次点击 Capture Minecraft window 可以重新连接本地 Minecraft 画面。");
               setSyncStatus("Browser capture ended");
             }
           });
@@ -929,10 +983,15 @@
         setSyncStatus("Left panel is showing captured Minecraft window");
       } catch (error) {
         if (error && error.name === "NotAllowedError") {
+          showCapturePlaceholder("本地捕获取消", "再次点击 Capture Minecraft window 可以选择 Minecraft 窗口。");
           setSyncStatus("Browser capture cancelled");
         } else {
-          setSyncStatus(`Browser capture failed: ${error.message}`);
+          const message = error && error.message ? error.message : "Browser capture failed";
+          showCapturePlaceholder("本地捕获失败", message);
+          setSyncStatus(`Browser capture failed: ${message}`);
         }
+      } finally {
+        useBrowserCaptureButton.disabled = false;
       }
     }
 
@@ -958,9 +1017,13 @@
     function initializeVncSource() {
       const params = new URLSearchParams(window.location.search);
       const paramLocalVnc = params.get("localVnc");
+      const wantsCapture = params.get("capture") === "1" || localStorage.getItem(MINECRAFT_VIEW_MODE_STORAGE_KEY) === "capture";
       const savedLocalVnc = localStorage.getItem(LOCAL_VNC_URL_STORAGE_KEY);
       localVncUrlInput.value = paramLocalVnc || savedLocalVnc || DEFAULT_LOCAL_VNC_URL;
-      if (paramLocalVnc || localStorage.getItem(USE_LOCAL_VNC_STORAGE_KEY) === "true") {
+      if (wantsCapture) {
+        localStorage.setItem(USE_LOCAL_VNC_STORAGE_KEY, "false");
+        showCapturePlaceholder();
+      } else if (paramLocalVnc || localStorage.getItem(USE_LOCAL_VNC_STORAGE_KEY) === "true") {
         useLocalVnc();
       } else {
         setMinecraftVncSource(REMOTE_VNC_URL, "remote");
