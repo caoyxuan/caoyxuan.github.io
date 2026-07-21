@@ -599,12 +599,12 @@
   <header>
     <div>
       <h1>Shun Lee clean-v3 dynamic review</h1>
-      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 Google Street View、OSM map、MC text labels、以及同一个 selected point 驱动的同步 teleport/坐标控制；当前 Minecraft player 是 <code>ShunLeeV3</code>。普通 OSM anchors 已更新为 clean-v3 crop default 84 个 S1 review points；有 OSM tag 且在 clean crop 内的弱自然地面点会保留并标记风险，不是 exact anchor；<code>text #...</code> 才是已按 MC 文字牌坐标单独设定的 waypoint。</p>
+      <p class="lede">GitHub Pages 前端 + Cloudflare HTTPS tunnel。左侧是 live noVNC，右侧是 Google Street View、OSM map、MC text labels、以及同一个 selected point 驱动的同步 teleport/坐标控制；当前 Minecraft player 是 <code>ShunLeeV3</code>。普通 OSM anchors 已更新为 clean-v3 crop content-mask default 76 个 S1 review points；落在无效 clean-map 背景 mask 上的点已移除，有 OSM tag 且落在有效内容上的弱自然地面点会保留并标记风险，不是 exact anchor；<code>text #...</code> 才是已按 MC 文字牌坐标单独设定的 waypoint。</p>
     </div>
     <nav class="actions" aria-label="direct links">
       <a class="button primary" href="https://exposed-portrait-parade-immigration.trycloudflare.com/vnc.html?autoconnect=1&amp;resize=scale" target="_blank" rel="noopener">单独打开 VNC</a>
       <a class="button warn" href="https://shall-training-driven-intense.trycloudflare.com/api/health" target="_blank" rel="noopener">检查 API health</a>
-      <a class="button" href="prompts.html">84 点 prompt 审查</a>
+      <a class="button" href="prompts.html">76 点 prompt 审查</a>
       <a class="button" href="prompts-full.html">104 点 full pool</a>
     </nav>
   </header>
@@ -675,9 +675,9 @@
       <div class="minecraft-map-strip" aria-label="Minecraft clean top-down map">
         <div class="panel-head">
           <h2>MC clean-v3 top-down map</h2>
-          <span class="badge"><span class="dot"></span>84 default anchors</span>
+          <span class="badge"><span class="dot"></span>76 content-mask anchors</span>
         </div>
-        <img src="assets/shun-lee-clean-v3-topdown-default84.png?v=20260721-default84" alt="Shun Lee clean-v3 Minecraft top-down map with 84 default retained anchor points">
+        <img src="assets/shun-lee-clean-v3-topdown-default76.png?v=20260721-default76" alt="Shun Lee clean-v3 Minecraft top-down map with 76 content-mask retained anchor points">
       </div>
     </section>
 
@@ -713,10 +713,10 @@
       </section>
 
       <section class="panel map-card">
-        <img src="assets/shun-lee-clean-v3-topdown-default84.png?v=20260721-default84" alt="Shun Lee clean-v3 top-down map with 84 default retained anchor points">
+        <img src="assets/shun-lee-clean-v3-topdown-default76.png?v=20260721-default76" alt="Shun Lee clean-v3 top-down map with 76 content-mask retained anchor points">
         <div>
           <div class="facts">
-            <div class="fact"><strong>84</strong><span>default clean-crop S1 points</span></div>
+            <div class="fact"><strong>76</strong><span>content-mask clean-crop S1 points</span></div>
             <div class="fact"><strong>v3</strong><span>clean world package</span></div>
             <div class="fact"><strong>25</strong><span>OSM-tagged weak-natural points kept</span></div>
             <div class="fact"><strong>0</strong><span>certified exact anchors</span></div>
@@ -959,7 +959,7 @@
       if (String(promptId || "").startsWith("local-place-")) return `local ${String(promptId).slice(-6)}`;
       const mappedAnchor = anchorsByPrompt && anchorsByPrompt.get ? anchorsByPrompt.get(String(promptId || "")) : null;
       if (mappedAnchor && mappedAnchor.display_id) return mappedAnchor.display_id;
-      if (String(promptId || "").startsWith("shun-lee-clean-v3-default84-prompt-v1-")) return `default #${String(promptId).slice(-3)}`;
+      if (String(promptId || "").startsWith("shun-lee-clean-v3-default76-prompt-v1-")) return `default #${String(promptId).slice(-3)}`;
       return promptId.replace("shun-lee-clean-osm-prompt-v1-", "#");
     }
 
@@ -1517,7 +1517,7 @@
       const previous = anchorSelect.value;
       anchorSelect.innerHTML = "";
       const anchorGroup = document.createElement("optgroup");
-      anchorGroup.label = "OSM default84 / MC anchors";
+      anchorGroup.label = "OSM default76 / MC anchors";
       baseReviewAnchors.forEach((anchor) => {
         const option = document.createElement("option");
         option.value = anchor.prompt_id;
