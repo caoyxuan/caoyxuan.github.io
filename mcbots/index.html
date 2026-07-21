@@ -957,8 +957,25 @@
 
     function compactPromptId(promptId) {
       if (String(promptId || "").startsWith("local-place-")) return `local ${String(promptId).slice(-6)}`;
+      const mappedAnchor = anchorsByPrompt && anchorsByPrompt.get ? anchorsByPrompt.get(String(promptId || "")) : null;
+      if (mappedAnchor && mappedAnchor.display_id) return mappedAnchor.display_id;
       if (String(promptId || "").startsWith("shun-lee-clean-v3-default84-prompt-v1-")) return `default #${String(promptId).slice(-3)}`;
       return promptId.replace("shun-lee-clean-osm-prompt-v1-", "#");
+    }
+
+    function anchorDisplayId(anchor) {
+      if (!anchor) return "";
+      return anchor.display_id || compactPromptId(anchor.prompt_id);
+    }
+
+    function anchorDisplayName(anchor) {
+      if (!anchor) return "";
+      return anchor.display_name || anchor.name || "";
+    }
+
+    function anchorOptionLabel(anchor) {
+      const kind = anchor.display_kind ? ` · ${anchor.display_kind}` : "";
+      return `${anchorDisplayId(anchor)} · ${anchorDisplayName(anchor)}${kind} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}`;
     }
 
     function compactLabelId(labelId) {
@@ -1503,7 +1520,7 @@
       baseReviewAnchors.forEach((anchor) => {
         const option = document.createElement("option");
         option.value = anchor.prompt_id;
-        option.textContent = `${compactPromptId(anchor.prompt_id)} · ${anchor.name} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}${anchorTextSuffix(anchor)}${anchorOptionWarningSuffix(anchor)}${decisionSuffixForKey(anchor.prompt_id)}`;
+        option.textContent = `${anchorOptionLabel(anchor)}${anchorTextSuffix(anchor)}${anchorOptionWarningSuffix(anchor)}${decisionSuffixForKey(anchor.prompt_id)}`;
         anchorGroup.appendChild(option);
       });
       anchorSelect.appendChild(anchorGroup);
@@ -1537,7 +1554,7 @@
     function entryButtonHtml(match) {
       const promptId = match.prompt_id || "";
       const anchor = anchorsByPrompt.get(promptId);
-      const anchorName = match.anchor_name || (anchor ? anchor.name : "");
+      const anchorName = anchor ? anchorDisplayName(anchor) : (match.anchor_name || "");
       const distance = matchDistanceText(match);
       const distanceSuffix = distance ? ` · ${distance}` : "";
       return `<button type="button" class="entry-jump" data-prompt-id="${escapeHtml(promptId)}">${escapeHtml(compactPromptId(promptId))} · ${escapeHtml(anchorName)}${escapeHtml(distanceSuffix)}</button>`;
@@ -1697,7 +1714,7 @@
       if (!key) return;
       const selectedName = selectedTextWaypoint
         ? `${compactLabelId(selectedTextWaypoint.label_id)} · ${selectedTextWaypoint.text || selectedTextWaypoint.label_text}`
-        : `${compactPromptId(selectedAnchor.prompt_id)} · ${selectedAnchor.name}`;
+        : `${anchorDisplayId(selectedAnchor)} · ${anchorDisplayName(selectedAnchor)}`;
       reviewDecisions[key] = {
         status,
         note: String(reviewDecisionNoteInput.value || "").trim(),
@@ -1859,7 +1876,7 @@
     }
 
     async function teleportMinecraft(anchor, options = {}) {
-      const target = options.targetLabel ? `sign ${options.targetLabel}` : compactPromptId(anchor.prompt_id);
+      const target = options.targetLabel ? `sign ${options.targetLabel}` : anchorDisplayId(anchor);
       setSyncStatus(`Teleporting ${target}...`);
       teleportButton.disabled = true;
       const request = { anchor_review_id: knownControlAnchorId(anchor) };
@@ -1917,7 +1934,7 @@
         : "";
       const selectedName = selectedTextWaypoint
         ? `${compactLabelId(selectedTextWaypoint.label_id)} · ${selectedTextWaypoint.text || selectedTextWaypoint.label_text}`
-        : `${compactPromptId(selectedAnchor.prompt_id)} · ${selectedAnchor.name}`;
+        : `${anchorDisplayId(selectedAnchor)} · ${anchorDisplayName(selectedAnchor)}`;
       const semanticLine = selectedTextWaypoint
         ? `MC text waypoint / ${semanticRoleText(selectedTextWaypoint.semantic_role || selectedTextWaypoint.role)}`
         : selectedAnchor.is_local_place
@@ -1937,6 +1954,9 @@
         active MC: ${escapeHtml(coordinateDisplay(coordinate))}<br>
         ${selectedTextWaypoint ? `candidate OSM anchors: ${escapeHtml(candidateIds || compactPromptId(selectedAnchor.prompt_id))}<br>` : ""}
         registered MC anchor: ${selectedAnchor.mc_x}, ${selectedAnchor.mc_y}, ${selectedAnchor.mc_z}<br>
+        ${selectedAnchor.osm_ref ? `OSM source: ${escapeHtml(selectedAnchor.osm_ref)}<br>` : ""}
+        ${selectedAnchor.source_prompt_id ? `source packet id: ${escapeHtml(selectedAnchor.source_prompt_id)}<br>` : ""}
+        ${selectedAnchor.prompt_id && selectedAnchor.prompt_id !== selectedAnchor.source_prompt_id ? `stable internal id: ${escapeHtml(selectedAnchor.prompt_id)}<br>` : ""}
         ${selectedAnchor.is_local_place ? `control source: ${escapeHtml(compactPromptId(knownControlAnchorId(selectedAnchor)))}<br>` : ""}
         coordinate mode: ${escapeHtml(coordinateNote)}<br>
         ${selectedTextWaypoint ? "" : anchorAlignmentDebugHtml(selectedAnchor)}
