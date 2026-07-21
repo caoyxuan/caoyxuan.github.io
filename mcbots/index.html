@@ -246,7 +246,7 @@
     }
     .vnc-switch {
       display: grid;
-      grid-template-columns: minmax(260px, 1fr) auto auto;
+      grid-template-columns: minmax(260px, 1fr) auto auto auto auto;
       gap: .45rem;
       align-items: center;
       padding: .55rem .65rem;
@@ -263,6 +263,18 @@
       min-height: 34px;
       padding: .45rem .62rem;
       font-size: .84rem;
+    }
+    .minecraft-capture {
+      display: block;
+      width: 100%;
+      height: calc(100vh - 224px);
+      min-height: 560px;
+      border: 0;
+      background: #0a0f14;
+      object-fit: contain;
+    }
+    [hidden] {
+      display: none !important;
     }
     .reference-meta {
       display: grid;
@@ -525,6 +537,8 @@
           Local noVNC URL
           <input id="localVncUrlInput" type="url" spellcheck="false" value="http://127.0.0.1:6080/vnc.html?autoconnect=1&amp;resize=scale">
         </label>
+        <button type="button" id="useBrowserCaptureButton">Capture Minecraft window</button>
+        <button type="button" id="stopBrowserCaptureButton">Stop capture</button>
         <button type="button" id="useLocalVncButton">Use local noVNC</button>
         <button type="button" id="useRemoteVncButton">Use server VNC</button>
       </div>
@@ -535,6 +549,14 @@
         allow="clipboard-read; clipboard-write; fullscreen"
         referrerpolicy="no-referrer">
       </iframe>
+      <video
+        id="minecraftCaptureVideo"
+        class="minecraft-capture"
+        autoplay
+        muted
+        playsinline
+        hidden>
+      </video>
     </section>
 
     <aside class="side">
@@ -657,9 +679,12 @@
     const LOCAL_VNC_URL_STORAGE_KEY = "shunLeeLocalVncUrl";
     const USE_LOCAL_VNC_STORAGE_KEY = "shunLeeUseLocalVnc";
     const minecraftVncFrame = document.getElementById("minecraftVncFrame");
+    const minecraftCaptureVideo = document.getElementById("minecraftCaptureVideo");
     const minecraftVncTitle = document.getElementById("minecraftVncTitle");
     const minecraftVncBadge = document.getElementById("minecraftVncBadge");
     const localVncUrlInput = document.getElementById("localVncUrlInput");
+    const useBrowserCaptureButton = document.getElementById("useBrowserCaptureButton");
+    const stopBrowserCaptureButton = document.getElementById("stopBrowserCaptureButton");
     const useLocalVncButton = document.getElementById("useLocalVncButton");
     const useRemoteVncButton = document.getElementById("useRemoteVncButton");
     const USEFUL_TEXT_CATEGORIES = new Set(["building_or_institution", "park_or_transport"]);
@@ -683,6 +708,7 @@
     let mcTextWaypointsByPrompt = new Map();
     let mcTextWaypointsByLabel = new Map();
     let mcLabelsById = new Map();
+    let localCaptureStream = null;
 
     function googleStreetViewEmbedUrl(anchor) {
       const url = new URL("https://maps.google.com/maps");
@@ -804,6 +830,9 @@
     }
 
     function setMinecraftVncSource(url, mode) {
+      stopBrowserCapture({ switchToRemote: false, quiet: true });
+      minecraftCaptureVideo.hidden = true;
+      minecraftVncFrame.hidden = false;
       minecraftVncFrame.src = url;
       if (mode === "local") {
         minecraftVncTitle.textContent = "Live noVNC · Local Minecraft";
@@ -811,6 +840,65 @@
       } else {
         minecraftVncTitle.textContent = "Live noVNC · Minecraft ShunLeeV3";
         minecraftVncBadge.innerHTML = '<span class="dot"></span>HTTPS tunnel';
+      }
+    }
+
+    function stopBrowserCapture(options = {}) {
+      if (localCaptureStream) {
+        localCaptureStream.getTracks().forEach((track) => track.stop());
+        localCaptureStream = null;
+      }
+      minecraftCaptureVideo.pause();
+      minecraftCaptureVideo.srcObject = null;
+      minecraftCaptureVideo.hidden = true;
+      if (options.switchToRemote) {
+        setMinecraftVncSource(REMOTE_VNC_URL, "remote");
+      } else if (!options.quiet) {
+        minecraftVncFrame.hidden = false;
+        minecraftVncTitle.textContent = "Live noVNC · Minecraft ShunLeeV3";
+        minecraftVncBadge.innerHTML = '<span class="dot"></span>HTTPS tunnel';
+        setSyncStatus("Local browser capture stopped");
+      }
+    }
+
+    async function useBrowserCapture() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
+        setSyncStatus("Browser capture is not available in this browser");
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+          video: {
+            displaySurface: "window",
+            frameRate: { ideal: 30, max: 60 },
+          },
+          audio: false,
+        });
+        stopBrowserCapture({ switchToRemote: false, quiet: true });
+        localStorage.setItem(USE_LOCAL_VNC_STORAGE_KEY, "false");
+        localCaptureStream = stream;
+        minecraftCaptureVideo.srcObject = stream;
+        minecraftVncFrame.hidden = true;
+        minecraftCaptureVideo.hidden = false;
+        minecraftVncTitle.textContent = "Local Minecraft · Browser Capture";
+        minecraftVncBadge.innerHTML = '<span class="dot"></span>window capture';
+        const [videoTrack] = stream.getVideoTracks();
+        if (videoTrack) {
+          videoTrack.addEventListener("ended", () => {
+            if (localCaptureStream === stream) {
+              stopBrowserCapture({ switchToRemote: true, quiet: true });
+              setSyncStatus("Browser capture ended");
+            }
+          });
+        }
+        await minecraftCaptureVideo.play();
+        setSyncStatus("Left panel is showing captured Minecraft window");
+      } catch (error) {
+        if (error && error.name === "NotAllowedError") {
+          setSyncStatus("Browser capture cancelled");
+        } else {
+          setSyncStatus(`Browser capture failed: ${error.message}`);
+        }
       }
     }
 
@@ -1377,6 +1465,10 @@
       if (options.syncMinecraft) teleportCurrentSelection({ targetLabel: options.targetLabel });
     }
 
+    useBrowserCaptureButton.addEventListener("click", useBrowserCapture);
+    stopBrowserCaptureButton.addEventListener("click", () => {
+      stopBrowserCapture({ switchToRemote: true });
+    });
     useLocalVncButton.addEventListener("click", useLocalVnc);
     useRemoteVncButton.addEventListener("click", useRemoteVnc);
     localVncUrlInput.addEventListener("keydown", (event) => {
