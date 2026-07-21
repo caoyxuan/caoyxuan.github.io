@@ -223,7 +223,7 @@
     .anchor-warning-meta strong {
       color: var(--amber);
     }
-    select, input[type="url"] {
+    select, input[type="url"], input[type="text"] {
       width: 100%;
       min-height: 40px;
       border: 1px solid #3f5368;
@@ -501,6 +501,17 @@
       font: inherit;
       padding: .35rem .45rem;
     }
+    .local-place-grid {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(150px, .65fr);
+      gap: .45rem;
+    }
+    .local-place-grid label {
+      display: grid;
+      gap: .22rem;
+      color: var(--muted);
+      font-size: .72rem;
+    }
     .control-actions {
       align-items: stretch;
     }
@@ -708,8 +719,26 @@
             <label>Pitch <input id="mcPitchInput" type="number" step="1" placeholder="auto"></label>
           </div>
           <div class="reference-actions control-actions">
+            <button type="button" id="useLivePositionButton">Use live player position</button>
             <button type="button" id="teleportEditedButton">Teleport current coords</button>
             <button type="button" id="resetCoordsButton">Reset to anchor coords</button>
+          </div>
+          <div class="local-place-grid" aria-label="local place editor">
+            <label>New place name <input id="newPlaceNameInput" type="text" maxlength="80" placeholder="e.g. bus stop sign"></label>
+            <label>Kind
+              <select id="newPlaceKindSelect">
+                <option value="local_landmark">local landmark</option>
+                <option value="sign_or_label">sign or label</option>
+                <option value="entrance">entrance</option>
+                <option value="route_point">route point</option>
+                <option value="other">other</option>
+              </select>
+            </label>
+          </div>
+          <div class="reference-actions control-actions">
+            <button type="button" id="saveLocalPlaceButton">Save current coords as place</button>
+            <button type="button" id="deleteLocalPlaceButton">Delete selected local place</button>
+            <button type="button" id="exportLocalPlacesButton">Export local places JSON</button>
           </div>
           <p class="note">This replaces the separate summary control page. The dropdown, Google view, OSM marker, VNC teleport, coordinate edits, and sign teleport actions all use the same selected point state. The OSM panel stays fixed to the Shun Lee mcbots area; its marker follows the active MC point.</p>
         </div>
@@ -732,6 +761,12 @@
     const teleportButton = document.getElementById("teleportButton");
     const teleportEditedButton = document.getElementById("teleportEditedButton");
     const resetCoordsButton = document.getElementById("resetCoordsButton");
+    const useLivePositionButton = document.getElementById("useLivePositionButton");
+    const newPlaceNameInput = document.getElementById("newPlaceNameInput");
+    const newPlaceKindSelect = document.getElementById("newPlaceKindSelect");
+    const saveLocalPlaceButton = document.getElementById("saveLocalPlaceButton");
+    const deleteLocalPlaceButton = document.getElementById("deleteLocalPlaceButton");
+    const exportLocalPlacesButton = document.getElementById("exportLocalPlacesButton");
     const promptDetail = document.getElementById("promptDetail");
     const mcXInput = document.getElementById("mcXInput");
     const mcYInput = document.getElementById("mcYInput");
@@ -747,6 +782,7 @@
     const LOCAL_VNC_URL_STORAGE_KEY = "shunLeeLocalVncUrl";
     const USE_LOCAL_VNC_STORAGE_KEY = "shunLeeUseLocalVnc";
     const MINECRAFT_VIEW_MODE_STORAGE_KEY = "shunLeeMinecraftViewMode";
+    const LOCAL_PLACES_STORAGE_KEY = "shunLeeLocalPlacesV1";
     const minecraftVncFrame = document.getElementById("minecraftVncFrame");
     const minecraftCaptureVideo = document.getElementById("minecraftCaptureVideo");
     const minecraftCapturePlaceholder = document.getElementById("minecraftCapturePlaceholder");
@@ -768,7 +804,9 @@
     };
     let selectedAnchor = null;
     let selectedTextWaypoint = null;
+    let baseReviewAnchors = [];
     let reviewAnchors = [];
+    let localPlaces = [];
     let anchorsByPrompt = new Map();
     let mcToGeoModel = null;
     let osmAreaBounds = null;
@@ -856,6 +894,7 @@
     }
 
     function compactPromptId(promptId) {
+      if (String(promptId || "").startsWith("local-place-")) return `local ${String(promptId).slice(-6)}`;
       return promptId.replace("shun-lee-clean-osm-prompt-v1-", "#");
     }
 
@@ -875,6 +914,19 @@
 
     function setSyncStatus(message) {
       syncStatus.innerHTML = `<span class="dot"></span>${escapeHtml(message)}`;
+    }
+
+    function localStorageJson(key, fallback) {
+      try {
+        const value = localStorage.getItem(key);
+        return value ? JSON.parse(value) : fallback;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function writeLocalStorageJson(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
     }
 
     function isLoopbackHostname(hostname) {
@@ -1151,6 +1203,66 @@
       };
     }
 
+    function firstBaseAnchorId() {
+      return baseReviewAnchors.length ? baseReviewAnchors[0].prompt_id : "";
+    }
+
+    function knownControlAnchorId(anchor) {
+      const candidate = anchor && (anchor.control_anchor_id || anchor.source_prompt_id || anchor.prompt_id);
+      if (candidate && baseReviewAnchors.some((item) => item.prompt_id === candidate)) return candidate;
+      return firstBaseAnchorId();
+    }
+
+    function normalizeLocalPlace(item, index) {
+      if (!item || typeof item !== "object") return null;
+      const x = Number(item.mc_x);
+      const y = Number(item.mc_y);
+      const z = Number(item.mc_z);
+      const lat = Number(item.lat);
+      const lon = Number(item.lon);
+      if (![x, y, z, lat, lon].every(Number.isFinite)) return null;
+      const promptId = String(item.prompt_id || `local-place-imported-${index}`).replace(/[^A-Za-z0-9_-]/g, "-");
+      const sourceCandidate = String(item.source_prompt_id || knownControlAnchorId(item) || firstBaseAnchorId());
+      const sourcePromptId = baseReviewAnchors.some((anchor) => anchor.prompt_id === sourceCandidate)
+        ? sourceCandidate
+        : firstBaseAnchorId();
+      const controlAnchorId = baseReviewAnchors.some((anchor) => anchor.prompt_id === item.control_anchor_id)
+        ? item.control_anchor_id
+        : sourcePromptId;
+      return {
+        ...item,
+        prompt_id: promptId,
+        name: String(item.name || `Local place ${index + 1}`).slice(0, 80),
+        lat,
+        lon,
+        mc_x: Math.round(x),
+        mc_y: Math.round(y),
+        mc_z: Math.round(z),
+        scenario_id: item.scenario_id || "local exploration",
+        endpoint_affordance: item.endpoint_affordance || "local_landmark",
+        source_prompt_id: sourcePromptId,
+        control_anchor_id: controlAnchorId || firstBaseAnchorId(),
+        is_local_place: true,
+        mc_alignment_label: "local place draft",
+        mc_alignment_note: "Saved in this browser from an exploratory Minecraft coordinate; not part of the reviewed 65-anchor source file yet.",
+      };
+    }
+
+    function loadLocalPlaces() {
+      const raw = localStorageJson(LOCAL_PLACES_STORAGE_KEY, []);
+      if (!Array.isArray(raw)) return [];
+      return raw.map(normalizeLocalPlace).filter(Boolean);
+    }
+
+    function saveLocalPlaces() {
+      writeLocalStorageJson(LOCAL_PLACES_STORAGE_KEY, localPlaces);
+    }
+
+    function rebuildAnchorIndex() {
+      reviewAnchors = baseReviewAnchors.concat(localPlaces);
+      anchorsByPrompt = new Map(reviewAnchors.map((anchor) => [anchor.prompt_id, anchor]));
+    }
+
     function signCoordinate(item) {
       const x = Number(item.label_x ?? item.x);
       const y = Number(item.label_y ?? item.y);
@@ -1295,13 +1407,24 @@
       anchorSelect.innerHTML = "";
       const anchorGroup = document.createElement("optgroup");
       anchorGroup.label = "OSM / MC anchors";
-      reviewAnchors.forEach((anchor) => {
+      baseReviewAnchors.forEach((anchor) => {
         const option = document.createElement("option");
         option.value = anchor.prompt_id;
         option.textContent = `${compactPromptId(anchor.prompt_id)} · ${anchor.name} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}${anchorTextSuffix(anchor)}${anchorOptionWarningSuffix(anchor)}`;
         anchorGroup.appendChild(option);
       });
       anchorSelect.appendChild(anchorGroup);
+      if (localPlaces.length) {
+        const localGroup = document.createElement("optgroup");
+        localGroup.label = `Local saved places (${localPlaces.length})`;
+        localPlaces.forEach((anchor) => {
+          const option = document.createElement("option");
+          option.value = anchor.prompt_id;
+          option.textContent = `${compactPromptId(anchor.prompt_id)} · ${anchor.name} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z} · [local draft]`;
+          localGroup.appendChild(option);
+        });
+        anchorSelect.appendChild(localGroup);
+      }
       if (mcTextWaypoints.length) {
         const textGroup = document.createElement("optgroup");
         textGroup.label = "MC text landmark waypoints";
@@ -1457,6 +1580,117 @@
       return readCoordinateInputs();
     }
 
+    async function useLivePlayerPosition() {
+      useLivePositionButton.disabled = true;
+      setSyncStatus("Reading live Minecraft player position...");
+      try {
+        const response = await fetch(`${CONTROL_API_BASE}/api/player-position`, { cache: "no-store" });
+        const payload = await response.json();
+        if (!response.ok || !payload.success) {
+          throw new Error(payload.error || `HTTP ${response.status}`);
+        }
+        const coordinate = {
+          x: Math.round(Number(payload.x)),
+          y: Math.round(Number(payload.y)),
+          z: Math.round(Number(payload.z)),
+          yaw: payload.yaw == null ? "" : Math.round(Number(payload.yaw)),
+          pitch: payload.pitch == null ? "" : Math.round(Number(payload.pitch)),
+        };
+        if (![coordinate.x, coordinate.y, coordinate.z].every(Number.isFinite)) {
+          throw new Error("live player position is not numeric");
+        }
+        writeCoordinateInputs(coordinate);
+        renderSelectedState();
+        setSyncStatus(`Loaded live position for ${payload.player}: ${coordinate.x}, ${coordinate.y}, ${coordinate.z}`);
+      } catch (error) {
+        const message = error && error.message ? error.message : "unknown error";
+        setSyncStatus(`Live position failed: ${message}`);
+      } finally {
+        useLivePositionButton.disabled = false;
+      }
+    }
+
+    function saveCurrentLocalPlace() {
+      if (!selectedAnchor) return;
+      let coordinate;
+      try {
+        coordinate = readCoordinateInputs();
+      } catch (error) {
+        setSyncStatus(error.message);
+        return;
+      }
+      const googleTarget = googleTargetForCoordinate(selectedAnchor, coordinate);
+      const name = String(newPlaceNameInput.value || "").trim() || `Local place ${localPlaces.length + 1}`;
+      const kind = newPlaceKindSelect.value || "local_landmark";
+      const sourcePromptId = knownControlAnchorId(selectedAnchor);
+      const now = new Date().toISOString();
+      const promptId = `local-place-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+      const place = normalizeLocalPlace({
+        prompt_id: promptId,
+        name,
+        lat: Number(googleTarget.lat.toFixed(7)),
+        lon: Number(googleTarget.lon.toFixed(7)),
+        mc_x: coordinate.x,
+        mc_y: coordinate.y,
+        mc_z: coordinate.z,
+        scenario_id: "local exploration",
+        endpoint_affordance: kind,
+        source_prompt_id: sourcePromptId,
+        control_anchor_id: sourcePromptId,
+        local_created_at: now,
+        local_created_from: selectedAnchor.prompt_id,
+        google_target_mode: googleTarget.mode,
+      }, localPlaces.length);
+      if (!place) {
+        setSyncStatus("Could not save local place");
+        return;
+      }
+      localPlaces.push(place);
+      saveLocalPlaces();
+      rebuildAnchorIndex();
+      renderAnchorOptions();
+      anchorSelect.value = place.prompt_id;
+      newPlaceNameInput.value = "";
+      selectAnchor(place);
+      setSyncStatus(`Saved local place: ${place.name}`);
+    }
+
+    function deleteSelectedLocalPlace() {
+      if (!selectedAnchor || !selectedAnchor.is_local_place) {
+        setSyncStatus("Select a local saved place before deleting");
+        return;
+      }
+      const deletedName = selectedAnchor.name;
+      localPlaces = localPlaces.filter((place) => place.prompt_id !== selectedAnchor.prompt_id);
+      saveLocalPlaces();
+      rebuildAnchorIndex();
+      renderAnchorOptions();
+      const nextAnchor = baseReviewAnchors[0] || localPlaces[0] || null;
+      if (nextAnchor) {
+        anchorSelect.value = nextAnchor.prompt_id;
+        selectAnchor(nextAnchor);
+      }
+      setSyncStatus(`Deleted local place: ${deletedName}`);
+    }
+
+    function exportLocalPlaces() {
+      const payload = {
+        version: 1,
+        exported_at: new Date().toISOString(),
+        places: localPlaces,
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `shun-lee-local-places-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      setSyncStatus(`Exported ${localPlaces.length} local place(s)`);
+    }
+
     async function teleportCurrentSelection(options = {}) {
       if (!selectedAnchor) return;
       try {
@@ -1473,7 +1707,7 @@
       const target = options.targetLabel ? `sign ${options.targetLabel}` : compactPromptId(anchor.prompt_id);
       setSyncStatus(`Teleporting ${target}...`);
       teleportButton.disabled = true;
-      const request = { anchor_review_id: anchor.prompt_id };
+      const request = { anchor_review_id: knownControlAnchorId(anchor) };
       if (options.coordinateOverride) request.coordinate_override = options.coordinateOverride;
       const body = JSON.stringify(request);
       try {
@@ -1531,6 +1765,8 @@
         : `${compactPromptId(selectedAnchor.prompt_id)} · ${selectedAnchor.name}`;
       const semanticLine = selectedTextWaypoint
         ? `MC text waypoint / ${semanticRoleText(selectedTextWaypoint.semantic_role || selectedTextWaypoint.role)}`
+        : selectedAnchor.is_local_place
+          ? `local saved place / ${String(selectedAnchor.endpoint_affordance || "local_landmark").replaceAll("_", " ")}`
         : `${selectedAnchor.scenario_id} / ${selectedAnchor.endpoint_affordance}`;
       anchorMeta.innerHTML = `
         <div><span>selected</span><strong>${escapeHtml(selectedName)}</strong></div>
@@ -1546,11 +1782,13 @@
         active MC: ${escapeHtml(coordinateDisplay(coordinate))}<br>
         ${selectedTextWaypoint ? `candidate OSM anchors: ${escapeHtml(candidateIds || compactPromptId(selectedAnchor.prompt_id))}<br>` : ""}
         registered MC anchor: ${selectedAnchor.mc_x}, ${selectedAnchor.mc_y}, ${selectedAnchor.mc_z}<br>
+        ${selectedAnchor.is_local_place ? `control source: ${escapeHtml(compactPromptId(knownControlAnchorId(selectedAnchor)))}<br>` : ""}
         coordinate mode: ${escapeHtml(coordinateNote)}<br>
         ${selectedTextWaypoint ? "" : anchorAlignmentDebugHtml(selectedAnchor)}
         Google target: ${googleTarget.lat.toFixed(7)}, ${googleTarget.lon.toFixed(7)} (${escapeHtml(googleTarget.mode)})<br>
         scenario: ${escapeHtml(semanticLine)}
       `;
+      deleteLocalPlaceButton.disabled = !selectedAnchor.is_local_place;
       renderNearbyText(selectedAnchor);
     }
 
@@ -1571,6 +1809,14 @@
     localVncUrlInput.addEventListener("keydown", (event) => {
       if (event.key === "Enter") useLocalVnc();
     });
+    useLivePositionButton.addEventListener("click", useLivePlayerPosition);
+    saveLocalPlaceButton.addEventListener("click", saveCurrentLocalPlace);
+    deleteLocalPlaceButton.addEventListener("click", deleteSelectedLocalPlace);
+    exportLocalPlacesButton.addEventListener("click", exportLocalPlaces);
+    newPlaceNameInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") saveCurrentLocalPlace();
+    });
+    deleteLocalPlaceButton.disabled = true;
     initializeVncSource();
 
     fetch("assets/shun-lee-clean-v3-mc-text-labels.json", { cache: "no-store" })
@@ -1655,10 +1901,11 @@
       })
       .then((payload) => {
         const anchors = payload.anchors || [];
-        reviewAnchors = anchors;
-        anchorsByPrompt = new Map(anchors.map((anchor) => [anchor.prompt_id, anchor]));
-        mcToGeoModel = fitMcToGeoModel(anchors);
-        osmAreaBounds = fitOsmAreaBounds(anchors);
+        baseReviewAnchors = anchors;
+        mcToGeoModel = fitMcToGeoModel(baseReviewAnchors);
+        osmAreaBounds = fitOsmAreaBounds(baseReviewAnchors);
+        localPlaces = loadLocalPlaces();
+        rebuildAnchorIndex();
         renderAnchorOptions();
         if (mcTextLabels) renderAllTextLabels(mcTextLabels);
         anchorSelect.addEventListener("change", () => {
