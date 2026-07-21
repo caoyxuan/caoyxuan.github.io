@@ -422,6 +422,10 @@
       border-color: #a07624;
       color: var(--amber);
     }
+    .route-pill.coverage_sweep {
+      border-color: #3f6f96;
+      color: #9bd4ff;
+    }
     .route-pill.defer {
       border-color: #8b3b42;
       color: var(--red);
@@ -819,8 +823,8 @@
         </div>
         <div class="route-body">
           <div class="reference-actions">
-            <a class="button primary" href="assets/shun-lee-clean-v3-default76-route-review-plan-v1.csv?v=20260722-routeplan" target="_blank" rel="noopener">打开路线 CSV</a>
-            <a class="button" href="assets/shun-lee-clean-v3-default76-route-review-plan-v1.csv?v=20260722-routeplan" download>下载 CSV</a>
+            <a class="button primary" href="assets/shun-lee-clean-v3-default76-route-review-plan-v2.csv?v=20260722-routeplan-v2" target="_blank" rel="noopener">打开路线 CSV</a>
+            <a class="button" href="assets/shun-lee-clean-v3-default76-route-review-plan-v2.csv?v=20260722-routeplan-v2" download>下载 CSV</a>
           </div>
           <p class="note">这是一版 Shun Lee 局部人工审核路线，不是 8-map 全局多样性已满足的声明。路线表显式标注 city category、城市形态、场景类别和操作标签；bus stop / vehicle / door 类操作暂不作为已覆盖，除非你在 MC 里看到明确牌子、入口或可交互结构。</p>
           <div class="route-summary" id="routePlanSummary">
@@ -1910,6 +1914,7 @@
         <div class="fact"><strong>${uniqueAnchors.size}</strong><span>unique SL76 points referenced</span></div>
         <div class="fact"><strong>${actionCounts.try_first || 0}</strong><span>try first</span></div>
         <div class="fact"><strong>${actionCounts.modify_first || 0}</strong><span>modify first</span></div>
+        <div class="fact"><strong>${actionCounts.coverage_sweep || 0}</strong><span>coverage sweep</span></div>
         <div class="fact"><strong>${actionCounts.defer || 0}</strong><span>defer</span></div>
         <div class="fact"><strong>${scenes.size}</strong><span>Shun Lee scene categories</span></div>
       `;
@@ -2317,7 +2322,7 @@
         nearbyTextList.innerHTML = `<div class="text-empty">${escapeHtml(error.message)}</div>`;
       });
 
-    fetch("assets/shun-lee-clean-v3-default76-route-review-plan-v1.csv", { cache: "no-store" })
+    fetch("assets/shun-lee-clean-v3-default76-route-review-plan-v2.csv", { cache: "no-store" })
       .then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.text();
