@@ -1,0 +1,80 @@
+sets:gui.xaero_default
+#
+#waypoint:name:initials:x:y:z:color:disabled:type:set:rotate_on_tp:tp_yaw:visibility_type:destination
+#
+waypoint:SL76-001 利安道 Lee On Road:SL76-001:-163:3:-709:3:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-002 新清水灣道 New Clear Water Bay Road:SL76-002:-276:16:-703:3:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-003 新清水灣道 New Clear Water Bay Road:SL76-003:-275:-12:-717:3:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-004 利安道 Lee On Road:SL76-004:-152:7:-714:3:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-005 天桥/有盖通道 · highway=footway|bridge=yes|layer=1:SL76-005:17:10:-681:3:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-006 天桥/有盖通道 · highway=steps|bridge=yes|layer=1:SL76-006:35:-2:-683:3:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-007 天桥/有盖通道 · highway=steps|bridge=yes|layer=1:SL76-007:13:11:-676:3:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-008 天桥/有盖通道 · highway=footway|bridge=yes|layer=1:SL76-008:37:-2:-687:3:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-009 天桥/有盖通道 · highway=footway|bridge=yes|layer=1:SL76-009:12:8:-679:3:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-010 天桥/有盖通道 · highway=footway|bridge=yes|layer=1:SL76-010:6:11:-677:3:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-011 天桥/有盖通道 · highway=footway|bridge=yes|layer=1:SL76-011:9:7:-679:3:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-012 山坡楼梯 · highway=steps:SL76-012:-209:-10:-741:11:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-013 山坡楼梯 · highway=steps:SL76-013:-201:-2:-562:11:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-014 山坡楼梯 · highway=steps:SL76-014:-100:10:-676:11:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-015 山坡楼梯 · highway=steps:SL76-015:-208:-2:-547:11:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-016 山坡楼梯 · highway=steps:SL76-016:-142:8:-721:11:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-017 山坡楼梯 · highway=steps:SL76-017:4:7:-677:11:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-018 基順學校 Kei Shun Special School:SL76-018:-161:7:-716:2:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-019 基順學校 Kei Shun Special School:SL76-019:-160:9:-714:2:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-020 德望學校 Good Hope School:SL76-020:-336:-11:-710:2:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-021 德望學校 Good Hope School:SL76-021:-338:-10:-709:2:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-022 順利消防局 Shun Lee Fire Station:SL76-022:-160:-2:-671:2:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-023 順利消防局 Shun Lee Fire Station:SL76-023:-167:-2:-670:2:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-024 順利消防局 Shun Lee Fire Station:SL76-024:-155:-2:-670:2:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-025 順利紀律部隊宿舍 Shun Lee Disciplined Services Quarters:SL76-025:-229:-2:-615:2:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-026 利明樓 Lee Ming House:SL76-026:24:-2:-695:2:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-027 基順學校 Kei Shun Special School:SL76-027:-120:-2:-716:2:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-028 基順小學 Kei Shun School:SL76-028:-119:-1:-714:2:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-029 巴士/屋邨连接 · public_transport=stop_position:SL76-029:-340:-10:-713:2:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-030 滙基書院（東九龍） United Christian College (Kowloon East):SL76-030:-135:-2:-599:6:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-031 香港扶幼會盛德中心學校 Society of Boy's Centre Shing Tak Centre Sc...:SL76-031:-212:-2:-599:6:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-032 Dormitory & Extension Block:SL76-032:-119:26:-584:6:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-033 中華基督教會基順學校 CCC Kei Shun Special School:SL76-033:-137:-2:-739:6:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-034 基督教中國佈道會聖道迦南書院 Saint Too Canaan College:SL76-034:-54:3:-613:6:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-035 学校步行点 · building=school:SL76-035:-135:0:-605:6:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-036 学校步行点 · building=school:SL76-036:-134:-1:-735:6:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-037 四季花園 Four Seasons Garden:SL76-037:-249:7:-540:10:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-038 清水灣道臨時休憩處 Clear Water Bay Road Temporary Sitting-Out Area:SL76-038:-320:-11:-715:10:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-039 清水灣道臨時休憩處 Clear Water Bay Road Temporary Sitting-out Area:SL76-039:-320:-7:-712:10:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-040 JT-01:SL76-040:-278:12:-500:10:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-041 KE+:SL76-041:-117:-2:-617:10:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-042 社區園圃 Community Garden:SL76-042:-65:3:-549:10:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-043 簕杜鵑園 Bougainvillea Garden:SL76-043:-283:14:-500:10:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-044 遙控模型賽車場(A場) Radio-Controlled Model Car Racing Circuit (...:SL76-044:-153:7:-517:10:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-045 順利邨遊樂場 Shun Lee Tsuen Playground:SL76-045:-69:-2:-665:10:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-046 公园/游乐场 · leisure=pitch:SL76-046:-219:-2:-594:10:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-047 公园/游乐场 · natural=wood:SL76-047:-207:-12:-724:10:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-048 第1座 Block 1:SL76-048:-265:10:-612:12:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-049 第2座 Block 2:SL76-049:-265:10:-636:12:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-050 第3座 Block 3:SL76-050:-267:10:-661:12:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-051 第4座 Block 4:SL76-051:-241:10:-666:12:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-052 第5座 Block 5:SL76-052:-215:10:-671:12:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-053 第6座 Block 6:SL76-053:-188:127:-677:12:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-054 第7座 Block 7:SL76-054:-186:127:-657:12:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-055 第8座 Block 8:SL76-055:-185:127:-636:12:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-056 順利紀律部隊宿舍 Shun Lee Disciplined Services Quarters:SL76-056:-215:19:-640:12:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-057 順利消防局 Shun Lee Fire Station:SL76-057:-125:11:-641:5:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-058 順利福德伯公廟:SL76-058:-160:-2:-741:5:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-059 公共服务点 · amenity=toilets:SL76-059:-207:0:-534:5:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-060 公共服务点 · amenity=toilets|building=yes:SL76-060:-260:9:-511:5:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-061 公共服务点 · amenity=toilets|building=yes:SL76-061:-92:-2:-649:5:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-062 利安商場 Lee On Shopping Centre:SL76-062:-223:10:-634:14:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-063 利安道 Lee On Road:SL76-063:-154:-2:-669:8:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-064 利安道 Lee On Road:SL76-064:-169:-2:-649:8:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-065 利安道 Lee On Road:SL76-065:-159:1:-603:8:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-066 新清水灣道 New Clear Water Bay Road:SL76-066:-297:11:-608:8:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-067 新清水灣道 New Clear Water Bay Road:SL76-067:-257:127:-589:8:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-068 新清水灣道 New Clear Water Bay Road:SL76-068:-233:-2:-580:8:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-069 服务通道 · highway=footway:SL76-069:-342:-10:-708:8:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-070 服务通道 · highway=footway:SL76-070:-268:20:-587:8:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-071 斜坡/挡土墙 · natural=cliff:SL76-071:-220:-12:-723:4:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-072 斜坡/挡土墙 · barrier=retaining_wall:SL76-072:-153:1:-584:4:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-073 斜坡/挡土墙 · natural=cliff:SL76-073:-336:12:-603:4:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-074 斜坡/挡土墙 · natural=cliff:SL76-074:-301:-12:-720:4:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-075 斜坡/挡土墙 · natural=cliff:SL76-075:-87:-1:-665:4:false:0:gui.xaero_default:true:0:0:false
+waypoint:SL76-076 斜坡/挡土墙 · natural=cliff:SL76-076:-15:-2:-575:4:false:0:gui.xaero_default:true:0:0:false
