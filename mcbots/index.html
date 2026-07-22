@@ -716,6 +716,22 @@
       border-color: #8b3b42;
       color: var(--red);
     }
+    .route-pill.all_segments_certified,
+    .route-pill.certified_static_reference {
+      border-color: #2b8f5a;
+      color: var(--green);
+    }
+    .route-pill.all_segments_found_uncertified,
+    .route-pill.static_path_upper_bound {
+      border-color: #a07624;
+      color: var(--amber);
+    }
+    .route-pill.partial_static_route,
+    .route-pill.no_path_found,
+    .route-pill.no_static_route_found {
+      border-color: #8b3b42;
+      color: var(--red);
+    }
     .route-anchor-links {
       display: flex;
       flex-wrap: wrap;
@@ -734,6 +750,20 @@
       cursor: pointer;
     }
     .route-anchor-jump:hover {
+      border-color: var(--cyan);
+    }
+    .route-point-jump {
+      min-height: 0;
+      padding: .22rem .34rem;
+      border-radius: 6px;
+      border-color: #31465b;
+      background: #0d1722;
+      color: var(--cyan);
+      font-size: .72rem;
+      line-height: 1.15;
+      cursor: pointer;
+    }
+    .route-point-jump:hover {
       border-color: var(--cyan);
     }
     .route-active-detail {
@@ -779,6 +809,33 @@
       color: var(--ink);
       font-size: .78rem;
       overflow-wrap: anywhere;
+    }
+    .route-segment-list {
+      display: grid;
+      gap: .35rem;
+    }
+    .route-segment {
+      display: grid;
+      grid-template-columns: minmax(120px, .5fr) minmax(0, 1fr) minmax(110px, auto);
+      gap: .45rem;
+      align-items: center;
+      padding: .4rem .48rem;
+      border: 1px solid #27394b;
+      border-radius: 7px;
+      background: #0d1722;
+      color: var(--muted);
+      font-size: .73rem;
+      line-height: 1.3;
+    }
+    .route-segment.certified_static_reference {
+      border-color: rgba(126, 231, 135, .42);
+    }
+    .route-segment.static_path_upper_bound {
+      border-color: rgba(255, 197, 103, .55);
+    }
+    .route-segment.no_path_found,
+    .route-segment.no_static_route_found {
+      border-color: rgba(255, 123, 114, .62);
     }
     .route-source-links {
       justify-content: flex-start;
@@ -1273,7 +1330,7 @@
           <div class="facts">
             <div class="fact"><strong>0</strong><span>old MC waypoints currently installed</span></div>
             <div class="fact"><strong>v3</strong><span>clean world package</span></div>
-            <div class="fact"><strong>10</strong><span>manual Google/OSM route rows</span></div>
+            <div class="fact"><strong>10</strong><span>user MC waypoint routes</span></div>
             <div class="fact"><strong>new</strong><span>your MC-created waypoints stay visible</span></div>
           </div>
           <p class="note">旧的 SL76 waypoint 已从服务器 review 客户端文件中移除。网页仍保留 76 个 OSM/MC probe 作为传送和 Google/OSM 对照索引，但它们不再要求显示在 Minecraft 地图上。</p>
@@ -1293,11 +1350,20 @@
                 <option>Loading route plan...</option>
               </select>
             </label>
+            <div class="reference-actions route-source-links">
+              <a class="button" href="assets/shunlee-10-natural-reachable-routes.md" target="_blank" rel="noopener">路线说明</a>
+              <a class="button" href="assets/shunlee-10-natural-reachable-routes.csv" target="_blank" rel="noopener">CSV</a>
+              <a class="button" href="assets/shunlee-10-natural-reachable-routes.json" target="_blank" rel="noopener">JSON</a>
+            </div>
+          </div>
+          <div class="route-map-shell" aria-label="selected user waypoint route on Minecraft top-down map">
+            <img src="assets/shun-lee-clean-v3-topdown-nomarkers.png" alt="Shun Lee clean Minecraft top-down map without waypoints">
+            <svg id="routeMapSvg" viewBox="0 0 1296 816" role="img" aria-label="Selected user waypoint route"></svg>
           </div>
           <div class="route-active-detail" id="routeActiveDetail">
             <div class="text-empty">Loading route review plan...</div>
           </div>
-          <p class="note">下面 10 条是人工标点路线，不是自动认证路线。你按 Google/OSM 判断真实路线，再到 Minecraft 里找可见入口、路口、楼梯、天桥、边界或牌子并新建 waypoint；表格里的 SL76 按钮只用于把 Google/OSM/VNC 快速同步到附近参考点。</p>
+          <p class="note">下面 10 条来自你本地标的 39 个 waypoint。绿色是静态 world 几何认证可达；黄色是找到路径但未严格认证；红色是静态模型未找到通路，优先人工确认。点击 load coords 会把该路线点写入上方 MC 坐标框，再用 Teleport current coords 传送。</p>
           <div class="route-summary" id="routePlanSummary">
             <div class="fact"><strong>...</strong><span>loading route plan</span></div>
           </div>
@@ -2427,12 +2493,64 @@
       return String(value || "").split("|").map((item) => item.trim()).filter(Boolean);
     }
 
+    function coordinateFromArray(values) {
+      if (!Array.isArray(values) || values.length < 3) return null;
+      const x = Number(values[0]);
+      const y = Number(values[1]);
+      const z = Number(values[2]);
+      if (![x, y, z].every(Number.isFinite)) return null;
+      return { x, y, z };
+    }
+
     function routeAnchorIds(row) {
+      if (row && Array.isArray(row.points)) return [];
       return [row.start_id, ...splitRouteValues(row.via_ids), row.endpoint_id].filter(Boolean);
     }
 
     function routeAnchorNames(row) {
+      if (row && Array.isArray(row.points)) return row.points.map((point) => String(point.waypoint || ""));
       return [row.start_name, ...splitRouteValues(row.via_names), row.endpoint_name].map((item) => String(item || ""));
+    }
+
+    function routePointEntries(row) {
+      if (!row) return [];
+      if (Array.isArray(row.points)) {
+        return row.points.map((point, index) => {
+          const snapped = coordinateFromArray(point.snapped);
+          const original = coordinateFromArray(point.original);
+          const coordinate = snapped || original;
+          return {
+            id: `${row.route_id}-P${String(index + 1).padStart(2, "0")}`,
+            routeId: row.route_id,
+            label: point.waypoint || `point ${index + 1}`,
+            name: point.waypoint || `point ${index + 1}`,
+            role: point.role || routeStepRole(index, row.points.length),
+            coverage: point.coverage_role || "primary",
+            coordinate,
+            original,
+            snapped,
+            exactStandable: Boolean(point.exact_standable),
+            snapDistance: Number(point.snap_distance_blocks),
+            isLocalRoutePoint: true,
+          };
+        });
+      }
+      const ids = routeAnchorIds(row);
+      const names = routeAnchorNames(row);
+      return ids.map((id, index) => {
+        const anchor = anchorsByDisplayId.get(id);
+        return {
+          id,
+          routeId: row.route_id,
+          label: id,
+          name: anchor ? anchorDisplayName(anchor) : names[index] || "",
+          role: routeStepRole(index, ids.length),
+          coverage: "reference",
+          coordinate: anchor ? { x: Number(anchor.mc_x), y: Number(anchor.mc_y), z: Number(anchor.mc_z) } : null,
+          anchor,
+          isLocalRoutePoint: false,
+        };
+      });
     }
 
     function routeAnchorButtonHtml(id, role) {
@@ -2440,12 +2558,20 @@
       return `<button type="button" class="route-anchor-jump" data-display-id="${escapeHtml(id)}">${escapeHtml(role)} ${escapeHtml(id)}</button>`;
     }
 
+    function routePointButtonHtml(entry, label, index) {
+      if (!entry || !entry.coordinate) return "";
+      if (!entry.isLocalRoutePoint && entry.id) return routeAnchorButtonHtml(entry.id, label);
+      return `<button type="button" class="route-point-jump" data-route-id="${escapeHtml(entry.routeId || selectedRouteId)}" data-point-index="${index}">${escapeHtml(label)} coords</button>`;
+    }
+
     function routePillHtml(value, cssClass = "") {
-      const className = cssClass ? ` route-pill ${cssClass}` : " route-pill";
+      const safeClass = String(cssClass || "").replace(/[^A-Za-z0-9_-]/g, "_");
+      const className = safeClass ? ` route-pill ${safeClass}` : " route-pill";
       return `<span class="${className.trim()}">${escapeHtml(String(value || "").replaceAll("_", " "))}</span>`;
     }
 
     function routeLabel(row) {
+      if (row && row.title) return `${row.route_id} · ${row.title}`;
       return `${row.route_id} · ${MANUAL_ROUTE_LABELS[row.route_id] || String(row.route_theme || "").replaceAll("_", " ")}`;
     }
 
@@ -2454,11 +2580,20 @@
     }
 
     function routeMatchesFilter(row) {
+      if (row && Array.isArray(row.points)) return true;
       return Number(row.priority) <= MANUAL_ROUTE_LIMIT;
     }
 
     function filteredRouteRows() {
       return routePlanRows.filter(routeMatchesFilter);
+    }
+
+    function normalizeRoutePlanPayload(payload) {
+      const rows = Array.isArray(payload) ? payload : (payload && Array.isArray(payload.routes) ? payload.routes : []);
+      return rows.map((row, index) => ({
+        ...row,
+        priority: Number(row.priority || index + 1),
+      }));
     }
 
     function ensureSelectedRouteVisible() {
@@ -2524,24 +2659,26 @@
       return "via";
     }
 
-    function routeNodeHtml(id, index, total) {
-      const anchor = anchorsByDisplayId.get(id);
-      const point = routeMapPoint(anchor);
+    function routeNodeHtml(entry, index, total) {
+      const point = routeMapPointForCoordinate(entry.coordinate);
       if (!point) return "";
       const role = routeStepRole(index, total);
       const label = role === "via" ? String(index) : (role === "start" ? "S" : "E");
+      const localAttrs = entry.isLocalRoutePoint
+        ? `data-route-id="${escapeHtml(selectedRouteId)}" data-point-index="${index}"`
+        : `data-display-id="${escapeHtml(entry.id)}"`;
       return `
-        <g data-display-id="${escapeHtml(id)}" class="route-node-click">
+        <g ${localAttrs} class="route-node-click">
           <circle class="route-node ${escapeHtml(role)}" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="17"></circle>
           <text class="route-node-index" x="${point.x.toFixed(1)}" y="${point.y.toFixed(1)}">${escapeHtml(label)}</text>
-          <text class="route-node-label" x="${(point.x + 22).toFixed(1)}" y="${(point.y - 18).toFixed(1)}">${escapeHtml(id.replace("SL76-", ""))}</text>
+          <text class="route-node-label" x="${(point.x + 22).toFixed(1)}" y="${(point.y - 18).toFixed(1)}">${escapeHtml(String(index + 1))}</text>
         </g>
       `;
     }
 
     function routePolylinePoints(row) {
-      return routeAnchorIds(row)
-        .map((id) => routeMapPoint(anchorsByDisplayId.get(id)))
+      return routePointEntries(row)
+        .map((entry) => routeMapPointForCoordinate(entry.coordinate))
         .filter(Boolean)
         .map((point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`)
         .join(" ");
@@ -2553,11 +2690,11 @@
         routeMapSvg.innerHTML = '<foreignObject width="1296" height="816"><div xmlns="http://www.w3.org/1999/xhtml" class="route-map-empty">No route selected</div></foreignObject>';
         return;
       }
-      const ids = routeAnchorIds(row);
+      const entries = routePointEntries(row);
       const points = routePolylinePoints(row);
-      const nodes = ids.map((id, index) => routeNodeHtml(id, index, ids.length)).join("");
+      const nodes = entries.map((entry, index) => routeNodeHtml(entry, index, entries.length)).join("");
       if (!points) {
-        routeMapSvg.innerHTML = '<foreignObject width="1296" height="816"><div xmlns="http://www.w3.org/1999/xhtml" class="route-map-empty">Route loaded; waiting for anchor map data</div></foreignObject>';
+        routeMapSvg.innerHTML = '<foreignObject width="1296" height="816"><div xmlns="http://www.w3.org/1999/xhtml" class="route-map-empty">Route loaded; waiting for MC coordinates</div></foreignObject>';
         return;
       }
       routeMapSvg.innerHTML = `
@@ -2698,88 +2835,119 @@
       `;
     }
 
-    function routeStepHtml(row, id, index, total) {
-      const names = routeAnchorNames(row);
-      const anchor = anchorsByDisplayId.get(id);
+    function routeStepHtml(row, entry, index, total) {
+      const anchor = entry.anchor || (!entry.isLocalRoutePoint ? anchorsByDisplayId.get(entry.id) : null);
       const role = routeStepRole(index, total);
-      const name = anchor ? anchorDisplayName(anchor) : names[index] || "";
-      const coord = anchor ? `MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}` : "anchor data loading";
+      const name = anchor ? anchorDisplayName(anchor) : entry.name || "";
+      const coord = entry.coordinate ? `MC ${entry.coordinate.x},${entry.coordinate.y},${entry.coordinate.z}` : "coordinate missing";
       const decision = anchor ? decisionSuffixForKey(anchor.prompt_id) : "";
+      const snap = entry.isLocalRoutePoint && Number.isFinite(entry.snapDistance) && entry.snapDistance > 0
+        ? ` · snapped ${entry.snapDistance.toFixed(1)} blocks`
+        : "";
+      const coverage = entry.coverage ? ` · ${entry.coverage}` : "";
       return `
         <div class="route-step">
           <div class="route-step-role">${escapeHtml(role)}</div>
-          <div class="route-step-name">${escapeHtml(id)} · ${escapeHtml(name)}${escapeHtml(decision)}<br><small>${escapeHtml(coord)}</small></div>
-          ${routeAnchorButtonHtml(id, "tp")}
+          <div class="route-step-name">${escapeHtml(entry.label)} · ${escapeHtml(name)}${escapeHtml(decision)}<br><small>${escapeHtml(coord + coverage + snap)}</small></div>
+          ${routePointButtonHtml(entry, "load", index)}
+        </div>
+      `;
+    }
+
+    function segmentStatusClass(status) {
+      const normalized = String(status || "unknown").replace(/[^A-Za-z0-9_-]/g, "_");
+      return normalized || "unknown";
+    }
+
+    function routeSegmentHtml(segment) {
+      const status = segment.search_status || "unknown";
+      const length = Number(segment.reference_length_blocks);
+      const movement = segment.path_movement_counts
+        ? Object.entries(segment.path_movement_counts).map(([key, value]) => `${key}:${value}`).join(", ")
+        : "";
+      return `
+        <div class="route-segment ${escapeHtml(segmentStatusClass(status))}">
+          <strong>${escapeHtml(segment.segment_id || "segment")}</strong>
+          <span>${escapeHtml(segment.from_waypoint || "")} -> ${escapeHtml(segment.to_waypoint || "")}</span>
+          <span>${escapeHtml(String(status).replaceAll("_", " "))}${Number.isFinite(length) ? ` · ${length.toFixed(1)} blocks` : ""}${movement ? `<br>${escapeHtml(movement)}` : ""}</span>
         </div>
       `;
     }
 
     function routeActiveDetailHtml(row) {
       if (!row) return '<div class="text-empty">No route selected.</div>';
-      const ids = routeAnchorIds(row);
-      const operationTags = splitRouteValues(row.operation_tags);
-      const length = row.static_probe_length_blocks ? `${Number(row.static_probe_length_blocks).toFixed(1)} blocks` : row.static_probe_status;
+      const entries = routePointEntries(row);
+      const operationTags = Array.isArray(row.points)
+        ? [row.operation_focus].filter(Boolean)
+        : splitRouteValues(row.operation_tags);
+      const metrics = row.metrics || {};
+      const length = Number(metrics.reference_length_blocks || row.static_probe_length_blocks);
+      const status = row.static_route_status || row.static_probe_status || "";
+      const badSegments = (row.segments || []).filter((segment) => segment.search_status !== "certified_static_reference");
       return `
         <div>
           <strong>${escapeHtml(routeLabel(row))}</strong>
           <div class="route-pill-row">
-            ${routePillHtml(row.review_action, row.review_action)}
-            ${routePillHtml(row.scene_category)}
-            ${routePillHtml(row.map_morphology_class)}
+            ${routePillHtml(status, status)}
+            ${routePillHtml(row.difficulty_prelabel)}
+            ${routePillHtml(row.scene_category || row.city_category)}
           </div>
         </div>
         <div class="route-step-list">
-          ${ids.map((id, index) => routeStepHtml(row, id, index, ids.length)).join("")}
+          ${entries.map((entry, index) => routeStepHtml(row, entry, index, entries.length)).join("")}
         </div>
-        <p><strong>路线描述:</strong> ${escapeHtml(row.prompt_zh)}</p>
-        <p><strong>MC 标点任务:</strong> ${escapeHtml(row.manual_review_goal)}</p>
-        <small>Google/OSM 对照：先确认现实世界的道路、学校/商场/公园边界、楼梯或天桥关系，再在 Minecraft 里新建你看到的真实点。</small>
-        <small>${escapeHtml(row.city_category)} · ${escapeHtml(operationTags.join(" · "))}</small>
-        <small>Static probe reference: ${escapeHtml(row.static_probe_status)}${length ? ` · ${escapeHtml(length)}` : ""}${row.static_probe_waypoint_count ? ` · ${escapeHtml(row.static_probe_waypoint_count)} waypoints` : ""}</small>
+        <p><strong>路线意图:</strong> ${escapeHtml(row.reviewer_intent || row.prompt_zh || "")}</p>
+        <p><strong>场景组合:</strong> ${escapeHtml(row.scene_mix || row.manual_review_goal || "")}</p>
+        <small>${escapeHtml(row.city_category || "")}${operationTags.length ? ` · ${escapeHtml(operationTags.join(" · "))}` : ""}</small>
+        <small>Static reachability: ${escapeHtml(status)}${Number.isFinite(length) ? ` · ${length.toFixed(1)} blocks` : ""}${metrics.turn_count != null ? ` · ${escapeHtml(metrics.turn_count)} turns` : ""}${badSegments.length ? ` · ${badSegments.length} segment(s) need manual check` : ""}</small>
+        ${(row.segments || []).length ? `<div class="route-segment-list">${row.segments.map(routeSegmentHtml).join("")}</div>` : ""}
       `;
     }
 
     function routePathText(row) {
-      const ids = routeAnchorIds(row);
-      const names = routeAnchorNames(row);
-      return ids.map((id, index) => `${id} ${names[index] || ""}`.trim()).join(" -> ");
+      return routePointEntries(row).map((entry) => entry.label).join(" -> ");
     }
 
     function routeActionText(row) {
-      if (row.review_action === "modify_first" || row.static_probe_status === "no_path_found" || row.static_probe_status === "invalid_goal_acceptance_set") {
-        return "不要直接信 probe 点；按 Google/OSM 找入口、边界、路口或可站平台，在 MC 里新建点。";
+      const status = row.static_route_status || row.static_probe_status;
+      if (status === "partial_static_route" || status === "no_static_route_found" || status === "no_path_found" || status === "invalid_goal_acceptance_set") {
+        return "红色段优先人工核对：可能是坐标高度、入口、楼梯、蹲下门或地图局部建模问题。";
       }
-      return "按现实路线走，遇到清晰入口、路牌、楼梯、天桥落点或设施边界时新建点。";
+      if (status === "all_segments_found_uncertified" || status === "static_path_upper_bound") {
+        return "已有静态路径，但还需要你按游戏画面确认真实入口和路线是否自然。";
+      }
+      return "优先走这条，遇到清晰入口、路牌、楼梯、边界或设施点时新建 waypoint。";
     }
 
     function routeTableRowHtml(row) {
-      const viaIds = splitRouteValues(row.via_ids);
+      const entries = routePointEntries(row);
       const active = row.route_id === selectedRouteId ? " active" : "";
+      const status = row.static_route_status || row.static_probe_status || "";
+      const badSegments = (row.segments || []).filter((segment) => segment.search_status !== "certified_static_reference");
       return `
         <tr class="route-manual-row${active}" data-route-id="${escapeHtml(row.route_id)}">
           <td>
             <strong>${escapeHtml(routeLabel(row))}</strong>
-            <small>${escapeHtml(row.intent || row.route_theme)}</small>
+            <small>${escapeHtml(row.reviewer_intent || row.intent || row.route_theme || "")}</small>
           </td>
           <td>
             ${escapeHtml(routePathText(row))}
-            <small>${viaIds.length} via point(s)</small>
+            <small>${Math.max(0, entries.length - 2)} via point(s)</small>
           </td>
           <td>
-            ${escapeHtml(row.manual_review_goal)}
+            ${escapeHtml(row.operation_focus || row.manual_review_goal || "")}
             <small>${escapeHtml(routeActionText(row))}</small>
           </td>
           <td>
-            ${escapeHtml(row.scene_category)}
-            <small>${escapeHtml(row.map_morphology_class)}</small>
-            <small>${escapeHtml(splitRouteValues(row.operation_tags).join(" · "))}</small>
+            ${routePillHtml(status, status)}
+            <small>${escapeHtml(row.city_category || row.scene_category || "")}</small>
+            <small>${escapeHtml(row.scene_mix || row.map_morphology_class || "")}</small>
+            ${badSegments.length ? `<small>${badSegments.length} failed/uncertified segment(s)</small>` : ""}
           </td>
           <td>
             <div class="route-anchor-links">
-              ${routeAnchorButtonHtml(row.start_id, "start")}
-              ${viaIds.slice(0, 4).map((id) => routeAnchorButtonHtml(id, "via")).join("")}
-              ${viaIds.length > 4 ? `<small>+${viaIds.length - 4} via</small>` : ""}
-              ${routeAnchorButtonHtml(row.endpoint_id, "end")}
+              ${entries.slice(0, 5).map((entry, index) => routePointButtonHtml(entry, index === 0 ? "start" : (index === entries.length - 1 ? "end" : "via"), index)).join("")}
+              ${entries.length > 5 ? `<small>+${entries.length - 5} point(s)</small>` : ""}
             </div>
           </td>
         </tr>
@@ -2794,10 +2962,10 @@
             <thead>
               <tr>
                 <th>路线</th>
-                <th>Google / OSM 顺序</th>
-                <th>你在 MC 里标什么</th>
-                <th>场景 / 操作</th>
-                <th>同步参考点</th>
+                <th>MC 点顺序</th>
+                <th>审核重点</th>
+                <th>可达性 / 多样性</th>
+                <th>坐标</th>
               </tr>
             </thead>
             <tbody>
@@ -2809,23 +2977,29 @@
     }
 
     function renderRoutePlan(rows) {
-      routePlanRows = rows
-        .filter((row) => Number(row.priority) <= MANUAL_ROUTE_LIMIT)
-        .sort((left, right) => Number(left.priority) - Number(right.priority));
-      const actionCounts = routePlanRows.reduce((acc, row) => {
-        acc[row.review_action] = (acc[row.review_action] || 0) + 1;
+      routePlanRows = normalizeRoutePlanPayload(rows)
+        .filter(routeMatchesFilter)
+        .sort((left, right) => Number(left.priority) - Number(right.priority) || String(left.route_id).localeCompare(String(right.route_id)));
+      const statusCounts = routePlanRows.reduce((acc, row) => {
+        const status = row.static_route_status || row.static_probe_status || "unknown";
+        acc[status] = (acc[status] || 0) + 1;
         return acc;
       }, {});
-      const uniqueAnchors = new Set();
+      const uniquePoints = new Set();
+      let failedSegments = 0;
       routePlanRows.forEach((row) => {
-        [row.start_id, row.endpoint_id, ...splitRouteValues(row.via_ids)].filter(Boolean).forEach((id) => uniqueAnchors.add(id));
+        routePointEntries(row).forEach((entry) => {
+          if (entry.coverage !== "connector") uniquePoints.add(entry.label);
+        });
+        failedSegments += (row.segments || []).filter((segment) => segment.search_status !== "certified_static_reference").length;
       });
-      const scenes = new Set(routePlanRows.map((row) => row.scene_category).filter(Boolean));
+      const scenes = new Set(routePlanRows.map((row) => row.city_category || row.scene_category).filter(Boolean));
       routePlanCount.innerHTML = `<span class="dot"></span>${routePlanRows.length} manual routes`;
       routePlanSummary.innerHTML = `
-        <div class="fact"><strong>${routePlanRows.length}</strong><span>Google/OSM-guided manual routes</span></div>
-        <div class="fact"><strong>${uniqueAnchors.size}</strong><span>nearby reference SL76 points</span></div>
-        <div class="fact"><strong>${actionCounts.modify_first || 0}</strong><span>need manual coordinate correction</span></div>
+        <div class="fact"><strong>${routePlanRows.length}</strong><span>natural MC review routes</span></div>
+        <div class="fact"><strong>${uniquePoints.size}</strong><span>primary user waypoints covered</span></div>
+        <div class="fact"><strong>${statusCounts.all_segments_certified || 0}</strong><span>fully certified routes</span></div>
+        <div class="fact"><strong>${failedSegments}</strong><span>segments to manually inspect</span></div>
         <div class="fact"><strong>${scenes.size}</strong><span>scene categories</span></div>
       `;
       renderRouteFilterButtons();
@@ -2850,10 +3024,41 @@
       localStorage.setItem(SELECTED_ROUTE_STORAGE_KEY, selectedRouteId);
       renderRoutePlan(routePlanRows);
       const row = activeRouteRow();
-      if (row) setSyncStatus(`Selected route ${row.route_id}; click a step or map node to sync Minecraft`);
+      if (row) setSyncStatus(`Selected route ${row.route_id}; click a step or map node to load MC coords`);
+    }
+
+    function loadRoutePointIntoEditor(routeId, pointIndex) {
+      const row = routePlanRows.find((item) => item.route_id === routeId);
+      if (!row) {
+        setSyncStatus(`Route ${routeId} is not loaded`);
+        return;
+      }
+      if (selectedRouteId !== routeId) {
+        selectedRouteId = routeId;
+        localStorage.setItem(SELECTED_ROUTE_STORAGE_KEY, selectedRouteId);
+      }
+      const entries = routePointEntries(row);
+      const entry = entries[Number(pointIndex)];
+      if (!entry || !entry.coordinate) {
+        setSyncStatus("Route point coordinate is missing");
+        return;
+      }
+      writeCoordinateInputs({ ...entry.coordinate, yaw: "", pitch: "" });
+      renderRoutePlan(routePlanRows);
+      if (selectedAnchor) {
+        const target = googleTargetForCoordinate(selectedAnchor, entry.coordinate);
+        updateGoogleReference(target);
+        renderAlignmentPanel(target, entry.coordinate);
+      }
+      setSyncStatus(`Loaded ${row.route_id} point ${Number(pointIndex) + 1}: ${entry.label}`);
     }
 
     function handleRoutePlanClick(event) {
+      const pointButton = event.target && event.target.closest ? event.target.closest(".route-point-jump") : null;
+      if (pointButton) {
+        loadRoutePointIntoEditor(pointButton.dataset.routeId, pointButton.dataset.pointIndex);
+        return;
+      }
       const button = event.target && event.target.closest ? event.target.closest(".route-anchor-jump") : null;
       if (button) {
         const anchor = anchorsByDisplayId.get(button.dataset.displayId);
@@ -2872,6 +3077,11 @@
     }
 
     function handleRouteMapClick(event) {
+      const routeNode = event.target && event.target.closest ? event.target.closest("[data-route-id][data-point-index]") : null;
+      if (routeNode) {
+        loadRoutePointIntoEditor(routeNode.dataset.routeId, routeNode.dataset.pointIndex);
+        return;
+      }
       const node = event.target && event.target.closest ? event.target.closest("[data-display-id]") : null;
       if (!node) return;
       const anchor = anchorsByDisplayId.get(node.dataset.displayId);
@@ -3273,13 +3483,13 @@
         nearbyTextList.innerHTML = `<div class="text-empty">${escapeHtml(error.message)}</div>`;
       });
 
-    fetch("assets/shun-lee-clean-v3-default76-route-review-plan-v2.csv", { cache: "no-store" })
+    fetch("assets/shunlee-10-natural-reachable-routes.json", { cache: "no-store" })
       .then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.text();
+        return response.json();
       })
-      .then((text) => {
-        renderRoutePlan(csvObjects(text));
+      .then((payload) => {
+        renderRoutePlan(payload);
       })
       .catch((error) => {
         routePlanCount.innerHTML = '<span class="dot"></span>Routes failed';
