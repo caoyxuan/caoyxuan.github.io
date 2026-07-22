@@ -424,7 +424,7 @@
     }
     .wide-alignment {
       width: min(1800px, calc(100% - 28px));
-      margin: 0 auto 1.2rem;
+      margin: 0 auto .8rem;
     }
     .alignment-grid {
       display: grid;
@@ -1107,6 +1107,58 @@
     </div>
   </section>
 
+  <section class="panel alignment-panel wide-alignment" aria-label="north aligned Minecraft and real-world map comparison">
+    <div class="panel-head">
+      <h2>Aligned shape view · MC ↔ OSM/Google</h2>
+      <span class="badge" id="alignmentBadge"><span class="dot"></span>north-up</span>
+    </div>
+    <div class="alignment-stats" id="alignmentStats">
+      <div class="fact"><strong>...</strong><span>loading alignment</span></div>
+    </div>
+    <div class="alignment-grid">
+      <div class="alignment-pane">
+        <h3>Minecraft clean map, rotated to north-up</h3>
+        <div class="aligned-map-shell">
+          <div class="alignment-compass">N</div>
+          <div class="aligned-mc-rotator" id="alignedMcRotator">
+            <img src="assets/shun-lee-clean-v3-topdown-nomarkers.png" alt="Decluttered Shun Lee clean-v3 Minecraft top-down map">
+            <svg id="alignedMcSvg" viewBox="0 0 1296 816" role="img" aria-label="Selected route projected on Minecraft map"></svg>
+          </div>
+        </div>
+      </div>
+      <div class="alignment-pane">
+        <h3>OSM/Google geometry, north-up</h3>
+        <div class="aligned-geo-shell">
+          <div class="alignment-compass">N</div>
+          <svg id="alignedGeoSvg" viewBox="0 0 1000 680" role="img" aria-label="Selected route projected from OSM and Google coordinates"></svg>
+        </div>
+      </div>
+      <div class="alignment-pane">
+        <h3>OSM map, same selected point</h3>
+        <iframe
+          id="alignedOsmFrame"
+          class="aligned-real-frame"
+          title="Aligned OpenStreetMap reference"
+          src="about:blank"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+      <div class="alignment-pane">
+        <h3>Google map, same selected point</h3>
+        <iframe
+          id="alignedGoogleMapFrame"
+          class="aligned-real-frame"
+          title="Aligned Google map reference"
+          src="about:blank"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+    <p class="note">MC top-down image is rotated by the fitted MC→WGS84 transform so north is visually up. The OSM/Google geometry panel uses the same selected route/point in real-world coordinates; use this only for shape and direction, then verify exact landmarks in the live Minecraft view.</p>
+  </section>
+
   <main>
     <section class="panel">
       <div class="panel-head">
@@ -1307,58 +1359,6 @@
       </section>
     </aside>
   </main>
-
-  <section class="panel alignment-panel wide-alignment" aria-label="north aligned Minecraft and real-world map comparison">
-    <div class="panel-head">
-      <h2>Aligned shape view · MC ↔ OSM/Google</h2>
-      <span class="badge" id="alignmentBadge"><span class="dot"></span>north-up</span>
-    </div>
-    <div class="alignment-stats" id="alignmentStats">
-      <div class="fact"><strong>...</strong><span>loading alignment</span></div>
-    </div>
-    <div class="alignment-grid">
-      <div class="alignment-pane">
-        <h3>Minecraft clean map, rotated to north-up</h3>
-        <div class="aligned-map-shell">
-          <div class="alignment-compass">N</div>
-          <div class="aligned-mc-rotator" id="alignedMcRotator">
-            <img src="assets/shun-lee-clean-v3-topdown-nomarkers.png" alt="Decluttered Shun Lee clean-v3 Minecraft top-down map">
-            <svg id="alignedMcSvg" viewBox="0 0 1296 816" role="img" aria-label="Selected route projected on Minecraft map"></svg>
-          </div>
-        </div>
-      </div>
-      <div class="alignment-pane">
-        <h3>OSM/Google geometry, north-up</h3>
-        <div class="aligned-geo-shell">
-          <div class="alignment-compass">N</div>
-          <svg id="alignedGeoSvg" viewBox="0 0 1000 680" role="img" aria-label="Selected route projected from OSM and Google coordinates"></svg>
-        </div>
-      </div>
-      <div class="alignment-pane">
-        <h3>OSM map, same selected point</h3>
-        <iframe
-          id="alignedOsmFrame"
-          class="aligned-real-frame"
-          title="Aligned OpenStreetMap reference"
-          src="about:blank"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-      </div>
-      <div class="alignment-pane">
-        <h3>Google map, same selected point</h3>
-        <iframe
-          id="alignedGoogleMapFrame"
-          class="aligned-real-frame"
-          title="Aligned Google map reference"
-          src="about:blank"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-      </div>
-    </div>
-    <p class="note">MC top-down image is rotated by the fitted MC→WGS84 transform so north is visually up. The OSM/Google geometry panel uses the same selected route/point in real-world coordinates; use this only for shape and direction, then verify exact landmarks in the live Minecraft view.</p>
-  </section>
 
   <footer>
     Anchor data refreshed 2026-07-21 Asia/Hong_Kong. Runtime tunnel refreshed 2026-07-17 Asia/Hong_Kong. This dynamic page depends on the running server sessions on <code>jxcpu1</code>: cloudflared VNC, cloudflared control, two local ncat loopback forwards, the noVNC client, and the Shun Lee control API.
