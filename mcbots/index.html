@@ -622,6 +622,64 @@
     .route-source-links {
       justify-content: flex-start;
     }
+    .route-table-wrap {
+      overflow: auto;
+      border: 1px solid #28394b;
+      border-radius: 8px;
+      background: #0d1722;
+    }
+    .route-table {
+      width: 100%;
+      min-width: 920px;
+      border-collapse: collapse;
+      font-size: .76rem;
+    }
+    .route-table th,
+    .route-table td {
+      padding: .5rem .55rem;
+      border-bottom: 1px solid #243547;
+      vertical-align: top;
+      text-align: left;
+    }
+    .route-table th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #132030;
+      color: var(--ink);
+      font-weight: 700;
+    }
+    .route-table tr {
+      cursor: pointer;
+    }
+    .route-table tr.active,
+    .route-table tr:hover {
+      background: #102733;
+    }
+    .route-table strong {
+      color: var(--ink);
+      font-size: .8rem;
+    }
+    .route-table small {
+      display: block;
+      margin-top: .2rem;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+    .route-table .route-anchor-links {
+      margin-top: 0;
+    }
+    .waypoint-status-card {
+      grid-template-columns: 1fr;
+    }
+    .waypoint-clear-note {
+      display: grid;
+      gap: .45rem;
+      padding: .75rem .8rem;
+    }
+    .waypoint-clear-note strong {
+      color: var(--green);
+    }
     .text-item {
       min-width: 0;
       padding: .5rem .55rem;
@@ -939,12 +997,15 @@
           <span id="minecraftCapturePlaceholderBody">点击 Capture Minecraft window 后选择 Minecraft 窗口，左侧会显示本地画面的镜像。</span>
         </div>
       </div>
-      <div class="minecraft-map-strip" aria-label="Minecraft clean top-down map">
+      <div class="minecraft-map-strip" aria-label="Minecraft waypoint status">
         <div class="panel-head">
-          <h2>MC clean-v3 top-down map</h2>
-          <span class="badge"><span class="dot"></span>76 content-mask anchors</span>
+          <h2>MC waypoint status</h2>
+          <span class="badge"><span class="dot"></span>old SL76 markers cleared</span>
         </div>
-        <img src="assets/shun-lee-clean-v3-topdown-default76.png?v=20260721-default76" alt="Shun Lee clean-v3 Minecraft top-down map with 76 content-mask retained anchor points">
+        <div class="waypoint-clear-note">
+          <strong>服务器 ShunLeeV3 的旧 Xaero waypoint 文件已清空。</strong>
+          <span class="note">新点仍会显示在小地图/大地图上；第一视角里的 waypoint overlay 保持关闭。你可以在 MC 里自己新建地点，不会再被原来的 SL76 点干扰。</span>
+        </div>
       </div>
     </section>
 
@@ -979,55 +1040,41 @@
         </div>
       </section>
 
-      <section class="panel map-card">
-        <img src="assets/shun-lee-clean-v3-topdown-default76.png?v=20260721-default76" alt="Shun Lee clean-v3 top-down map with 76 content-mask retained anchor points">
+      <section class="panel map-card waypoint-status-card">
         <div>
           <div class="facts">
-            <div class="fact"><strong>76</strong><span>content-mask clean-crop S1 points</span></div>
+            <div class="fact"><strong>0</strong><span>old MC waypoints currently installed</span></div>
             <div class="fact"><strong>v3</strong><span>clean world package</span></div>
-            <div class="fact"><strong>25</strong><span>OSM-tagged weak-natural points kept</span></div>
-            <div class="fact"><strong>0</strong><span>certified exact anchors</span></div>
+            <div class="fact"><strong>10</strong><span>manual Google/OSM route rows</span></div>
+            <div class="fact"><strong>new</strong><span>your MC-created waypoints stay visible</span></div>
           </div>
-          <p class="note">这些 OSM 点用于语义筛选和人工审查启动；弱自然地面点只有在 OSM 有 tag 且原始投影在 clean crop 内时保留。黄色/蓝色/粉色点表示不同 MC 表面类别，非文字牌点仍不能直接视为建筑、入口或边界的精确坐标。</p>
+          <p class="note">旧的 SL76 waypoint 已从服务器 review 客户端文件中移除。网页仍保留 76 个 OSM/MC probe 作为传送和 Google/OSM 对照索引，但它们不再要求显示在 Minecraft 地图上。</p>
         </div>
       </section>
 
       <section class="panel route-plan-panel">
         <div class="panel-head">
-          <h2>Route review plan · default76</h2>
+          <h2>Manual marking routes · 10</h2>
           <span class="badge" id="routePlanCount"><span class="dot"></span>Loading</span>
         </div>
         <div class="route-body">
           <div class="route-toolbar">
             <label class="route-select-label">
-              Route
+              Route detail
               <select id="routePlanSelect">
                 <option>Loading route plan...</option>
               </select>
             </label>
-            <div class="route-filter-row" aria-label="route filters">
-              <button type="button" class="route-filter-button active" data-route-filter="priority">优先路线</button>
-              <button type="button" class="route-filter-button" data-route-filter="sweep">覆盖扫点</button>
-              <button type="button" class="route-filter-button" data-route-filter="all">全部</button>
-            </div>
-          </div>
-          <div class="route-map-shell" id="routeMapShell">
-            <img src="assets/shun-lee-clean-v3-topdown-default76.png?v=20260721-default76" alt="Selected Shun Lee route highlighted on Minecraft top-down map">
-            <svg id="routeMapSvg" viewBox="0 0 1296 816" aria-label="Selected route overlay"></svg>
           </div>
           <div class="route-active-detail" id="routeActiveDetail">
             <div class="text-empty">Loading route review plan...</div>
           </div>
-          <p class="note">这是一版 Shun Lee 局部人工审核路线，不是 8-map 全局多样性已满足的声明。地图上的粉色线是审核顺序/候选连接线，不等于已认证可走路径；bus stop / vehicle / door 类操作暂不作为已覆盖，除非你在 MC 里看到明确牌子、入口或可交互结构。</p>
+          <p class="note">下面 10 条是人工标点路线，不是自动认证路线。你按 Google/OSM 判断真实路线，再到 Minecraft 里找可见入口、路口、楼梯、天桥、边界或牌子并新建 waypoint；表格里的 SL76 按钮只用于把 Google/OSM/VNC 快速同步到附近参考点。</p>
           <div class="route-summary" id="routePlanSummary">
             <div class="fact"><strong>...</strong><span>loading route plan</span></div>
           </div>
           <div class="route-list" id="routePlanList">
             <div class="text-empty">Loading route review plan...</div>
-          </div>
-          <div class="reference-actions route-source-links">
-            <a class="button" href="assets/shun-lee-clean-v3-default76-route-review-plan-v2.csv?v=20260722-routeplan-v2" target="_blank" rel="noopener">CSV source</a>
-            <a class="button" href="assets/shun-lee-clean-v3-default76-route-review-plan-v2.csv?v=20260722-routeplan-v2" download>Download CSV</a>
           </div>
         </div>
       </section>
@@ -1161,6 +1208,19 @@
     const SELECTED_ROUTE_STORAGE_KEY = "shunLeeSelectedRouteV1";
     const TOPDOWN_IMAGE = { width: 1296, height: 816 };
     const MC_CROP_BOUNDS = { minX: -368, maxX: 63, minZ: -752, maxZ: -481 };
+    const MANUAL_ROUTE_LIMIT = 10;
+    const MANUAL_ROUTE_LABELS = {
+      "SLR76-001": "屋邨到滙基書院",
+      "SLR76-002": "住宅到利安商场",
+      "SLR76-003": "基順学校到利安道通道",
+      "SLR76-004": "聖道迦南到社区园圃",
+      "SLR76-005": "四季花园到赛车场",
+      "SLR76-006": "东侧天桥到学校",
+      "SLR76-007": "坡地路径到挡土墙",
+      "SLR76-008": "第4座到簕杜鹃园",
+      "SLR76-009": "特殊学校到休憩处",
+      "SLR76-010": "第5座到消防局",
+    };
     const minecraftVncFrame = document.getElementById("minecraftVncFrame");
     const minecraftCaptureVideo = document.getElementById("minecraftCaptureVideo");
     const minecraftCapturePlaceholder = document.getElementById("minecraftCapturePlaceholder");
@@ -2080,7 +2140,7 @@
     }
 
     function routeLabel(row) {
-      return `${row.route_id} · ${String(row.route_theme || "").replaceAll("_", " ")}`;
+      return `${row.route_id} · ${MANUAL_ROUTE_LABELS[row.route_id] || String(row.route_theme || "").replaceAll("_", " ")}`;
     }
 
     function activeRouteRow() {
@@ -2088,9 +2148,7 @@
     }
 
     function routeMatchesFilter(row) {
-      if (routePlanFilter === "all") return true;
-      if (routePlanFilter === "sweep") return row.review_action === "coverage_sweep";
-      return row.review_action !== "coverage_sweep";
+      return Number(row.priority) <= MANUAL_ROUTE_LIMIT;
     }
 
     function filteredRouteRows() {
@@ -2127,7 +2185,7 @@
       });
       if (!rows.length) {
         const option = document.createElement("option");
-        option.textContent = "No routes in this filter";
+        option.textContent = "No manual routes loaded";
         routePlanSelect.appendChild(option);
       }
       routePlanSelect.value = selectedRouteId;
@@ -2180,6 +2238,7 @@
     }
 
     function renderRouteMap(row) {
+      if (!routeMapSvg) return;
       if (!row) {
         routeMapSvg.innerHTML = '<foreignObject width="1296" height="816"><div xmlns="http://www.w3.org/1999/xhtml" class="route-map-empty">No route selected</div></foreignObject>';
         return;
@@ -2231,36 +2290,87 @@
         <div class="route-step-list">
           ${ids.map((id, index) => routeStepHtml(row, id, index, ids.length)).join("")}
         </div>
-        <p><strong>Prompt:</strong> ${escapeHtml(row.prompt_zh)}</p>
-        <p><strong>Review goal:</strong> ${escapeHtml(row.manual_review_goal)}</p>
+        <p><strong>路线描述:</strong> ${escapeHtml(row.prompt_zh)}</p>
+        <p><strong>MC 标点任务:</strong> ${escapeHtml(row.manual_review_goal)}</p>
+        <small>Google/OSM 对照：先确认现实世界的道路、学校/商场/公园边界、楼梯或天桥关系，再在 Minecraft 里新建你看到的真实点。</small>
         <small>${escapeHtml(row.city_category)} · ${escapeHtml(operationTags.join(" · "))}</small>
-        <small>Probe: ${escapeHtml(row.static_probe_status)}${length ? ` · ${escapeHtml(length)}` : ""}${row.static_probe_waypoint_count ? ` · ${escapeHtml(row.static_probe_waypoint_count)} waypoints` : ""}</small>
+        <small>Static probe reference: ${escapeHtml(row.static_probe_status)}${length ? ` · ${escapeHtml(length)}` : ""}${row.static_probe_waypoint_count ? ` · ${escapeHtml(row.static_probe_waypoint_count)} waypoints` : ""}</small>
       `;
     }
 
-    function routeItemHtml(row) {
+    function routePathText(row) {
+      const ids = routeAnchorIds(row);
+      const names = routeAnchorNames(row);
+      return ids.map((id, index) => `${id} ${names[index] || ""}`.trim()).join(" -> ");
+    }
+
+    function routeActionText(row) {
+      if (row.review_action === "modify_first" || row.static_probe_status === "no_path_found" || row.static_probe_status === "invalid_goal_acceptance_set") {
+        return "不要直接信 probe 点；按 Google/OSM 找入口、边界、路口或可站平台，在 MC 里新建点。";
+      }
+      return "按现实路线走，遇到清晰入口、路牌、楼梯、天桥落点或设施边界时新建点。";
+    }
+
+    function routeTableRowHtml(row) {
       const viaIds = splitRouteValues(row.via_ids);
-      const length = row.static_probe_length_blocks ? `${row.static_probe_length_blocks} blocks` : row.static_probe_status;
       const active = row.route_id === selectedRouteId ? " active" : "";
       return `
-        <div class="route-item${active}" data-route-id="${escapeHtml(row.route_id)}">
-          <div class="route-item-top">
+        <tr class="route-manual-row${active}" data-route-id="${escapeHtml(row.route_id)}">
+          <td>
             <strong>${escapeHtml(routeLabel(row))}</strong>
-            <button type="button" class="route-item-select" data-route-id="${escapeHtml(row.route_id)}">看路线</button>
-          </div>
-          <small>${escapeHtml(row.start_id)} ${escapeHtml(row.start_name)} -> ${escapeHtml(row.endpoint_id)} ${escapeHtml(row.endpoint_name)}</small>
-          <small>${viaIds.length} via point(s) · ${escapeHtml(row.static_probe_status)}${length ? ` · ${escapeHtml(length)}` : ""}</small>
-          <div class="route-pill-row">
-            ${routePillHtml(row.review_action, row.review_action)}
-            ${routePillHtml(row.scene_category)}
-            ${routePillHtml(row.map_morphology_class)}
-          </div>
+            <small>${escapeHtml(row.intent || row.route_theme)}</small>
+          </td>
+          <td>
+            ${escapeHtml(routePathText(row))}
+            <small>${viaIds.length} via point(s)</small>
+          </td>
+          <td>
+            ${escapeHtml(row.manual_review_goal)}
+            <small>${escapeHtml(routeActionText(row))}</small>
+          </td>
+          <td>
+            ${escapeHtml(row.scene_category)}
+            <small>${escapeHtml(row.map_morphology_class)}</small>
+            <small>${escapeHtml(splitRouteValues(row.operation_tags).join(" · "))}</small>
+          </td>
+          <td>
+            <div class="route-anchor-links">
+              ${routeAnchorButtonHtml(row.start_id, "start")}
+              ${viaIds.slice(0, 4).map((id) => routeAnchorButtonHtml(id, "via")).join("")}
+              ${viaIds.length > 4 ? `<small>+${viaIds.length - 4} via</small>` : ""}
+              ${routeAnchorButtonHtml(row.endpoint_id, "end")}
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+
+    function routeTableHtml(rows) {
+      if (!rows.length) return '<div class="text-empty">No manual route rows found.</div>';
+      return `
+        <div class="route-table-wrap">
+          <table class="route-table">
+            <thead>
+              <tr>
+                <th>路线</th>
+                <th>Google / OSM 顺序</th>
+                <th>你在 MC 里标什么</th>
+                <th>场景 / 操作</th>
+                <th>同步参考点</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map(routeTableRowHtml).join("")}
+            </tbody>
+          </table>
         </div>
       `;
     }
 
     function renderRoutePlan(rows) {
-      routePlanRows = rows.slice().sort((left, right) => Number(left.priority) - Number(right.priority));
+      routePlanRows = rows
+        .filter((row) => Number(row.priority) <= MANUAL_ROUTE_LIMIT)
+        .sort((left, right) => Number(left.priority) - Number(right.priority));
       const actionCounts = routePlanRows.reduce((acc, row) => {
         acc[row.review_action] = (acc[row.review_action] || 0) + 1;
         return acc;
@@ -2270,20 +2380,17 @@
         [row.start_id, row.endpoint_id, ...splitRouteValues(row.via_ids)].filter(Boolean).forEach((id) => uniqueAnchors.add(id));
       });
       const scenes = new Set(routePlanRows.map((row) => row.scene_category).filter(Boolean));
-      routePlanCount.innerHTML = `<span class="dot"></span>${routePlanRows.length} visual routes`;
+      routePlanCount.innerHTML = `<span class="dot"></span>${routePlanRows.length} manual routes`;
       routePlanSummary.innerHTML = `
-        <div class="fact"><strong>${routePlanRows.length}</strong><span>candidate review routes</span></div>
-        <div class="fact"><strong>${uniqueAnchors.size}</strong><span>unique SL76 points referenced</span></div>
-        <div class="fact"><strong>${actionCounts.try_first || 0}</strong><span>try first</span></div>
-        <div class="fact"><strong>${actionCounts.modify_first || 0}</strong><span>modify first</span></div>
-        <div class="fact"><strong>${actionCounts.coverage_sweep || 0}</strong><span>coverage sweep</span></div>
-        <div class="fact"><strong>${actionCounts.defer || 0}</strong><span>defer</span></div>
-        <div class="fact"><strong>${scenes.size}</strong><span>Shun Lee scene categories</span></div>
+        <div class="fact"><strong>${routePlanRows.length}</strong><span>Google/OSM-guided manual routes</span></div>
+        <div class="fact"><strong>${uniqueAnchors.size}</strong><span>nearby reference SL76 points</span></div>
+        <div class="fact"><strong>${actionCounts.modify_first || 0}</strong><span>need manual coordinate correction</span></div>
+        <div class="fact"><strong>${scenes.size}</strong><span>scene categories</span></div>
       `;
       renderRouteFilterButtons();
       renderRouteSelect();
       const visibleRows = filteredRouteRows();
-      routePlanList.innerHTML = visibleRows.map(routeItemHtml).join("") || '<div class="text-empty">No route plan rows found in this filter.</div>';
+      routePlanList.innerHTML = routeTableHtml(visibleRows);
       const row = activeRouteRow();
       renderRouteMap(row);
       routeActiveDetail.innerHTML = routeActiveDetailHtml(row);
@@ -2317,7 +2424,7 @@
         return;
       }
       const routeButton = event.target && event.target.closest ? event.target.closest(".route-item-select") : null;
-      const routeItem = event.target && event.target.closest ? event.target.closest(".route-item") : null;
+      const routeItem = event.target && event.target.closest ? event.target.closest(".route-item, .route-manual-row") : null;
       const routeId = routeButton ? routeButton.dataset.routeId : (routeItem ? routeItem.dataset.routeId : "");
       if (routeId) selectRoute(routeId);
     }
@@ -2839,7 +2946,7 @@
     nearbyTextList.addEventListener("click", handleTextActionClick);
     allTextLabels.addEventListener("click", handleTextActionClick);
     routePlanList.addEventListener("click", handleRoutePlanClick);
-    routeMapSvg.addEventListener("click", handleRouteMapClick);
+    if (routeMapSvg) routeMapSvg.addEventListener("click", handleRouteMapClick);
     routePlanSelect.addEventListener("change", () => selectRoute(routePlanSelect.value));
     document.querySelectorAll(".route-filter-button").forEach((button) => {
       button.addEventListener("click", () => setRouteFilter(button.dataset.routeFilter));
