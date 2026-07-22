@@ -365,6 +365,108 @@
       gap: .7rem;
       padding: .75rem .8rem;
     }
+    .route-toolbar {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: .6rem;
+      align-items: end;
+    }
+    .route-select-label {
+      display: grid;
+      gap: .22rem;
+      color: var(--muted);
+      font-size: .72rem;
+    }
+    .route-filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .35rem;
+      justify-content: flex-start;
+    }
+    .route-filter-button {
+      min-height: 34px;
+      padding: .42rem .56rem;
+      font-size: .78rem;
+      border-color: #31465b;
+      background: #0d1722;
+    }
+    .route-filter-button.active {
+      border-color: #168d85;
+      background: #0e6c65;
+      color: var(--ink);
+    }
+    .route-map-shell {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #31465b;
+      border-radius: 8px;
+      aspect-ratio: 1296 / 816;
+      background: #d9e2ec;
+    }
+    .route-map-shell img,
+    .route-map-shell svg {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .route-map-shell img {
+      object-fit: fill;
+    }
+    .route-map-shell svg {
+      overflow: visible;
+    }
+    .route-line {
+      fill: none;
+      stroke: #ff3f7f;
+      stroke-width: 7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      paint-order: stroke;
+      filter: drop-shadow(0 0 4px rgba(0, 0, 0, .85));
+    }
+    .route-line-shadow {
+      fill: none;
+      stroke: rgba(5, 12, 18, .82);
+      stroke-width: 13;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .route-node {
+      stroke: #071018;
+      stroke-width: 5;
+      cursor: pointer;
+    }
+    .route-node.start { fill: #7ee787; }
+    .route-node.via { fill: #9bd4ff; }
+    .route-node.end { fill: #ffc567; }
+    .route-node-label {
+      paint-order: stroke;
+      stroke: rgba(5, 12, 18, .92);
+      stroke-width: 5;
+      fill: #ffffff;
+      font-size: 27px;
+      font-weight: 800;
+      pointer-events: none;
+    }
+    .route-node-index {
+      fill: #071018;
+      font-size: 22px;
+      font-weight: 850;
+      text-anchor: middle;
+      dominant-baseline: central;
+      pointer-events: none;
+    }
+    .route-map-empty {
+      display: grid;
+      place-items: center;
+      height: 100%;
+      padding: 1rem;
+      color: #26384a;
+      text-align: center;
+      font-weight: 650;
+    }
     .route-summary {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -382,6 +484,18 @@
       border: 1px solid #28394b;
       border-radius: 8px;
       background: #111d29;
+      cursor: pointer;
+    }
+    .route-item.active {
+      border-color: #35d0c4;
+      background: #102733;
+      box-shadow: 0 0 0 1px rgba(53, 208, 196, .28) inset;
+    }
+    .route-item-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
     }
     .route-item strong {
       display: block;
@@ -389,6 +503,17 @@
       font-size: .86rem;
       line-height: 1.25;
       overflow-wrap: anywhere;
+    }
+    .route-item-select {
+      flex: 0 0 auto;
+      min-height: 28px;
+      padding: .24rem .42rem;
+      border-radius: 6px;
+      border-color: #335067;
+      background: #0c1520;
+      color: var(--cyan);
+      font-size: .72rem;
+      line-height: 1;
     }
     .route-item small {
       display: block;
@@ -449,6 +574,53 @@
     }
     .route-anchor-jump:hover {
       border-color: var(--cyan);
+    }
+    .route-active-detail {
+      display: grid;
+      gap: .55rem;
+      padding: .65rem;
+      border: 1px solid #28394b;
+      border-radius: 8px;
+      background: #111d29;
+    }
+    .route-active-detail strong {
+      color: var(--ink);
+    }
+    .route-active-detail small,
+    .route-active-detail p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.42;
+    }
+    .route-step-list {
+      display: grid;
+      gap: .36rem;
+    }
+    .route-step {
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr) auto;
+      gap: .45rem;
+      align-items: center;
+      padding: .42rem .48rem;
+      border: 1px solid #27394b;
+      border-radius: 7px;
+      background: #0d1722;
+    }
+    .route-step-role {
+      color: var(--cyan);
+      font-size: .7rem;
+      font-weight: 750;
+      text-transform: uppercase;
+    }
+    .route-step-name {
+      min-width: 0;
+      color: var(--ink);
+      font-size: .78rem;
+      overflow-wrap: anywhere;
+    }
+    .route-source-links {
+      justify-content: flex-start;
     }
     .text-item {
       min-width: 0;
@@ -678,6 +850,10 @@
       .map-card { grid-template-columns: 1fr; }
       .facts { grid-template-columns: 1fr 1fr; }
       .route-summary { grid-template-columns: 1fr 1fr; }
+      .route-toolbar { grid-template-columns: 1fr; }
+      .route-filter-row { justify-content: flex-start; }
+      .route-step { grid-template-columns: 42px minmax(0, 1fr); }
+      .route-step .route-anchor-jump { grid-column: 2; justify-self: start; }
       iframe { min-height: 560px; }
       .reference-meta { grid-template-columns: 1fr; }
       .reference-meta .wide-meta { grid-column: auto; }
@@ -822,16 +998,36 @@
           <span class="badge" id="routePlanCount"><span class="dot"></span>Loading</span>
         </div>
         <div class="route-body">
-          <div class="reference-actions">
-            <a class="button primary" href="assets/shun-lee-clean-v3-default76-route-review-plan-v2.csv?v=20260722-routeplan-v2" target="_blank" rel="noopener">打开路线 CSV</a>
-            <a class="button" href="assets/shun-lee-clean-v3-default76-route-review-plan-v2.csv?v=20260722-routeplan-v2" download>下载 CSV</a>
+          <div class="route-toolbar">
+            <label class="route-select-label">
+              Route
+              <select id="routePlanSelect">
+                <option>Loading route plan...</option>
+              </select>
+            </label>
+            <div class="route-filter-row" aria-label="route filters">
+              <button type="button" class="route-filter-button active" data-route-filter="priority">优先路线</button>
+              <button type="button" class="route-filter-button" data-route-filter="sweep">覆盖扫点</button>
+              <button type="button" class="route-filter-button" data-route-filter="all">全部</button>
+            </div>
           </div>
-          <p class="note">这是一版 Shun Lee 局部人工审核路线，不是 8-map 全局多样性已满足的声明。路线表显式标注 city category、城市形态、场景类别和操作标签；bus stop / vehicle / door 类操作暂不作为已覆盖，除非你在 MC 里看到明确牌子、入口或可交互结构。</p>
+          <div class="route-map-shell" id="routeMapShell">
+            <img src="assets/shun-lee-clean-v3-topdown-default76.png?v=20260721-default76" alt="Selected Shun Lee route highlighted on Minecraft top-down map">
+            <svg id="routeMapSvg" viewBox="0 0 1296 816" aria-label="Selected route overlay"></svg>
+          </div>
+          <div class="route-active-detail" id="routeActiveDetail">
+            <div class="text-empty">Loading route review plan...</div>
+          </div>
+          <p class="note">这是一版 Shun Lee 局部人工审核路线，不是 8-map 全局多样性已满足的声明。地图上的粉色线是审核顺序/候选连接线，不等于已认证可走路径；bus stop / vehicle / door 类操作暂不作为已覆盖，除非你在 MC 里看到明确牌子、入口或可交互结构。</p>
           <div class="route-summary" id="routePlanSummary">
             <div class="fact"><strong>...</strong><span>loading route plan</span></div>
           </div>
           <div class="route-list" id="routePlanList">
             <div class="text-empty">Loading route review plan...</div>
+          </div>
+          <div class="reference-actions route-source-links">
+            <a class="button" href="assets/shun-lee-clean-v3-default76-route-review-plan-v2.csv?v=20260722-routeplan-v2" target="_blank" rel="noopener">CSV source</a>
+            <a class="button" href="assets/shun-lee-clean-v3-default76-route-review-plan-v2.csv?v=20260722-routeplan-v2" download>Download CSV</a>
           </div>
         </div>
       </section>
@@ -950,6 +1146,9 @@
     const routePlanCount = document.getElementById("routePlanCount");
     const routePlanSummary = document.getElementById("routePlanSummary");
     const routePlanList = document.getElementById("routePlanList");
+    const routePlanSelect = document.getElementById("routePlanSelect");
+    const routeMapSvg = document.getElementById("routeMapSvg");
+    const routeActiveDetail = document.getElementById("routeActiveDetail");
     const CONTROL_API_BASE = "https://shall-training-driven-intense.trycloudflare.com";
     const REMOTE_VNC_URL = "https://exposed-portrait-parade-immigration.trycloudflare.com/vnc.html?autoconnect=1&resize=scale";
     const DEFAULT_LOCAL_VNC_URL = "http://127.0.0.1:6080/vnc.html?autoconnect=1&resize=scale";
@@ -958,6 +1157,10 @@
     const MINECRAFT_VIEW_MODE_STORAGE_KEY = "shunLeeMinecraftViewMode";
     const LOCAL_PLACES_STORAGE_KEY = "shunLeeLocalPlacesV1";
     const REVIEW_DECISIONS_STORAGE_KEY = "shunLeeReviewDecisionsV1";
+    const ROUTE_FILTER_STORAGE_KEY = "shunLeeRouteFilterV1";
+    const SELECTED_ROUTE_STORAGE_KEY = "shunLeeSelectedRouteV1";
+    const TOPDOWN_IMAGE = { width: 1296, height: 816 };
+    const MC_CROP_BOUNDS = { minX: -368, maxX: 63, minZ: -752, maxZ: -481 };
     const minecraftVncFrame = document.getElementById("minecraftVncFrame");
     const minecraftCaptureVideo = document.getElementById("minecraftCaptureVideo");
     const minecraftCapturePlaceholder = document.getElementById("minecraftCapturePlaceholder");
@@ -996,6 +1199,10 @@
     let mcTextWaypointsByLabel = new Map();
     let mcLabelsById = new Map();
     let routePlanRows = [];
+    let selectedRouteId = localStorage.getItem(SELECTED_ROUTE_STORAGE_KEY) || "";
+    let routePlanFilter = ["priority", "sweep", "all"].includes(localStorage.getItem(ROUTE_FILTER_STORAGE_KEY))
+      ? localStorage.getItem(ROUTE_FILTER_STORAGE_KEY)
+      : "priority";
     let localCaptureStream = null;
 
     function googleStreetViewEmbedUrl(anchor) {
@@ -1854,6 +2061,14 @@
       return String(value || "").split("|").map((item) => item.trim()).filter(Boolean);
     }
 
+    function routeAnchorIds(row) {
+      return [row.start_id, ...splitRouteValues(row.via_ids), row.endpoint_id].filter(Boolean);
+    }
+
+    function routeAnchorNames(row) {
+      return [row.start_name, ...splitRouteValues(row.via_names), row.endpoint_name].map((item) => String(item || ""));
+    }
+
     function routeAnchorButtonHtml(id, role) {
       if (!id) return "";
       return `<button type="button" class="route-anchor-jump" data-display-id="${escapeHtml(id)}">${escapeHtml(role)} ${escapeHtml(id)}</button>`;
@@ -1864,34 +2079,181 @@
       return `<span class="${className.trim()}">${escapeHtml(String(value || "").replaceAll("_", " "))}</span>`;
     }
 
-    function routeItemHtml(row) {
-      const viaIds = splitRouteValues(row.via_ids);
-      const viaNames = splitRouteValues(row.via_names);
-      const operationTags = splitRouteValues(row.operation_tags);
-      const viaText = viaIds.length
-        ? viaIds.map((id, index) => `${id} ${viaNames[index] || ""}`.trim()).join(" -> ")
-        : "none";
-      const length = row.static_probe_length_blocks ? `${row.static_probe_length_blocks} blocks` : row.static_probe_status;
+    function routeLabel(row) {
+      return `${row.route_id} · ${String(row.route_theme || "").replaceAll("_", " ")}`;
+    }
+
+    function activeRouteRow() {
+      return routePlanRows.find((row) => row.route_id === selectedRouteId) || null;
+    }
+
+    function routeMatchesFilter(row) {
+      if (routePlanFilter === "all") return true;
+      if (routePlanFilter === "sweep") return row.review_action === "coverage_sweep";
+      return row.review_action !== "coverage_sweep";
+    }
+
+    function filteredRouteRows() {
+      return routePlanRows.filter(routeMatchesFilter);
+    }
+
+    function ensureSelectedRouteVisible() {
+      if (!routePlanRows.length) {
+        selectedRouteId = "";
+        return;
+      }
+      const filtered = filteredRouteRows();
+      const current = routePlanRows.find((row) => row.route_id === selectedRouteId);
+      if (current && routeMatchesFilter(current)) return;
+      selectedRouteId = (filtered[0] || routePlanRows[0]).route_id;
+      localStorage.setItem(SELECTED_ROUTE_STORAGE_KEY, selectedRouteId);
+    }
+
+    function renderRouteFilterButtons() {
+      document.querySelectorAll(".route-filter-button").forEach((button) => {
+        button.classList.toggle("active", button.dataset.routeFilter === routePlanFilter);
+      });
+    }
+
+    function renderRouteSelect() {
+      ensureSelectedRouteVisible();
+      routePlanSelect.innerHTML = "";
+      const rows = filteredRouteRows();
+      rows.forEach((row) => {
+        const option = document.createElement("option");
+        option.value = row.route_id;
+        option.textContent = routeLabel(row);
+        routePlanSelect.appendChild(option);
+      });
+      if (!rows.length) {
+        const option = document.createElement("option");
+        option.textContent = "No routes in this filter";
+        routePlanSelect.appendChild(option);
+      }
+      routePlanSelect.value = selectedRouteId;
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function routeMapPoint(anchor) {
+      if (!anchor) return null;
+      const x = Number(anchor.mc_x);
+      const z = Number(anchor.mc_z);
+      if (!Number.isFinite(x) || !Number.isFinite(z)) return null;
+      const blockWidth = MC_CROP_BOUNDS.maxX - MC_CROP_BOUNDS.minX + 1;
+      const blockHeight = MC_CROP_BOUNDS.maxZ - MC_CROP_BOUNDS.minZ + 1;
+      return {
+        x: clamp(((x - MC_CROP_BOUNDS.minX) + 0.5) * TOPDOWN_IMAGE.width / blockWidth, 0, TOPDOWN_IMAGE.width),
+        y: clamp(((z - MC_CROP_BOUNDS.minZ) + 0.5) * TOPDOWN_IMAGE.height / blockHeight, 0, TOPDOWN_IMAGE.height),
+      };
+    }
+
+    function routeStepRole(index, total) {
+      if (index === 0) return "start";
+      if (index === total - 1) return "end";
+      return "via";
+    }
+
+    function routeNodeHtml(id, index, total) {
+      const anchor = anchorsByDisplayId.get(id);
+      const point = routeMapPoint(anchor);
+      if (!point) return "";
+      const role = routeStepRole(index, total);
+      const label = role === "via" ? String(index) : (role === "start" ? "S" : "E");
       return `
-        <div class="route-item">
-          <strong>${escapeHtml(row.route_id)} · ${escapeHtml(row.route_theme)}</strong>
-          <small>${escapeHtml(row.start_id)} ${escapeHtml(row.start_name)} -> ${escapeHtml(row.endpoint_id)} ${escapeHtml(row.endpoint_name)}</small>
-          <small>via: ${escapeHtml(viaText)}</small>
+        <g data-display-id="${escapeHtml(id)}" class="route-node-click">
+          <circle class="route-node ${escapeHtml(role)}" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="17"></circle>
+          <text class="route-node-index" x="${point.x.toFixed(1)}" y="${point.y.toFixed(1)}">${escapeHtml(label)}</text>
+          <text class="route-node-label" x="${(point.x + 22).toFixed(1)}" y="${(point.y - 18).toFixed(1)}">${escapeHtml(id.replace("SL76-", ""))}</text>
+        </g>
+      `;
+    }
+
+    function routePolylinePoints(row) {
+      return routeAnchorIds(row)
+        .map((id) => routeMapPoint(anchorsByDisplayId.get(id)))
+        .filter(Boolean)
+        .map((point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`)
+        .join(" ");
+    }
+
+    function renderRouteMap(row) {
+      if (!row) {
+        routeMapSvg.innerHTML = '<foreignObject width="1296" height="816"><div xmlns="http://www.w3.org/1999/xhtml" class="route-map-empty">No route selected</div></foreignObject>';
+        return;
+      }
+      const ids = routeAnchorIds(row);
+      const points = routePolylinePoints(row);
+      const nodes = ids.map((id, index) => routeNodeHtml(id, index, ids.length)).join("");
+      if (!points) {
+        routeMapSvg.innerHTML = '<foreignObject width="1296" height="816"><div xmlns="http://www.w3.org/1999/xhtml" class="route-map-empty">Route loaded; waiting for anchor map data</div></foreignObject>';
+        return;
+      }
+      routeMapSvg.innerHTML = `
+        <polyline class="route-line-shadow" points="${points}"></polyline>
+        <polyline class="route-line" points="${points}"></polyline>
+        ${nodes}
+      `;
+    }
+
+    function routeStepHtml(row, id, index, total) {
+      const names = routeAnchorNames(row);
+      const anchor = anchorsByDisplayId.get(id);
+      const role = routeStepRole(index, total);
+      const name = anchor ? anchorDisplayName(anchor) : names[index] || "";
+      const coord = anchor ? `MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}` : "anchor data loading";
+      const decision = anchor ? decisionSuffixForKey(anchor.prompt_id) : "";
+      return `
+        <div class="route-step">
+          <div class="route-step-role">${escapeHtml(role)}</div>
+          <div class="route-step-name">${escapeHtml(id)} · ${escapeHtml(name)}${escapeHtml(decision)}<br><small>${escapeHtml(coord)}</small></div>
+          ${routeAnchorButtonHtml(id, "tp")}
+        </div>
+      `;
+    }
+
+    function routeActiveDetailHtml(row) {
+      if (!row) return '<div class="text-empty">No route selected.</div>';
+      const ids = routeAnchorIds(row);
+      const operationTags = splitRouteValues(row.operation_tags);
+      const length = row.static_probe_length_blocks ? `${Number(row.static_probe_length_blocks).toFixed(1)} blocks` : row.static_probe_status;
+      return `
+        <div>
+          <strong>${escapeHtml(routeLabel(row))}</strong>
           <div class="route-pill-row">
             ${routePillHtml(row.review_action, row.review_action)}
             ${routePillHtml(row.scene_category)}
             ${routePillHtml(row.map_morphology_class)}
           </div>
-          <small>City category: ${escapeHtml(row.city_category)}</small>
-          <small>Operations: ${escapeHtml(operationTags.join(" · "))}</small>
-          <small>Probe: ${escapeHtml(row.static_probe_status)}${length ? ` · ${escapeHtml(length)}` : ""}${row.static_probe_waypoint_count ? ` · ${escapeHtml(row.static_probe_waypoint_count)} waypoints` : ""}</small>
-          <small>Prompt: ${escapeHtml(row.prompt_zh)}</small>
-          <small>Manual review: ${escapeHtml(row.manual_review_goal)}</small>
-          <small>Diversity note: ${escapeHtml(row.diversity_role)}</small>
-          <div class="route-anchor-links">
-            ${routeAnchorButtonHtml(row.start_id, "start")}
-            ${viaIds.map((id) => routeAnchorButtonHtml(id, "via")).join("")}
-            ${routeAnchorButtonHtml(row.endpoint_id, "end")}
+        </div>
+        <div class="route-step-list">
+          ${ids.map((id, index) => routeStepHtml(row, id, index, ids.length)).join("")}
+        </div>
+        <p><strong>Prompt:</strong> ${escapeHtml(row.prompt_zh)}</p>
+        <p><strong>Review goal:</strong> ${escapeHtml(row.manual_review_goal)}</p>
+        <small>${escapeHtml(row.city_category)} · ${escapeHtml(operationTags.join(" · "))}</small>
+        <small>Probe: ${escapeHtml(row.static_probe_status)}${length ? ` · ${escapeHtml(length)}` : ""}${row.static_probe_waypoint_count ? ` · ${escapeHtml(row.static_probe_waypoint_count)} waypoints` : ""}</small>
+      `;
+    }
+
+    function routeItemHtml(row) {
+      const viaIds = splitRouteValues(row.via_ids);
+      const length = row.static_probe_length_blocks ? `${row.static_probe_length_blocks} blocks` : row.static_probe_status;
+      const active = row.route_id === selectedRouteId ? " active" : "";
+      return `
+        <div class="route-item${active}" data-route-id="${escapeHtml(row.route_id)}">
+          <div class="route-item-top">
+            <strong>${escapeHtml(routeLabel(row))}</strong>
+            <button type="button" class="route-item-select" data-route-id="${escapeHtml(row.route_id)}">看路线</button>
+          </div>
+          <small>${escapeHtml(row.start_id)} ${escapeHtml(row.start_name)} -> ${escapeHtml(row.endpoint_id)} ${escapeHtml(row.endpoint_name)}</small>
+          <small>${viaIds.length} via point(s) · ${escapeHtml(row.static_probe_status)}${length ? ` · ${escapeHtml(length)}` : ""}</small>
+          <div class="route-pill-row">
+            ${routePillHtml(row.review_action, row.review_action)}
+            ${routePillHtml(row.scene_category)}
+            ${routePillHtml(row.map_morphology_class)}
           </div>
         </div>
       `;
@@ -1908,7 +2270,7 @@
         [row.start_id, row.endpoint_id, ...splitRouteValues(row.via_ids)].filter(Boolean).forEach((id) => uniqueAnchors.add(id));
       });
       const scenes = new Set(routePlanRows.map((row) => row.scene_category).filter(Boolean));
-      routePlanCount.innerHTML = `<span class="dot"></span>${routePlanRows.length} routes`;
+      routePlanCount.innerHTML = `<span class="dot"></span>${routePlanRows.length} visual routes`;
       routePlanSummary.innerHTML = `
         <div class="fact"><strong>${routePlanRows.length}</strong><span>candidate review routes</span></div>
         <div class="fact"><strong>${uniqueAnchors.size}</strong><span>unique SL76 points referenced</span></div>
@@ -1918,15 +2280,54 @@
         <div class="fact"><strong>${actionCounts.defer || 0}</strong><span>defer</span></div>
         <div class="fact"><strong>${scenes.size}</strong><span>Shun Lee scene categories</span></div>
       `;
-      routePlanList.innerHTML = routePlanRows.map(routeItemHtml).join("") || '<div class="text-empty">No route plan rows found.</div>';
+      renderRouteFilterButtons();
+      renderRouteSelect();
+      const visibleRows = filteredRouteRows();
+      routePlanList.innerHTML = visibleRows.map(routeItemHtml).join("") || '<div class="text-empty">No route plan rows found in this filter.</div>';
+      const row = activeRouteRow();
+      renderRouteMap(row);
+      routeActiveDetail.innerHTML = routeActiveDetailHtml(row);
+    }
+
+    function setRouteFilter(filter) {
+      routePlanFilter = ["priority", "sweep", "all"].includes(filter) ? filter : "priority";
+      localStorage.setItem(ROUTE_FILTER_STORAGE_KEY, routePlanFilter);
+      if (routePlanRows.length) renderRoutePlan(routePlanRows);
+    }
+
+    function selectRoute(routeId) {
+      if (!routePlanRows.some((row) => row.route_id === routeId)) return;
+      selectedRouteId = routeId;
+      localStorage.setItem(SELECTED_ROUTE_STORAGE_KEY, selectedRouteId);
+      renderRoutePlan(routePlanRows);
+      const row = activeRouteRow();
+      if (row) setSyncStatus(`Selected route ${row.route_id}; click a step or map node to sync Minecraft`);
     }
 
     function handleRoutePlanClick(event) {
       const button = event.target && event.target.closest ? event.target.closest(".route-anchor-jump") : null;
-      if (!button) return;
-      const anchor = anchorsByDisplayId.get(button.dataset.displayId);
+      if (button) {
+        const anchor = anchorsByDisplayId.get(button.dataset.displayId);
+        if (!anchor) {
+          setSyncStatus(`Route anchor ${button.dataset.displayId} is not loaded`);
+          return;
+        }
+        anchorSelect.value = anchor.prompt_id;
+        selectAnchor(anchor, { syncMinecraft: true });
+        return;
+      }
+      const routeButton = event.target && event.target.closest ? event.target.closest(".route-item-select") : null;
+      const routeItem = event.target && event.target.closest ? event.target.closest(".route-item") : null;
+      const routeId = routeButton ? routeButton.dataset.routeId : (routeItem ? routeItem.dataset.routeId : "");
+      if (routeId) selectRoute(routeId);
+    }
+
+    function handleRouteMapClick(event) {
+      const node = event.target && event.target.closest ? event.target.closest("[data-display-id]") : null;
+      if (!node) return;
+      const anchor = anchorsByDisplayId.get(node.dataset.displayId);
       if (!anchor) {
-        setSyncStatus(`Route anchor ${button.dataset.displayId} is not loaded`);
+        setSyncStatus(`Route anchor ${node.dataset.displayId} is not loaded`);
         return;
       }
       anchorSelect.value = anchor.prompt_id;
@@ -2350,6 +2751,7 @@
         reviewDecisions = loadReviewDecisions();
         rebuildAnchorIndex();
         renderAnchorOptions();
+        if (routePlanRows.length) renderRoutePlan(routePlanRows);
         if (mcTextLabels) renderAllTextLabels(mcTextLabels);
         anchorSelect.addEventListener("change", () => {
           const value = anchorSelect.value;
@@ -2437,6 +2839,11 @@
     nearbyTextList.addEventListener("click", handleTextActionClick);
     allTextLabels.addEventListener("click", handleTextActionClick);
     routePlanList.addEventListener("click", handleRoutePlanClick);
+    routeMapSvg.addEventListener("click", handleRouteMapClick);
+    routePlanSelect.addEventListener("change", () => selectRoute(routePlanSelect.value));
+    document.querySelectorAll(".route-filter-button").forEach((button) => {
+      button.addEventListener("click", () => setRouteFilter(button.dataset.routeFilter));
+    });
   </script>
 </body>
 </html>
