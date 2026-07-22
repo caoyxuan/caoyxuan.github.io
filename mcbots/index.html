@@ -448,24 +448,22 @@
       overflow: hidden;
       border: 1px solid #31465b;
       border-radius: 8px;
-      aspect-ratio: 1296 / 816;
-      min-height: 360px;
+      aspect-ratio: 1280 / 900;
+      min-height: 430px;
       background: #05090e;
     }
     .minecraft-minimap-feed,
     .minecraft-minimap-video {
       position: absolute;
-      left: 0;
-      top: 0;
-      width: 1280px;
-      height: 900px;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       border: 0;
-      transform: scale(var(--minimap-zoom, 1.45));
-      transform-origin: top left;
       pointer-events: none;
     }
     .minecraft-minimap-video {
-      object-fit: fill;
+      object-fit: contain;
+      background: #05090e;
     }
     .minimap-crop-label {
       position: absolute;
@@ -1121,22 +1119,22 @@
     </div>
   </section>
 
-  <section class="panel alignment-panel wide-alignment" aria-label="live Minecraft minimap and real-world map comparison">
+  <section class="panel alignment-panel wide-alignment" aria-label="live Minecraft world map and real-world map comparison">
     <div class="panel-head">
-      <h2>Live minimap · MC ↔ OSM/Google</h2>
-      <span class="badge" id="alignmentBadge"><span class="dot"></span>live MC minimap</span>
+      <h2>Live Minecraft world map · MC ↔ OSM/Google</h2>
+      <span class="badge" id="alignmentBadge"><span class="dot"></span>live MC world map</span>
     </div>
     <div class="alignment-stats" id="alignmentStats">
       <div class="fact"><strong>...</strong><span>loading alignment</span></div>
     </div>
     <div class="alignment-grid">
       <div class="alignment-pane">
-        <h3>Live Minecraft minimap crop</h3>
+        <h3>Live Minecraft world map</h3>
         <div class="minecraft-minimap-shell" id="alignmentMinimapShell">
           <iframe
             id="alignmentMinimapFrame"
             class="minecraft-minimap-feed"
-            title="Live Minecraft minimap crop"
+            title="Live Minecraft world map"
             src="https://exposed-portrait-parade-immigration.trycloudflare.com/vnc.html?autoconnect=1&amp;resize=scale"
             referrerpolicy="no-referrer">
           </iframe>
@@ -1148,7 +1146,7 @@
             playsinline
             hidden>
           </video>
-          <div class="minimap-crop-label" id="alignmentMinimapStatus">same live Minecraft source</div>
+          <div class="minimap-crop-label" id="alignmentMinimapStatus">same live Minecraft world map source</div>
         </div>
       </div>
       <div class="alignment-pane">
@@ -1714,7 +1712,7 @@
       alignmentMinimapFrame.hidden = true;
       alignmentMinimapVideo.hidden = false;
       alignmentMinimapVideo.srcObject = stream;
-      setAlignmentMinimapStatus("browser capture minimap");
+      setAlignmentMinimapStatus("browser capture world map");
       return alignmentMinimapVideo.play().catch(() => {});
     }
 
@@ -1749,11 +1747,11 @@
       if (mode === "local") {
         minecraftVncTitle.textContent = "Live noVNC · Local Minecraft";
         minecraftVncBadge.innerHTML = '<span class="dot"></span>local 127.0.0.1';
-        showAlignmentMinimapFrame(url, "local noVNC minimap");
+        showAlignmentMinimapFrame(url, "local noVNC world map");
       } else {
         minecraftVncTitle.textContent = "Live noVNC · Minecraft ShunLeeV3";
         minecraftVncBadge.innerHTML = '<span class="dot"></span>HTTPS tunnel';
-        showAlignmentMinimapFrame(url, "server VNC minimap");
+        showAlignmentMinimapFrame(url, "server VNC world map");
       }
     }
 
@@ -2692,9 +2690,9 @@
       const sourceMode = localStorage.getItem(MINECRAFT_VIEW_MODE_STORAGE_KEY) === "capture"
         ? "browser capture"
         : (localStorage.getItem(USE_LOCAL_VNC_STORAGE_KEY) === "true" ? "local noVNC" : "server VNC");
-      alignmentBadge.innerHTML = '<span class="dot"></span>live MC minimap';
+      alignmentBadge.innerHTML = '<span class="dot"></span>live MC world map';
       alignmentStats.innerHTML = `
-        <div class="fact"><strong>${escapeHtml(sourceMode)}</strong><span>left MC minimap source</span></div>
+        <div class="fact"><strong>${escapeHtml(sourceMode)}</strong><span>left MC world map source</span></div>
         <div class="fact"><strong>${escapeHtml(routeText)}</strong><span>active alignment route</span></div>
         <div class="fact"><strong>${escapeHtml(anchorText)}</strong><span>current marker on both maps</span></div>
       `;
