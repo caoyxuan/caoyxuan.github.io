@@ -443,35 +443,49 @@
       font-size: .8rem;
       font-weight: 650;
     }
-    .aligned-map-shell {
+    .minecraft-minimap-shell {
       position: relative;
       overflow: hidden;
       border: 1px solid #31465b;
       border-radius: 8px;
       aspect-ratio: 1296 / 816;
       min-height: 360px;
-      background: #d9e2ec;
+      background: #05090e;
     }
-    .aligned-mc-rotator {
+    .minecraft-minimap-feed,
+    .minecraft-minimap-video {
       position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 112%;
-      aspect-ratio: 1296 / 816;
-      transform: translate(-50%, -50%) rotate(var(--mc-north-rotation, 0deg)) scale(.82);
-      transform-origin: center center;
+      left: 0;
+      top: 0;
+      width: 1280px;
+      height: 900px;
+      border: 0;
+      transform: scale(var(--minimap-zoom, 1.95));
+      transform-origin: top left;
+      pointer-events: none;
     }
-    .aligned-mc-rotator img,
-    .aligned-mc-rotator svg,
+    .minecraft-minimap-video {
+      object-fit: fill;
+    }
+    .minimap-crop-label {
+      position: absolute;
+      left: .55rem;
+      bottom: .55rem;
+      z-index: 3;
+      padding: .25rem .45rem;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 6px;
+      background: rgba(5, 12, 18, .76);
+      color: #dbeafe;
+      font-size: .72rem;
+      font-weight: 700;
+    }
     .aligned-geo-shell svg {
       position: absolute;
       inset: 0;
       display: block;
       width: 100%;
       height: 100%;
-    }
-    .aligned-mc-rotator img {
-      object-fit: fill;
     }
     .aligned-geo-shell {
       position: relative;
@@ -1107,23 +1121,34 @@
     </div>
   </section>
 
-  <section class="panel alignment-panel wide-alignment" aria-label="north aligned Minecraft and real-world map comparison">
+  <section class="panel alignment-panel wide-alignment" aria-label="live Minecraft minimap and real-world map comparison">
     <div class="panel-head">
-      <h2>Aligned shape view · MC ↔ OSM/Google</h2>
-      <span class="badge" id="alignmentBadge"><span class="dot"></span>north-up</span>
+      <h2>Live minimap · MC ↔ OSM/Google</h2>
+      <span class="badge" id="alignmentBadge"><span class="dot"></span>live MC minimap</span>
     </div>
     <div class="alignment-stats" id="alignmentStats">
       <div class="fact"><strong>...</strong><span>loading alignment</span></div>
     </div>
     <div class="alignment-grid">
       <div class="alignment-pane">
-        <h3>Minecraft clean map, rotated to north-up</h3>
-        <div class="aligned-map-shell">
-          <div class="alignment-compass">N</div>
-          <div class="aligned-mc-rotator" id="alignedMcRotator">
-            <img src="assets/shun-lee-clean-v3-topdown-nomarkers.png" alt="Decluttered Shun Lee clean-v3 Minecraft top-down map">
-            <svg id="alignedMcSvg" viewBox="0 0 1296 816" role="img" aria-label="Selected route projected on Minecraft map"></svg>
-          </div>
+        <h3>Live Minecraft minimap crop</h3>
+        <div class="minecraft-minimap-shell" id="alignmentMinimapShell">
+          <iframe
+            id="alignmentMinimapFrame"
+            class="minecraft-minimap-feed"
+            title="Live Minecraft minimap crop"
+            src="https://exposed-portrait-parade-immigration.trycloudflare.com/vnc.html?autoconnect=1&amp;resize=scale"
+            referrerpolicy="no-referrer">
+          </iframe>
+          <video
+            id="alignmentMinimapVideo"
+            class="minecraft-minimap-video"
+            autoplay
+            muted
+            playsinline
+            hidden>
+          </video>
+          <div class="minimap-crop-label" id="alignmentMinimapStatus">same live Minecraft source</div>
         </div>
       </div>
       <div class="alignment-pane">
@@ -1156,7 +1181,7 @@
         </iframe>
       </div>
     </div>
-    <p class="note">MC top-down image is rotated by the fitted MC→WGS84 transform so north is visually up. The OSM/Google geometry panel uses the same selected route/point in real-world coordinates; use this only for shape and direction, then verify exact landmarks in the live Minecraft view.</p>
+    <p class="note">左上角直接裁切当前 Minecraft 画面里的 Xaero 小地图；右侧使用同一个 selected point 的 OSM/Google 经纬度参考。点位最终以游戏里看到的牌子、建筑、入口、路口为准。</p>
   </section>
 
   <main>
@@ -1403,11 +1428,12 @@
     const routeActiveDetail = document.getElementById("routeActiveDetail");
     const alignmentBadge = document.getElementById("alignmentBadge");
     const alignmentStats = document.getElementById("alignmentStats");
-    const alignedMcRotator = document.getElementById("alignedMcRotator");
-    const alignedMcSvg = document.getElementById("alignedMcSvg");
     const alignedGeoSvg = document.getElementById("alignedGeoSvg");
     const alignedOsmFrame = document.getElementById("alignedOsmFrame");
     const alignedGoogleMapFrame = document.getElementById("alignedGoogleMapFrame");
+    const alignmentMinimapFrame = document.getElementById("alignmentMinimapFrame");
+    const alignmentMinimapVideo = document.getElementById("alignmentMinimapVideo");
+    const alignmentMinimapStatus = document.getElementById("alignmentMinimapStatus");
     const CONTROL_API_BASE = "https://shall-training-driven-intense.trycloudflare.com";
     const REMOTE_VNC_URL = "https://exposed-portrait-parade-immigration.trycloudflare.com/vnc.html?autoconnect=1&resize=scale";
     const DEFAULT_LOCAL_VNC_URL = "http://127.0.0.1:6080/vnc.html?autoconnect=1&resize=scale";
@@ -1463,7 +1489,6 @@
     let anchorsByDisplayId = new Map();
     let mcToGeoModel = null;
     let geoPlotBounds = null;
-    let mcNorthRotationDeg = 0;
     let osmAreaBounds = null;
     let mcTextLabels = null;
     let mcTextMatchesByPrompt = new Map();
@@ -1670,6 +1695,39 @@
       return parsed.toString();
     }
 
+    function setAlignmentMinimapStatus(message) {
+      if (alignmentMinimapStatus) alignmentMinimapStatus.textContent = message;
+    }
+
+    function showAlignmentMinimapFrame(url, label) {
+      if (!alignmentMinimapFrame || !alignmentMinimapVideo) return;
+      alignmentMinimapVideo.pause();
+      alignmentMinimapVideo.srcObject = null;
+      alignmentMinimapVideo.hidden = true;
+      alignmentMinimapFrame.hidden = false;
+      alignmentMinimapFrame.src = url;
+      setAlignmentMinimapStatus(label);
+    }
+
+    function showAlignmentMinimapCapture(stream) {
+      if (!alignmentMinimapFrame || !alignmentMinimapVideo) return Promise.resolve();
+      alignmentMinimapFrame.hidden = true;
+      alignmentMinimapVideo.hidden = false;
+      alignmentMinimapVideo.srcObject = stream;
+      setAlignmentMinimapStatus("browser capture minimap");
+      return alignmentMinimapVideo.play().catch(() => {});
+    }
+
+    function hideAlignmentMinimapLiveSource(message) {
+      if (alignmentMinimapFrame) alignmentMinimapFrame.hidden = true;
+      if (alignmentMinimapVideo) {
+        alignmentMinimapVideo.pause();
+        alignmentMinimapVideo.srcObject = null;
+        alignmentMinimapVideo.hidden = true;
+      }
+      setAlignmentMinimapStatus(message);
+    }
+
     function showCapturePlaceholder(title = "等待本地 Minecraft 捕获", body = "点击 Capture Minecraft window 后选择 Minecraft 窗口，左侧会显示本地画面的镜像。") {
       minecraftVncFrame.hidden = true;
       minecraftCaptureVideo.hidden = true;
@@ -1678,6 +1736,7 @@
       minecraftCapturePlaceholderBody.textContent = body;
       minecraftVncTitle.textContent = "Local Minecraft · Browser Capture";
       minecraftVncBadge.innerHTML = '<span class="dot"></span>waiting';
+      hideAlignmentMinimapLiveSource("waiting for browser capture");
     }
 
     function setMinecraftVncSource(url, mode) {
@@ -1690,9 +1749,11 @@
       if (mode === "local") {
         minecraftVncTitle.textContent = "Live noVNC · Local Minecraft";
         minecraftVncBadge.innerHTML = '<span class="dot"></span>local 127.0.0.1';
+        showAlignmentMinimapFrame(url, "local noVNC minimap");
       } else {
         minecraftVncTitle.textContent = "Live noVNC · Minecraft ShunLeeV3";
         minecraftVncBadge.innerHTML = '<span class="dot"></span>HTTPS tunnel';
+        showAlignmentMinimapFrame(url, "server VNC minimap");
       }
     }
 
@@ -1704,6 +1765,11 @@
       minecraftCaptureVideo.pause();
       minecraftCaptureVideo.srcObject = null;
       minecraftCaptureVideo.hidden = true;
+      if (alignmentMinimapVideo) {
+        alignmentMinimapVideo.pause();
+        alignmentMinimapVideo.srcObject = null;
+        alignmentMinimapVideo.hidden = true;
+      }
       minecraftCapturePlaceholder.hidden = true;
       if (options.switchToRemote) {
         setMinecraftVncSource(REMOTE_VNC_URL, "remote");
@@ -1736,6 +1802,7 @@
         minecraftVncFrame.hidden = true;
         minecraftCapturePlaceholder.hidden = true;
         minecraftCaptureVideo.hidden = false;
+        if (alignmentMinimapFrame) alignmentMinimapFrame.hidden = true;
         minecraftVncTitle.textContent = "Local Minecraft · Browser Capture";
         minecraftVncBadge.innerHTML = '<span class="dot"></span>window capture';
         const [videoTrack] = stream.getVideoTracks();
@@ -1749,6 +1816,7 @@
           });
         }
         await minecraftCaptureVideo.play();
+        await showAlignmentMinimapCapture(stream);
         setSyncStatus("Left panel is showing captured Minecraft window");
       } catch (error) {
         if (error && error.name === "NotAllowedError") {
@@ -2607,18 +2675,12 @@
     }
 
     function renderAlignmentPanel(target = null, coordinateOverride = null) {
-      if (!alignedMcSvg || !alignedGeoSvg) return;
+      if (!alignedGeoSvg) return;
       const row = activeRouteRow();
       const anchor = selectedAnchor || (row ? anchorsByDisplayId.get(row.start_id) : null);
       const pointTarget = target || (anchor ? { lat: anchor.lat, lon: anchor.lon } : null);
-      if (mcToGeoModel && alignedMcRotator) {
-        mcNorthRotationDeg = mcToGeoModel.northRotationDeg || 0;
-        alignedMcRotator.style.setProperty("--mc-north-rotation", `${mcNorthRotationDeg.toFixed(2)}deg`);
-      }
       if (!geoPlotBounds && reviewAnchors.length) geoPlotBounds = fitGeoPlotBounds(reviewAnchors);
-      const currentMcPoint = coordinateOverride ? routeMapPointForCoordinate(coordinateOverride) : (anchor ? routeMapPoint(anchor) : null);
       const currentGeoPoint = pointTarget ? geoMapPointForLatLon(pointTarget) : (anchor ? geoMapPoint(anchor) : null);
-      alignedMcSvg.innerHTML = alignmentOverlaySvg(row, routeMapPoint, currentMcPoint, TOPDOWN_IMAGE);
       alignedGeoSvg.innerHTML = alignmentOverlaySvg(row, geoMapPoint, currentGeoPoint, GEO_VIEWBOX);
       if (pointTarget && Number.isFinite(Number(pointTarget.lat)) && Number.isFinite(Number(pointTarget.lon))) {
         const mapTarget = { lat: Number(pointTarget.lat), lon: Number(pointTarget.lon) };
@@ -2626,11 +2688,13 @@
         alignedGoogleMapFrame.src = googleMapEmbedUrl(mapTarget);
       }
       const routeText = row ? row.route_id : "selected point";
-      const rotationText = mcToGeoModel ? `${mcNorthRotationDeg.toFixed(1)}°` : "loading";
       const anchorText = anchor ? `${anchorDisplayId(anchor)} · ${anchorDisplayName(anchor)}` : "none";
-      alignmentBadge.innerHTML = `<span class="dot"></span>MC rotate ${escapeHtml(rotationText)}`;
+      const sourceMode = localStorage.getItem(MINECRAFT_VIEW_MODE_STORAGE_KEY) === "capture"
+        ? "browser capture"
+        : (localStorage.getItem(USE_LOCAL_VNC_STORAGE_KEY) === "true" ? "local noVNC" : "server VNC");
+      alignmentBadge.innerHTML = '<span class="dot"></span>live MC minimap';
       alignmentStats.innerHTML = `
-        <div class="fact"><strong>${escapeHtml(rotationText)}</strong><span>MC image rotation to north-up</span></div>
+        <div class="fact"><strong>${escapeHtml(sourceMode)}</strong><span>left MC minimap source</span></div>
         <div class="fact"><strong>${escapeHtml(routeText)}</strong><span>active alignment route</span></div>
         <div class="fact"><strong>${escapeHtml(anchorText)}</strong><span>current marker on both maps</span></div>
       `;
@@ -3328,7 +3392,6 @@
     allTextLabels.addEventListener("click", handleTextActionClick);
     routePlanList.addEventListener("click", handleRoutePlanClick);
     if (routeMapSvg) routeMapSvg.addEventListener("click", handleRouteMapClick);
-    if (alignedMcSvg) alignedMcSvg.addEventListener("click", handleRouteMapClick);
     if (alignedGeoSvg) alignedGeoSvg.addEventListener("click", handleRouteMapClick);
     routePlanSelect.addEventListener("change", () => selectRoute(routePlanSelect.value));
     document.querySelectorAll(".route-filter-button").forEach((button) => {
