@@ -840,6 +840,36 @@
     .route-source-links {
       justify-content: flex-start;
     }
+    .wide-route-panel {
+      width: min(1800px, calc(100% - 28px));
+      margin: 0 auto .8rem;
+    }
+    .wide-route-panel .route-body {
+      grid-template-columns: minmax(520px, .95fr) minmax(420px, 1.05fr);
+      align-items: start;
+    }
+    .wide-route-panel .route-toolbar,
+    .wide-route-panel .route-body > .note,
+    .wide-route-panel .route-summary,
+    .wide-route-panel .route-list {
+      grid-column: 1 / -1;
+    }
+    .wide-route-panel .route-toolbar {
+      grid-template-columns: minmax(320px, 1fr) auto;
+    }
+    .wide-route-panel .route-map-shell {
+      min-height: 360px;
+    }
+    .wide-route-panel .route-active-detail {
+      min-height: 360px;
+      align-content: start;
+    }
+    .wide-route-panel .route-list {
+      max-height: 520px;
+    }
+    .wide-route-panel .route-summary {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
     .route-table-wrap {
       overflow: auto;
       border: 1px solid #28394b;
@@ -1115,6 +1145,11 @@
       .actions { justify-content: flex-start; }
       .review-toolbar { grid-template-columns: 1fr; }
       .reference-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .wide-route-panel .route-body { grid-template-columns: 1fr; }
+      .wide-route-panel .route-toolbar { grid-template-columns: 1fr; }
+      .wide-route-panel .route-map-shell,
+      .wide-route-panel .route-active-detail { min-height: 0; }
+      .wide-route-panel .route-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       main { grid-template-columns: 1fr; }
       iframe { height: 72vh; }
       .vnc-switch { grid-template-columns: 1fr; }
@@ -1125,7 +1160,7 @@
       .alignment-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 720px) {
-      main, header, footer, .review-toolbar, .wide-alignment { width: min(100% - 18px, 1800px); }
+      main, header, footer, .review-toolbar, .wide-alignment, .wide-route-panel { width: min(100% - 18px, 1800px); }
       .map-card { grid-template-columns: 1fr; }
       .facts { grid-template-columns: 1fr 1fr; }
       .route-summary { grid-template-columns: 1fr 1fr; }
@@ -1239,6 +1274,42 @@
     <p class="note">左上角直接裁切当前 Minecraft 画面里的 Xaero 小地图；右侧使用同一个 selected point 的 OSM/Google 经纬度参考。点位最终以游戏里看到的牌子、建筑、入口、路口为准。</p>
   </section>
 
+  <section class="panel route-plan-panel wide-route-panel">
+    <div class="panel-head">
+      <h2>Manual marking routes · 10</h2>
+      <span class="badge" id="routePlanCount"><span class="dot"></span>Loading</span>
+    </div>
+    <div class="route-body">
+      <div class="route-toolbar">
+        <label class="route-select-label">
+          Route detail
+          <select id="routePlanSelect">
+            <option>Loading route plan...</option>
+          </select>
+        </label>
+        <div class="reference-actions route-source-links">
+          <a class="button" href="assets/shunlee-10-natural-reachable-routes.md" target="_blank" rel="noopener">路线说明</a>
+          <a class="button" href="assets/shunlee-10-natural-reachable-routes.csv" target="_blank" rel="noopener">CSV</a>
+          <a class="button" href="assets/shunlee-10-natural-reachable-routes.json" target="_blank" rel="noopener">JSON</a>
+        </div>
+      </div>
+      <div class="route-map-shell" aria-label="selected user waypoint route on Minecraft top-down map">
+        <img src="assets/shun-lee-clean-v3-topdown-nomarkers.png" alt="Shun Lee clean Minecraft top-down map without waypoints">
+        <svg id="routeMapSvg" viewBox="0 0 1296 816" role="img" aria-label="Selected user waypoint route"></svg>
+      </div>
+      <div class="route-active-detail" id="routeActiveDetail">
+        <div class="text-empty">Loading route review plan...</div>
+      </div>
+      <p class="note">下面 10 条来自你本地标的 39 个 waypoint。绿色是静态 world 几何认证可达；黄色是找到路径但未严格认证；红色是静态模型未找到通路，优先人工确认。点击 load coords 会把该路线点写入上方 MC 坐标框，再用 Teleport current coords 传送。</p>
+      <div class="route-summary" id="routePlanSummary">
+        <div class="fact"><strong>...</strong><span>loading route plan</span></div>
+      </div>
+      <div class="route-list" id="routePlanList">
+        <div class="text-empty">Loading route review plan...</div>
+      </div>
+    </div>
+  </section>
+
   <main>
     <section class="panel">
       <div class="panel-head">
@@ -1334,42 +1405,6 @@
             <div class="fact"><strong>new</strong><span>your MC-created waypoints stay visible</span></div>
           </div>
           <p class="note">旧的 SL76 waypoint 已从服务器 review 客户端文件中移除。网页仍保留 76 个 OSM/MC probe 作为传送和 Google/OSM 对照索引，但它们不再要求显示在 Minecraft 地图上。</p>
-        </div>
-      </section>
-
-      <section class="panel route-plan-panel">
-        <div class="panel-head">
-          <h2>Manual marking routes · 10</h2>
-          <span class="badge" id="routePlanCount"><span class="dot"></span>Loading</span>
-        </div>
-        <div class="route-body">
-          <div class="route-toolbar">
-            <label class="route-select-label">
-              Route detail
-              <select id="routePlanSelect">
-                <option>Loading route plan...</option>
-              </select>
-            </label>
-            <div class="reference-actions route-source-links">
-              <a class="button" href="assets/shunlee-10-natural-reachable-routes.md" target="_blank" rel="noopener">路线说明</a>
-              <a class="button" href="assets/shunlee-10-natural-reachable-routes.csv" target="_blank" rel="noopener">CSV</a>
-              <a class="button" href="assets/shunlee-10-natural-reachable-routes.json" target="_blank" rel="noopener">JSON</a>
-            </div>
-          </div>
-          <div class="route-map-shell" aria-label="selected user waypoint route on Minecraft top-down map">
-            <img src="assets/shun-lee-clean-v3-topdown-nomarkers.png" alt="Shun Lee clean Minecraft top-down map without waypoints">
-            <svg id="routeMapSvg" viewBox="0 0 1296 816" role="img" aria-label="Selected user waypoint route"></svg>
-          </div>
-          <div class="route-active-detail" id="routeActiveDetail">
-            <div class="text-empty">Loading route review plan...</div>
-          </div>
-          <p class="note">下面 10 条来自你本地标的 39 个 waypoint。绿色是静态 world 几何认证可达；黄色是找到路径但未严格认证；红色是静态模型未找到通路，优先人工确认。点击 load coords 会把该路线点写入上方 MC 坐标框，再用 Teleport current coords 传送。</p>
-          <div class="route-summary" id="routePlanSummary">
-            <div class="fact"><strong>...</strong><span>loading route plan</span></div>
-          </div>
-          <div class="route-list" id="routePlanList">
-            <div class="text-empty">Loading route review plan...</div>
-          </div>
         </div>
       </section>
 
