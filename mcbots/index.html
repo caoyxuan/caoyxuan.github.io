@@ -1193,9 +1193,9 @@
 
   <section class="review-toolbar" aria-label="anchor and teleport controls">
     <div>
-      <label for="anchorSelect">OSM candidate probe / MC text waypoint</label>
+      <label for="anchorSelect">User marked MC waypoint</label>
       <select id="anchorSelect">
-        <option>Loading clean-v3 anchors...</option>
+        <option>Loading user-marked waypoints...</option>
       </select>
     </div>
     <div class="reference-actions" aria-label="real-world map links">
@@ -1404,7 +1404,7 @@
             <div class="fact"><strong>10</strong><span>user MC waypoint routes</span></div>
             <div class="fact"><strong>new</strong><span>your MC-created waypoints stay visible</span></div>
           </div>
-          <p class="note">旧的 SL76 waypoint 已从服务器 review 客户端文件中移除。网页仍保留 76 个 OSM/MC probe 作为传送和 Google/OSM 对照索引，但它们不再要求显示在 Minecraft 地图上。</p>
+          <p class="note">旧的 SL76 waypoint 已从服务器 review 客户端文件中移除。顶部可选传送点现在使用你导出的 39 个本地 MC waypoint；旧 76 个 OSM/MC probe 只在后台用于估算 Google/OSM 对照和 control API。</p>
         </div>
       </section>
 
@@ -1581,6 +1581,8 @@
     let selectedAnchor = null;
     let selectedTextWaypoint = null;
     let baseReviewAnchors = [];
+    let userMarkedWaypoints = [];
+    let userMarkedAnchors = [];
     let reviewAnchors = [];
     let localPlaces = [];
     let reviewDecisions = {};
@@ -1597,6 +1599,7 @@
     let mcTextWaypointsByPrompt = new Map();
     let mcTextWaypointsByLabel = new Map();
     let mcLabelsById = new Map();
+    let routePlanPayload = null;
     let routePlanRows = [];
     let selectedRouteId = localStorage.getItem(SELECTED_ROUTE_STORAGE_KEY) || "";
     let routePlanFilter = ["priority", "sweep", "all"].includes(localStorage.getItem(ROUTE_FILTER_STORAGE_KEY))
@@ -2090,7 +2093,7 @@
         return {
           lat: anchor.lat,
           lon: anchor.lon,
-          mode: "exact selected OSM point",
+          mode: anchor.google_target_mode || (anchor.is_user_marked_waypoint ? "estimated from user MC waypoint" : "exact selected OSM point"),
         };
       }
       const dx = Number(coordinate.x) - Number(anchor.mc_x);
@@ -2098,7 +2101,7 @@
       return {
         lat: anchor.lat + mcToGeoModel.latDx * dx + mcToGeoModel.latDz * dz,
         lon: anchor.lon + mcToGeoModel.lonDx * dx + mcToGeoModel.lonDz * dz,
-        mode: "estimated from edited MC X/Z",
+        mode: anchor.is_user_marked_waypoint ? "estimated from user MC waypoint alignment" : "estimated from edited MC X/Z",
       };
     }
 
@@ -2158,8 +2161,137 @@
       writeLocalStorageJson(LOCAL_PLACES_STORAGE_KEY, localPlaces);
     }
 
+    function routePayloadWaypointOrder(payload) {
+      const anchors = payload && payload.anchors && typeof payload.anchors === "object" ? payload.anchors : {};
+      const seen = new Set();
+      const output = [];
+      (payload && payload.routes || []).forEach((route) => {
+        (route.points || []).forEach((point) => {
+          const name = point.waypoint || point.name;
+          if (!name || seen.has(name) || point.coverage_role === "connector") return;
+          seen.add(name);
+          const anchor = anchors[name] || {};
+          const snapped = coordinateFromArray(point.snapped || anchor.snapped);
+          const original = coordinateFromArray(point.original || anchor.original);
+          const coordinate = snapped || original;
+          if (!coordinate) return;
+          output.push({
+            name,
+            short_name: anchor.short_name || "",
+            route_id: route.route_id || "",
+            route_title: route.title || "",
+            coordinate,
+            original,
+            snapped,
+            exact_standable: Boolean(point.exact_standable ?? anchor.exact_standable),
+            snap_distance_blocks: Number(point.snap_distance_blocks ?? anchor.snap_distance_blocks ?? 0),
+          });
+        });
+      });
+      Object.keys(anchors).sort().forEach((name) => {
+        if (seen.has(name)) return;
+        const anchor = anchors[name] || {};
+        const coordinate = coordinateFromArray(anchor.snapped || anchor.original);
+        if (!coordinate) return;
+        output.push({
+          name,
+          short_name: anchor.short_name || "",
+          route_id: "",
+          route_title: "",
+          coordinate,
+          original: coordinateFromArray(anchor.original),
+          snapped: coordinateFromArray(anchor.snapped),
+          exact_standable: Boolean(anchor.exact_standable),
+          snap_distance_blocks: Number(anchor.snap_distance_blocks || 0),
+        });
+      });
+      return output;
+    }
+
+    function nearestBaseAnchorForCoordinate(coordinate) {
+      if (!coordinate || !baseReviewAnchors.length) return null;
+      let best = null;
+      let bestScore = Number.POSITIVE_INFINITY;
+      baseReviewAnchors.forEach((anchor) => {
+        const dx = Number(coordinate.x) - Number(anchor.mc_x);
+        const dz = Number(coordinate.z) - Number(anchor.mc_z);
+        const dy = Number(coordinate.y) - Number(anchor.mc_y);
+        if (![dx, dy, dz].every(Number.isFinite)) return;
+        const score = dx * dx + dz * dz + 0.12 * dy * dy;
+        if (score < bestScore) {
+          best = anchor;
+          bestScore = score;
+        }
+      });
+      return best;
+    }
+
+    function estimatedGeoForMarkedCoordinate(coordinate, sourceAnchor) {
+      if (!sourceAnchor || !mcToGeoModel || !coordinate) return null;
+      const dx = Number(coordinate.x) - Number(sourceAnchor.mc_x);
+      const dz = Number(coordinate.z) - Number(sourceAnchor.mc_z);
+      return {
+        lat: Number(sourceAnchor.lat) + mcToGeoModel.latDx * dx + mcToGeoModel.latDz * dz,
+        lon: Number(sourceAnchor.lon) + mcToGeoModel.lonDx * dx + mcToGeoModel.lonDz * dz,
+      };
+    }
+
+    function rebuildUserMarkedAnchors() {
+      userMarkedAnchors = userMarkedWaypoints.map((waypoint, index) => {
+        const sourceAnchor = nearestBaseAnchorForCoordinate(waypoint.coordinate) || baseReviewAnchors[0] || null;
+        const geo = estimatedGeoForMarkedCoordinate(waypoint.coordinate, sourceAnchor)
+          || (sourceAnchor ? { lat: Number(sourceAnchor.lat), lon: Number(sourceAnchor.lon) } : { lat: 22.333, lon: 114.226 });
+        const id = `user-waypoint-${String(index + 1).padStart(2, "0")}`;
+        const displayId = `U${String(index + 1).padStart(2, "0")}`;
+        return {
+          prompt_id: id,
+          display_id: displayId,
+          display_name: waypoint.name,
+          display_kind: "user marked",
+          name: waypoint.name,
+          lat: geo.lat,
+          lon: geo.lon,
+          mc_x: Math.round(waypoint.coordinate.x),
+          mc_y: Math.round(waypoint.coordinate.y),
+          mc_z: Math.round(waypoint.coordinate.z),
+          scenario_id: "user marked waypoint",
+          endpoint_affordance: waypoint.route_id || "manual_review_point",
+          source_prompt_id: sourceAnchor ? sourceAnchor.prompt_id : "",
+          control_anchor_id: sourceAnchor ? sourceAnchor.prompt_id : firstBaseAnchorId(),
+          is_user_marked_waypoint: true,
+          mc_alignment_label: "user marked MC point",
+          mc_alignment_note: "This selectable teleport point comes from your exported Xaero waypoint file. Google/OSM is estimated from the clean-v3 MC-to-geo alignment.",
+          mc_alignment_action: "Teleport uses your MC coordinates; use Google/OSM only as approximate surrounding context.",
+          google_target_mode: "estimated from user MC waypoint",
+          route_id: waypoint.route_id,
+          route_title: waypoint.route_title,
+          original_coordinate: waypoint.original,
+          snapped_coordinate: waypoint.snapped,
+          exact_standable: waypoint.exact_standable,
+          snap_distance_blocks: waypoint.snap_distance_blocks,
+        };
+      });
+    }
+
+    function selectableReviewAnchors() {
+      return userMarkedAnchors.concat(localPlaces);
+    }
+
+    function selectablePromptIds() {
+      return new Set(selectableReviewAnchors().map((anchor) => anchor.prompt_id));
+    }
+
+    function selectDefaultVisibleAnchor() {
+      const selectable = selectableReviewAnchors();
+      if (!selectable.length) return;
+      const currentId = selectedAnchor && selectedAnchor.prompt_id;
+      if (currentId && selectable.some((anchor) => anchor.prompt_id === currentId)) return;
+      anchorSelect.value = selectable[0].prompt_id;
+      selectAnchor(selectable[0]);
+    }
+
     function rebuildAnchorIndex() {
-      reviewAnchors = baseReviewAnchors.concat(localPlaces);
+      reviewAnchors = userMarkedAnchors.concat(localPlaces, baseReviewAnchors);
       anchorsByPrompt = new Map(reviewAnchors.map((anchor) => [anchor.prompt_id, anchor]));
       anchorsByDisplayId = new Map(reviewAnchors.filter((anchor) => anchor.display_id).map((anchor) => [anchor.display_id, anchor]));
       geoPlotBounds = null;
@@ -2307,15 +2439,23 @@
     function renderAnchorOptions() {
       const previous = anchorSelect.value;
       anchorSelect.innerHTML = "";
-      const anchorGroup = document.createElement("optgroup");
-      anchorGroup.label = "OSM default76 / MC anchors";
-      baseReviewAnchors.forEach((anchor) => {
+      const userGroup = document.createElement("optgroup");
+      userGroup.label = `Your marked MC waypoints (${userMarkedAnchors.length})`;
+      userMarkedAnchors.forEach((anchor) => {
+        const route = anchor.route_id ? ` · ${anchor.route_id}` : "";
+        const snap = Number(anchor.snap_distance_blocks);
+        const snapText = Number.isFinite(snap) && snap > 0 ? ` · snapped ${snap.toFixed(1)}` : "";
         const option = document.createElement("option");
         option.value = anchor.prompt_id;
-        option.textContent = `${anchorOptionLabel(anchor)}${anchorTextSuffix(anchor)}${anchorOptionWarningSuffix(anchor)}${decisionSuffixForKey(anchor.prompt_id)}`;
-        anchorGroup.appendChild(option);
+        option.textContent = `${anchor.display_id} · ${anchor.name}${route} · MC ${anchor.mc_x},${anchor.mc_y},${anchor.mc_z}${snapText}${decisionSuffixForKey(anchor.prompt_id)}`;
+        userGroup.appendChild(option);
       });
-      anchorSelect.appendChild(anchorGroup);
+      if (!userMarkedAnchors.length) {
+        const option = document.createElement("option");
+        option.textContent = "Loading your marked waypoints...";
+        userGroup.appendChild(option);
+      }
+      anchorSelect.appendChild(userGroup);
       if (localPlaces.length) {
         const localGroup = document.createElement("optgroup");
         localGroup.label = `Local saved places (${localPlaces.length})`;
@@ -2327,20 +2467,14 @@
         });
         anchorSelect.appendChild(localGroup);
       }
-      if (mcTextWaypoints.length) {
-        const textGroup = document.createElement("optgroup");
-        textGroup.label = "MC text landmark waypoints";
-        mcTextWaypoints.forEach((waypoint) => {
-          const coord = waypointCoordinate(waypoint);
-          const primary = waypoint.primary_prompt_id ? ` · candidate ${compactPromptId(waypoint.primary_prompt_id)}` : "";
-          const option = document.createElement("option");
-          option.value = `text:${waypoint.label_id}`;
-          option.textContent = `${compactLabelId(waypoint.label_id)} · ${waypoint.text || waypoint.label_text}${coord ? ` · MC ${coord.x},${coord.y},${coord.z}` : ""}${primary}${decisionSuffixForKey(`text:${waypoint.label_id}`)}`;
-          textGroup.appendChild(option);
-        });
-        anchorSelect.appendChild(textGroup);
+      const selectableIds = selectablePromptIds();
+      if (previous && selectableIds.has(previous)) {
+        anchorSelect.value = previous;
+      } else if (userMarkedAnchors.length) {
+        anchorSelect.value = userMarkedAnchors[0].prompt_id;
+      } else if (localPlaces.length) {
+        anchorSelect.value = localPlaces[0].prompt_id;
       }
-      if (previous && (anchorsByPrompt.has(previous) || previous.startsWith("text:"))) anchorSelect.value = previous;
     }
 
     function entryButtonHtml(match) {
@@ -3078,6 +3212,20 @@
         setSyncStatus("Route point coordinate is missing");
         return;
       }
+      const matchingMarkedAnchor = userMarkedAnchors.find((anchor) => (
+        anchor.name === entry.name
+        || (
+          Number(anchor.mc_x) === Number(entry.coordinate.x)
+          && Number(anchor.mc_y) === Number(entry.coordinate.y)
+          && Number(anchor.mc_z) === Number(entry.coordinate.z)
+        )
+      ));
+      if (matchingMarkedAnchor) {
+        anchorSelect.value = matchingMarkedAnchor.prompt_id;
+        selectAnchor(matchingMarkedAnchor);
+        setSyncStatus(`Selected ${matchingMarkedAnchor.display_id}: ${matchingMarkedAnchor.name}`);
+        return;
+      }
       writeCoordinateInputs({ ...entry.coordinate, yaw: "", pitch: "" });
       renderRoutePlan(routePlanRows);
       if (selectedAnchor) {
@@ -3380,6 +3528,8 @@
         : `${anchorDisplayId(selectedAnchor)} · ${anchorDisplayName(selectedAnchor)}`;
       const semanticLine = selectedTextWaypoint
         ? `MC text waypoint / ${semanticRoleText(selectedTextWaypoint.semantic_role || selectedTextWaypoint.role)}`
+        : selectedAnchor.is_user_marked_waypoint
+          ? `user marked waypoint / ${selectedAnchor.route_id || "manual route point"}`
         : selectedAnchor.is_local_place
           ? `local saved place / ${String(selectedAnchor.endpoint_affordance || "local_landmark").replaceAll("_", " ")}`
         : `${selectedAnchor.scenario_id} / ${selectedAnchor.endpoint_affordance}`;
@@ -3397,6 +3547,7 @@
         active MC: ${escapeHtml(coordinateDisplay(coordinate))}<br>
         ${selectedTextWaypoint ? `candidate OSM anchors: ${escapeHtml(candidateIds || compactPromptId(selectedAnchor.prompt_id))}<br>` : ""}
         registered MC anchor: ${selectedAnchor.mc_x}, ${selectedAnchor.mc_y}, ${selectedAnchor.mc_z}<br>
+        ${selectedAnchor.is_user_marked_waypoint && selectedAnchor.route_title ? `route: ${escapeHtml(selectedAnchor.route_id)} · ${escapeHtml(selectedAnchor.route_title)}<br>` : ""}
         ${selectedAnchor.osm_ref ? `OSM source: ${escapeHtml(selectedAnchor.osm_ref)}<br>` : ""}
         ${selectedAnchor.source_prompt_id ? `source packet id: ${escapeHtml(selectedAnchor.source_prompt_id)}<br>` : ""}
         ${selectedAnchor.prompt_id && selectedAnchor.prompt_id !== selectedAnchor.source_prompt_id ? `stable internal id: ${escapeHtml(selectedAnchor.prompt_id)}<br>` : ""}
@@ -3524,6 +3675,14 @@
         return response.json();
       })
       .then((payload) => {
+        routePlanPayload = payload;
+        userMarkedWaypoints = routePayloadWaypointOrder(payload);
+        if (baseReviewAnchors.length) {
+          rebuildUserMarkedAnchors();
+          rebuildAnchorIndex();
+          renderAnchorOptions();
+          selectDefaultVisibleAnchor();
+        }
         renderRoutePlan(payload);
       })
       .catch((error) => {
@@ -3544,6 +3703,8 @@
         osmAreaBounds = fitOsmAreaBounds(baseReviewAnchors);
         localPlaces = loadLocalPlaces();
         reviewDecisions = loadReviewDecisions();
+        if (routePlanPayload) userMarkedWaypoints = routePayloadWaypointOrder(routePlanPayload);
+        rebuildUserMarkedAnchors();
         rebuildAnchorIndex();
         renderAnchorOptions();
         if (routePlanRows.length) renderRoutePlan(routePlanRows);
@@ -3565,7 +3726,8 @@
             }
             return;
           }
-          selectAnchor(anchorsByPrompt.get(value), { syncMinecraft: true });
+          const anchor = anchorsByPrompt.get(value);
+          if (anchor) selectAnchor(anchor, { syncMinecraft: true });
         });
         teleportButton.addEventListener("click", () => {
           teleportCurrentSelection();
@@ -3581,7 +3743,11 @@
         [mcXInput, mcYInput, mcZInput, mcYawInput, mcPitchInput].forEach((input) => {
           input.addEventListener("input", renderSelectedState);
         });
-        if (anchors.length) selectAnchor(anchors[0]);
+        if (userMarkedAnchors.length || localPlaces.length) {
+          selectDefaultVisibleAnchor();
+        } else if (anchors.length) {
+          selectAnchor(anchors[0]);
+        }
       })
       .catch((error) => {
         anchorSelect.innerHTML = "<option>Failed to load anchors</option>";
