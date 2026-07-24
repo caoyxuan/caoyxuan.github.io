@@ -1285,7 +1285,7 @@
 
   <section class="panel route-plan-panel wide-route-panel">
     <div class="panel-head">
-      <h2>Marked waypoint routes · 10 / 39</h2>
+      <h2>Natural marked waypoint routes · 10 / 39</h2>
       <span class="badge" id="routePlanCount"><span class="dot"></span>Loading</span>
     </div>
     <div class="route-body">
@@ -1297,9 +1297,9 @@
           </select>
         </label>
         <div class="reference-actions route-source-links">
-          <a class="button" href="assets/shunlee-user-marked-sequence-route.md" target="_blank" rel="noopener">路线说明</a>
-          <a class="button" href="assets/shunlee-user-marked-sequence-route.csv" target="_blank" rel="noopener">CSV</a>
-          <a class="button" href="assets/shunlee-user-marked-sequence-route.json" target="_blank" rel="noopener">JSON</a>
+          <a class="button" href="assets/shunlee-10-natural-reachable-routes.md" target="_blank" rel="noopener">路线说明</a>
+          <a class="button" href="assets/shunlee-10-natural-reachable-routes.csv" target="_blank" rel="noopener">CSV</a>
+          <a class="button" href="assets/shunlee-10-natural-reachable-routes.json" target="_blank" rel="noopener">JSON</a>
         </div>
       </div>
       <div class="route-map-shell" aria-label="selected user waypoint route on Minecraft top-down map">
@@ -1309,7 +1309,7 @@
       <div class="route-active-detail" id="routeActiveDetail">
         <div class="text-empty">Loading route review plan...</div>
       </div>
-      <p class="note">下面 10 条路线严格按 Xaero waypoint txt 行顺序切成连续片段，不按语义或区域重排。相邻路线共享一个边界点，覆盖全部 38 个连续段；绿色段是静态 world 几何认证可达，红色段是大跳未测试或静态模型未找到通路。点击 load coords 会同步到对应的 Uxx 标点，再用同步 Minecraft 或 Teleport current coords 传送。</p>
+      <p class="note">下面 10 条路线只使用你本地标出的 39 个点，但按空间邻近、建筑/设施语义和静态可达性重新组合，不再硬按 Xaero 导出顺序切段。connector 是为了路线自然重复出现的衔接点，不重复计入覆盖；绿色段是静态 world 几何认证可达，红色段需要你进 Minecraft 人工复核。点击 load coords 会同步到对应的 Uxx 标点，再用同步 Minecraft 或 Teleport current coords 传送。</p>
       <div class="route-summary" id="routePlanSummary">
         <div class="fact"><strong>...</strong><span>loading route plan</span></div>
       </div>
@@ -3185,7 +3185,7 @@
       const scenes = new Set(routePlanRows.map((row) => row.city_category || row.scene_category).filter(Boolean));
       routePlanCount.innerHTML = `<span class="dot"></span>${uniquePoints.size || routePlanRows.length} marked points`;
       routePlanSummary.innerHTML = `
-        <div class="fact"><strong>${routePlanRows.length}</strong><span>exact marked-order routes</span></div>
+        <div class="fact"><strong>${routePlanRows.length}</strong><span>natural routes from user marks</span></div>
         <div class="fact"><strong>${uniquePoints.size}</strong><span>primary user waypoints covered</span></div>
         <div class="fact"><strong>${certifiedSegments}</strong><span>certified consecutive segments</span></div>
         <div class="fact"><strong>${failedSegments}</strong><span>segments to manually inspect</span></div>
@@ -3689,7 +3689,7 @@
         nearbyTextList.innerHTML = `<div class="text-empty">${escapeHtml(error.message)}</div>`;
       });
 
-    fetch("assets/shunlee-user-marked-sequence-route.json", { cache: "no-store" })
+    fetch("assets/shunlee-10-natural-reachable-routes.json", { cache: "no-store" })
       .then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json();
