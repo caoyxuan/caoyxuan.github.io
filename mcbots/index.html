@@ -1285,7 +1285,7 @@
 
   <section class="panel route-plan-panel wide-route-panel">
     <div class="panel-head">
-      <h2>Natural marked waypoint routes · 10 / 39</h2>
+      <h2>Task-semantic marked routes · 10 / 39</h2>
       <span class="badge" id="routePlanCount"><span class="dot"></span>Loading</span>
     </div>
     <div class="route-body">
@@ -1309,7 +1309,7 @@
       <div class="route-active-detail" id="routeActiveDetail">
         <div class="text-empty">Loading route review plan...</div>
       </div>
-      <p class="note">下面 10 条路线只使用你本地标出的 39 个点，但按空间邻近、建筑/设施语义和静态可达性重新组合，不再硬按 Xaero 导出顺序切段。connector 是为了路线自然重复出现的衔接点，不重复计入覆盖；绿色段是静态 world 几何认证可达，红色段需要你进 Minecraft 人工复核。点击 load coords 会同步到对应的 Uxx 标点，再用同步 Minecraft 或 Teleport current coords 传送。</p>
+      <p class="note">下面 10 条路线只使用你本地标出的 39 个点，并改成任务语义：从家/宿舍/教堂入口出发，去晨练、吃饭、学校、消防局、球场、游乐场或图书馆。每条至少 3 个点；宿舍楼主要作为起点或找同伴的位置，不再做无意义巡楼。绿色段是静态 world 几何认证可达，红色段需要你进 Minecraft 人工复核；个别落在白线/边缘的点仍保留为人工核对点。点击 load coords 会同步到对应的 Uxx 标点，再用同步 Minecraft 或 Teleport current coords 传送。</p>
       <div class="route-summary" id="routePlanSummary">
         <div class="fact"><strong>...</strong><span>loading route plan</span></div>
       </div>
@@ -3185,7 +3185,7 @@
       const scenes = new Set(routePlanRows.map((row) => row.city_category || row.scene_category).filter(Boolean));
       routePlanCount.innerHTML = `<span class="dot"></span>${uniquePoints.size || routePlanRows.length} marked points`;
       routePlanSummary.innerHTML = `
-        <div class="fact"><strong>${routePlanRows.length}</strong><span>natural routes from user marks</span></div>
+        <div class="fact"><strong>${routePlanRows.length}</strong><span>task-semantic marked routes</span></div>
         <div class="fact"><strong>${uniquePoints.size}</strong><span>primary user waypoints covered</span></div>
         <div class="fact"><strong>${certifiedSegments}</strong><span>certified consecutive segments</span></div>
         <div class="fact"><strong>${failedSegments}</strong><span>segments to manually inspect</span></div>
