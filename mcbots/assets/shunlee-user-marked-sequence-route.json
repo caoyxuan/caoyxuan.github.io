@@ -1,0 +1,5196 @@
+{
+  "anchors": {
+    "为什么这里卡住了": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:stone_brick_slab",
+      "exact_standable": true,
+      "index": 18,
+      "name": "为什么这里卡住了",
+      "original": [
+        -112,
+        14,
+        -540
+      ],
+      "short_name": "卡住",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -112,
+        14,
+        -540
+      ]
+    },
+    "健身游乐场": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:red_terracotta",
+      "exact_standable": true,
+      "index": 7,
+      "name": "健身游乐场",
+      "original": [
+        -15,
+        -2,
+        -651
+      ],
+      "short_name": "健",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -15,
+        -2,
+        -651
+      ]
+    },
+    "图书馆": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:light_blue_concrete",
+      "exact_standable": true,
+      "index": 13,
+      "name": "图书馆",
+      "original": [
+        -108,
+        21,
+        -594
+      ],
+      "short_name": "图书",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -108,
+        21,
+        -594
+      ]
+    },
+    "基督教汇基堂": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:birch_planks",
+      "exact_standable": true,
+      "index": 27,
+      "name": "基督教汇基堂",
+      "original": [
+        -113,
+        -2,
+        -535
+      ],
+      "short_name": "教堂",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -113,
+        -2,
+        -535
+      ]
+    },
+    "教堂2到3暗处楼梯": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:stone_brick_slab",
+      "exact_standable": true,
+      "index": 20,
+      "name": "教堂2到3暗处楼梯",
+      "original": [
+        -114,
+        4,
+        -543
+      ],
+      "short_name": "教",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -114,
+        4,
+        -543
+      ]
+    },
+    "教堂2楼入口": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:smooth_stone_slab",
+      "exact_standable": true,
+      "index": 25,
+      "name": "教堂2楼入口",
+      "original": [
+        -114,
+        4,
+        -545
+      ],
+      "short_name": "教2",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -114,
+        4,
+        -545
+      ]
+    },
+    "教堂2楼平台": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:smooth_stone_slab",
+      "exact_standable": true,
+      "index": 24,
+      "name": "教堂2楼平台",
+      "original": [
+        -113,
+        4,
+        -568
+      ],
+      "short_name": "教2",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -113,
+        4,
+        -568
+      ]
+    },
+    "教堂3楼": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:smooth_stone_slab",
+      "exact_standable": true,
+      "index": 22,
+      "name": "教堂3楼",
+      "original": [
+        -117,
+        7,
+        -600
+      ],
+      "short_name": "教3",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -117,
+        7,
+        -600
+      ]
+    },
+    "教堂3楼暗处": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:smooth_stone_slab",
+      "exact_standable": true,
+      "index": 21,
+      "name": "教堂3楼暗处",
+      "original": [
+        -117,
+        7,
+        -540
+      ],
+      "short_name": "教暗",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -117,
+        7,
+        -540
+      ]
+    },
+    "教堂4楼暗处": {
+      "block_at_original": "minecraft:smooth_stone_slab",
+      "block_below_original": "minecraft:air",
+      "exact_standable": false,
+      "index": 19,
+      "name": "教堂4楼暗处",
+      "original": [
+        -114,
+        12,
+        -544
+      ],
+      "short_name": "教4",
+      "snap_distance_blocks": 1.0,
+      "snapped": [
+        -114,
+        13,
+        -544
+      ]
+    },
+    "教堂5楼": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:stone_brick_slab",
+      "exact_standable": true,
+      "index": 17,
+      "name": "教堂5楼",
+      "original": [
+        -117,
+        19,
+        -601
+      ],
+      "short_name": "教",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -117,
+        19,
+        -601
+      ]
+    },
+    "教堂6楼": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:smooth_stone_slab",
+      "exact_standable": true,
+      "index": 16,
+      "name": "教堂6楼",
+      "original": [
+        -116,
+        22,
+        -601
+      ],
+      "short_name": "教",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -116,
+        22,
+        -601
+      ]
+    },
+    "教堂6楼平台入口": {
+      "block_at_original": "minecraft:smooth_stone_slab",
+      "block_below_original": "minecraft:air",
+      "exact_standable": false,
+      "index": 15,
+      "name": "教堂6楼平台入口",
+      "original": [
+        -113,
+        21,
+        -594
+      ],
+      "short_name": "教6",
+      "snap_distance_blocks": 1.0,
+      "snapped": [
+        -113,
+        22,
+        -594
+      ]
+    },
+    "教堂楼梯": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:smooth_stone",
+      "exact_standable": true,
+      "index": 26,
+      "name": "教堂楼梯",
+      "original": [
+        -114,
+        -2,
+        -544
+      ],
+      "short_name": "楼梯",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -114,
+        -2,
+        -544
+      ]
+    },
+    "教堂楼梯2": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:smooth_stone",
+      "exact_standable": true,
+      "index": 23,
+      "name": "教堂楼梯2",
+      "original": [
+        -121,
+        -2,
+        -597
+      ],
+      "short_name": "梯2",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -121,
+        -2,
+        -597
+      ]
+    },
+    "教堂餐厅": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:smooth_stone_slab",
+      "exact_standable": true,
+      "index": 11,
+      "name": "教堂餐厅",
+      "original": [
+        -107,
+        -2,
+        -596
+      ],
+      "short_name": "教",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -107,
+        -2,
+        -596
+      ]
+    },
+    "楼6": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:white_terracotta",
+      "exact_standable": true,
+      "index": 3,
+      "name": "楼6",
+      "original": [
+        -211,
+        10,
+        -696
+      ],
+      "short_name": "楼",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -211,
+        10,
+        -696
+      ]
+    },
+    "楼7": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:white_terracotta",
+      "exact_standable": true,
+      "index": 2,
+      "name": "楼7",
+      "original": [
+        -196,
+        10,
+        -657
+      ],
+      "short_name": "楼",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -196,
+        10,
+        -657
+      ]
+    },
+    "楼8": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:white_terracotta",
+      "exact_standable": true,
+      "index": 1,
+      "name": "楼8",
+      "original": [
+        -185,
+        10,
+        -619
+      ],
+      "short_name": "楼",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -185,
+        10,
+        -619
+      ]
+    },
+    "消防公交车站": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:polished_andesite",
+      "exact_standable": true,
+      "index": 34,
+      "name": "消防公交车站",
+      "original": [
+        -163,
+        -3,
+        -696
+      ],
+      "short_name": "消车",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -163,
+        -3,
+        -696
+      ]
+    },
+    "盛德学校篮球场": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:snow_block",
+      "exact_standable": true,
+      "index": 8,
+      "name": "盛德学校篮球场",
+      "original": [
+        -206,
+        -2,
+        -550
+      ],
+      "short_name": "盛",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -206,
+        -2,
+        -550
+      ]
+    },
+    "盛德扶幼中心": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:polished_granite",
+      "exact_standable": true,
+      "index": 9,
+      "name": "盛德扶幼中心",
+      "original": [
+        -211,
+        -2,
+        -599
+      ],
+      "short_name": "盛",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -211,
+        -2,
+        -599
+      ]
+    },
+    "羽毛球场": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:light_blue_concrete",
+      "exact_standable": true,
+      "index": 10,
+      "name": "羽毛球场",
+      "original": [
+        -92,
+        -2,
+        -573
+      ],
+      "short_name": "羽",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -92,
+        -2,
+        -573
+      ]
+    },
+    "赛车场": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:polished_granite",
+      "exact_standable": true,
+      "index": 6,
+      "name": "赛车场",
+      "original": [
+        -147,
+        6,
+        -519
+      ],
+      "short_name": "赛",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -147,
+        6,
+        -519
+      ]
+    },
+    "迦南書院": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:polished_andesite",
+      "exact_standable": true,
+      "index": 12,
+      "name": "迦南書院",
+      "original": [
+        -49,
+        -2,
+        -613
+      ],
+      "short_name": "迦南",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -49,
+        -2,
+        -613
+      ]
+    },
+    "需要蹲下的门": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:light_blue_concrete",
+      "exact_standable": true,
+      "index": 14,
+      "name": "需要蹲下的门",
+      "original": [
+        -110,
+        21,
+        -594
+      ],
+      "short_name": "蹲门",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -110,
+        21,
+        -594
+      ]
+    },
+    "顺利消防宿舍区入口": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:light_gray_concrete",
+      "exact_standable": true,
+      "index": 5,
+      "name": "顺利消防宿舍区入口",
+      "original": [
+        -267,
+        10,
+        -549
+      ],
+      "short_name": "顺",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -267,
+        10,
+        -549
+      ]
+    },
+    "顺利消防宿舍楼5": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:white_terracotta",
+      "exact_standable": true,
+      "index": 4,
+      "name": "顺利消防宿舍楼5",
+      "original": [
+        -248,
+        10,
+        -673
+      ],
+      "short_name": "楼5",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -248,
+        10,
+        -673
+      ]
+    },
+    "顺利消防局": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:polished_andesite",
+      "exact_standable": true,
+      "index": 30,
+      "name": "顺利消防局",
+      "original": [
+        -122,
+        -2,
+        -622
+      ],
+      "short_name": "消防",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -122,
+        -2,
+        -622
+      ]
+    },
+    "顺利消防局门口": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:yellow_terracotta",
+      "exact_standable": true,
+      "index": 29,
+      "name": "顺利消防局门口",
+      "original": [
+        -90,
+        -3,
+        -623
+      ],
+      "short_name": "消门",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -90,
+        -3,
+        -623
+      ]
+    },
+    "顺利纪律宿舍2座": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:air",
+      "exact_standable": false,
+      "index": 39,
+      "name": "顺利纪律宿舍2座",
+      "original": [
+        -268,
+        2,
+        -744
+      ],
+      "short_name": "顺2",
+      "snap_distance_blocks": 3.605551275463989,
+      "snapped": [
+        -270,
+        2,
+        -741
+      ]
+    },
+    "顺利纪律部队2号楼": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:white_terracotta",
+      "exact_standable": true,
+      "index": 37,
+      "name": "顺利纪律部队2号楼",
+      "original": [
+        -287,
+        10,
+        -618
+      ],
+      "short_name": "顺",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -287,
+        10,
+        -618
+      ]
+    },
+    "顺利足球场正门": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:smooth_stone_slab",
+      "exact_standable": true,
+      "index": 31,
+      "name": "顺利足球场正门",
+      "original": [
+        -142,
+        -1,
+        -671
+      ],
+      "short_name": "顺正",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -142,
+        -1,
+        -671
+      ]
+    },
+    "顺利邨游乐场五人制足球场": {
+      "block_at_original": "minecraft:white_carpet",
+      "block_below_original": "minecraft:red_concrete",
+      "exact_standable": true,
+      "index": 33,
+      "name": "顺利邨游乐场五人制足球场",
+      "original": [
+        -137,
+        -1,
+        -694
+      ],
+      "short_name": "顺足",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -137,
+        -1,
+        -694
+      ]
+    },
+    "顺利部队宿舍1号楼": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:cut_sandstone",
+      "exact_standable": true,
+      "index": 36,
+      "name": "顺利部队宿舍1号楼",
+      "original": [
+        -268,
+        10,
+        -574
+      ],
+      "short_name": "顺1",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -268,
+        10,
+        -574
+      ]
+    },
+    "顺利部队操场": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:light_blue_concrete",
+      "exact_standable": true,
+      "index": 35,
+      "name": "顺利部队操场",
+      "original": [
+        -280,
+        10,
+        -563
+      ],
+      "short_name": "顺操",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -280,
+        10,
+        -563
+      ]
+    },
+    "顺利队宿舍3号楼": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:white_terracotta",
+      "exact_standable": true,
+      "index": 38,
+      "name": "顺利队宿舍3号楼",
+      "original": [
+        -300,
+        10,
+        -664
+      ],
+      "short_name": "顺3",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -300,
+        10,
+        -664
+      ]
+    },
+    "顺足侧门": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:smooth_stone_slab",
+      "exact_standable": true,
+      "index": 32,
+      "name": "顺足侧门",
+      "original": [
+        -118,
+        -2,
+        -674
+      ],
+      "short_name": "顺侧",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        -118,
+        -2,
+        -674
+      ]
+    },
+    "黑暗的地方": {
+      "block_at_original": "minecraft:air",
+      "block_below_original": "minecraft:polished_granite",
+      "exact_standable": true,
+      "index": 28,
+      "name": "黑暗的地方",
+      "original": [
+        16,
+        -2,
+        -593
+      ],
+      "short_name": "黑",
+      "snap_distance_blocks": 0.0,
+      "snapped": [
+        16,
+        -2,
+        -593
+      ]
+    }
+  },
+  "artifact_type": "shunlee_user_marked_sequence_route_v1",
+  "planner": {
+    "allow_doors": true,
+    "goal_radius_xz": 1.5,
+    "goal_radius_y": 1,
+    "initial_margin": 12,
+    "max_drop": 3,
+    "max_margin": 96,
+    "max_nodes": 120000,
+    "max_test_distance": 130.0,
+    "search_algorithm": "astar",
+    "snap_radius": 8
+  },
+  "routes": [
+    {
+      "city_category": "user_marked_sequence",
+      "difficulty_prelabel": "D5_marked_sequence_requires_manual_segment_review",
+      "metrics": {
+        "certified_segment_count": 28,
+        "detour_ratio": 11.021180091871052,
+        "door_crossing_count": 2,
+        "height_range_blocks": 25,
+        "junction_count": 398,
+        "ladder_edge_count": 0,
+        "movement_counts": {
+          "diagonal": 384,
+          "step": 61,
+          "walk": 1003
+        },
+        "narrow_passage_count": 23,
+        "path_len_cells": 1476,
+        "reference_length_blocks": 1641.119959850841,
+        "segment_count": 28,
+        "step_edge_count": 61,
+        "straight_line_distance_blocks": 148.90601062415178,
+        "total_ascent_blocks": 70,
+        "total_descent_blocks": 70,
+        "turn_count": 395
+      },
+      "operation_focus": "manual verification of the actual marked point order; red segments are not confirmed walked links",
+      "points": [
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 1,
+          "original": [
+            -185,
+            10,
+            -619
+          ],
+          "role": "start",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -185,
+            10,
+            -619
+          ],
+          "waypoint": "楼8"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 2,
+          "original": [
+            -196,
+            10,
+            -657
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -196,
+            10,
+            -657
+          ],
+          "waypoint": "楼7"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 3,
+          "original": [
+            -211,
+            10,
+            -696
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -211,
+            10,
+            -696
+          ],
+          "waypoint": "楼6"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 4,
+          "original": [
+            -248,
+            10,
+            -673
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -248,
+            10,
+            -673
+          ],
+          "waypoint": "顺利消防宿舍楼5"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 5,
+          "original": [
+            -267,
+            10,
+            -549
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -267,
+            10,
+            -549
+          ],
+          "waypoint": "顺利消防宿舍区入口"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 6,
+          "original": [
+            -147,
+            6,
+            -519
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -147,
+            6,
+            -519
+          ],
+          "waypoint": "赛车场"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 7,
+          "original": [
+            -15,
+            -2,
+            -651
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -15,
+            -2,
+            -651
+          ],
+          "waypoint": "健身游乐场"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 8,
+          "original": [
+            -206,
+            -2,
+            -550
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -206,
+            -2,
+            -550
+          ],
+          "waypoint": "盛德学校篮球场"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 9,
+          "original": [
+            -211,
+            -2,
+            -599
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -211,
+            -2,
+            -599
+          ],
+          "waypoint": "盛德扶幼中心"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 10,
+          "original": [
+            -92,
+            -2,
+            -573
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -92,
+            -2,
+            -573
+          ],
+          "waypoint": "羽毛球场"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 11,
+          "original": [
+            -107,
+            -2,
+            -596
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -107,
+            -2,
+            -596
+          ],
+          "waypoint": "教堂餐厅"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 12,
+          "original": [
+            -49,
+            -2,
+            -613
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -49,
+            -2,
+            -613
+          ],
+          "waypoint": "迦南書院"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 13,
+          "original": [
+            -108,
+            21,
+            -594
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -108,
+            21,
+            -594
+          ],
+          "waypoint": "图书馆"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 14,
+          "original": [
+            -110,
+            21,
+            -594
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -110,
+            21,
+            -594
+          ],
+          "waypoint": "需要蹲下的门"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": false,
+          "order": 15,
+          "original": [
+            -113,
+            21,
+            -594
+          ],
+          "role": "via",
+          "snap_distance_blocks": 1.0,
+          "snapped": [
+            -113,
+            22,
+            -594
+          ],
+          "waypoint": "教堂6楼平台入口"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 16,
+          "original": [
+            -116,
+            22,
+            -601
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -116,
+            22,
+            -601
+          ],
+          "waypoint": "教堂6楼"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 17,
+          "original": [
+            -117,
+            19,
+            -601
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -117,
+            19,
+            -601
+          ],
+          "waypoint": "教堂5楼"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 18,
+          "original": [
+            -112,
+            14,
+            -540
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -112,
+            14,
+            -540
+          ],
+          "waypoint": "为什么这里卡住了"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": false,
+          "order": 19,
+          "original": [
+            -114,
+            12,
+            -544
+          ],
+          "role": "via",
+          "snap_distance_blocks": 1.0,
+          "snapped": [
+            -114,
+            13,
+            -544
+          ],
+          "waypoint": "教堂4楼暗处"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 20,
+          "original": [
+            -114,
+            4,
+            -543
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -114,
+            4,
+            -543
+          ],
+          "waypoint": "教堂2到3暗处楼梯"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 21,
+          "original": [
+            -117,
+            7,
+            -540
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -117,
+            7,
+            -540
+          ],
+          "waypoint": "教堂3楼暗处"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 22,
+          "original": [
+            -117,
+            7,
+            -600
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -117,
+            7,
+            -600
+          ],
+          "waypoint": "教堂3楼"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 23,
+          "original": [
+            -121,
+            -2,
+            -597
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -121,
+            -2,
+            -597
+          ],
+          "waypoint": "教堂楼梯2"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 24,
+          "original": [
+            -113,
+            4,
+            -568
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -113,
+            4,
+            -568
+          ],
+          "waypoint": "教堂2楼平台"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 25,
+          "original": [
+            -114,
+            4,
+            -545
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -114,
+            4,
+            -545
+          ],
+          "waypoint": "教堂2楼入口"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 26,
+          "original": [
+            -114,
+            -2,
+            -544
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -114,
+            -2,
+            -544
+          ],
+          "waypoint": "教堂楼梯"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 27,
+          "original": [
+            -113,
+            -2,
+            -535
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -113,
+            -2,
+            -535
+          ],
+          "waypoint": "基督教汇基堂"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 28,
+          "original": [
+            16,
+            -2,
+            -593
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            16,
+            -2,
+            -593
+          ],
+          "waypoint": "黑暗的地方"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 29,
+          "original": [
+            -90,
+            -3,
+            -623
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -90,
+            -3,
+            -623
+          ],
+          "waypoint": "顺利消防局门口"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 30,
+          "original": [
+            -122,
+            -2,
+            -622
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -122,
+            -2,
+            -622
+          ],
+          "waypoint": "顺利消防局"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 31,
+          "original": [
+            -142,
+            -1,
+            -671
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -142,
+            -1,
+            -671
+          ],
+          "waypoint": "顺利足球场正门"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 32,
+          "original": [
+            -118,
+            -2,
+            -674
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -118,
+            -2,
+            -674
+          ],
+          "waypoint": "顺足侧门"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 33,
+          "original": [
+            -137,
+            -1,
+            -694
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -137,
+            -1,
+            -694
+          ],
+          "waypoint": "顺利邨游乐场五人制足球场"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 34,
+          "original": [
+            -163,
+            -3,
+            -696
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -163,
+            -3,
+            -696
+          ],
+          "waypoint": "消防公交车站"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 35,
+          "original": [
+            -280,
+            10,
+            -563
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -280,
+            10,
+            -563
+          ],
+          "waypoint": "顺利部队操场"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 36,
+          "original": [
+            -268,
+            10,
+            -574
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -268,
+            10,
+            -574
+          ],
+          "waypoint": "顺利部队宿舍1号楼"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 37,
+          "original": [
+            -287,
+            10,
+            -618
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -287,
+            10,
+            -618
+          ],
+          "waypoint": "顺利纪律部队2号楼"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": true,
+          "order": 38,
+          "original": [
+            -300,
+            10,
+            -664
+          ],
+          "role": "via",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -300,
+            10,
+            -664
+          ],
+          "waypoint": "顺利队宿舍3号楼"
+        },
+        {
+          "coverage_role": "primary",
+          "exact_standable": false,
+          "order": 39,
+          "original": [
+            -268,
+            2,
+            -744
+          ],
+          "role": "end",
+          "snap_distance_blocks": 3.605551275463989,
+          "snapped": [
+            -270,
+            2,
+            -741
+          ],
+          "waypoint": "顺利纪律宿舍2座"
+        }
+      ],
+      "reviewer_intent": "Follow the points in the same order as the exported waypoint file. This is the faithful marked sequence, not a semantic regrouping.",
+      "route_id": "MARKED-SEQ-01",
+      "scene_mix": "all points exactly as exported from the user Xaero waypoint file",
+      "segments": [
+        {
+          "bbox": {
+            "x": [
+              -208,
+              -173
+            ],
+            "y": [
+              -2,
+              22
+            ],
+            "z": [
+              -669,
+              -607
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -185,
+            10,
+            -619
+          ],
+          "from_waypoint": "楼8",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 41,
+          "path_movement_counts": {
+            "diagonal": 15,
+            "walk": 25
+          },
+          "reached_goal": [
+            -197,
+            10,
+            -656
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 46.21320343559643,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S01",
+          "to_snapped": [
+            -196,
+            10,
+            -657
+          ],
+          "to_waypoint": "楼7",
+          "waypoint_count": 16,
+          "waypoints": [
+            [
+              -185,
+              10,
+              -619
+            ],
+            [
+              -195,
+              10,
+              -629
+            ],
+            [
+              -195,
+              10,
+              -638
+            ],
+            [
+              -196,
+              10,
+              -639
+            ],
+            [
+              -196,
+              10,
+              -640
+            ],
+            [
+              -197,
+              10,
+              -641
+            ],
+            [
+              -197,
+              10,
+              -644
+            ],
+            [
+              -198,
+              10,
+              -645
+            ],
+            [
+              -198,
+              10,
+              -647
+            ],
+            [
+              -199,
+              10,
+              -648
+            ],
+            [
+              -199,
+              10,
+              -651
+            ],
+            [
+              -200,
+              10,
+              -652
+            ],
+            [
+              -200,
+              10,
+              -655
+            ],
+            [
+              -198,
+              10,
+              -655
+            ],
+            [
+              -198,
+              10,
+              -656
+            ],
+            [
+              -197,
+              10,
+              -656
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -223,
+              -184
+            ],
+            "y": [
+              -2,
+              22
+            ],
+            "z": [
+              -708,
+              -645
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -196,
+            10,
+            -657
+          ],
+          "from_waypoint": "楼7",
+          "goal_candidate_count": 8,
+          "ok": true,
+          "path_len_cells": 40,
+          "path_movement_counts": {
+            "diagonal": 14,
+            "walk": 25
+          },
+          "reached_goal": [
+            -211,
+            10,
+            -695
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 44.79898987322333,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S02",
+          "to_snapped": [
+            -211,
+            10,
+            -696
+          ],
+          "to_waypoint": "楼6",
+          "waypoint_count": 11,
+          "waypoints": [
+            [
+              -196,
+              10,
+              -657
+            ],
+            [
+              -199,
+              10,
+              -660
+            ],
+            [
+              -200,
+              10,
+              -660
+            ],
+            [
+              -206,
+              10,
+              -666
+            ],
+            [
+              -206,
+              10,
+              -680
+            ],
+            [
+              -207,
+              10,
+              -681
+            ],
+            [
+              -207,
+              10,
+              -682
+            ],
+            [
+              -210,
+              10,
+              -685
+            ],
+            [
+              -210,
+              10,
+              -688
+            ],
+            [
+              -211,
+              10,
+              -689
+            ],
+            [
+              -211,
+              10,
+              -695
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -260,
+              -199
+            ],
+            "y": [
+              -2,
+              22
+            ],
+            "z": [
+              -708,
+              -661
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -211,
+            10,
+            -696
+          ],
+          "from_waypoint": "楼6",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 40,
+          "path_movement_counts": {
+            "diagonal": 19,
+            "walk": 20
+          },
+          "reached_goal": [
+            -247,
+            10,
+            -674
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 46.87005768508878,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S03",
+          "to_snapped": [
+            -248,
+            10,
+            -673
+          ],
+          "to_waypoint": "顺利消防宿舍楼5",
+          "waypoint_count": 7,
+          "waypoints": [
+            [
+              -211,
+              10,
+              -696
+            ],
+            [
+              -211,
+              10,
+              -693
+            ],
+            [
+              -214,
+              10,
+              -690
+            ],
+            [
+              -229,
+              10,
+              -690
+            ],
+            [
+              -244,
+              10,
+              -675
+            ],
+            [
+              -246,
+              10,
+              -675
+            ],
+            [
+              -247,
+              10,
+              -674
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -279,
+              -236
+            ],
+            "y": [
+              -2,
+              22
+            ],
+            "z": [
+              -685,
+              -537
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -248,
+            10,
+            -673
+          ],
+          "from_waypoint": "顺利消防宿舍楼5",
+          "goal_candidate_count": 8,
+          "ok": true,
+          "path_len_cells": 124,
+          "path_movement_counts": {
+            "diagonal": 20,
+            "walk": 103
+          },
+          "reached_goal": [
+            -266,
+            10,
+            -550
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 131.28427124746185,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S04",
+          "to_snapped": [
+            -267,
+            10,
+            -549
+          ],
+          "to_waypoint": "顺利消防宿舍区入口",
+          "waypoint_count": 16,
+          "waypoints": [
+            [
+              -248,
+              10,
+              -673
+            ],
+            [
+              -248,
+              10,
+              -660
+            ],
+            [
+              -250,
+              10,
+              -658
+            ],
+            [
+              -250,
+              10,
+              -643
+            ],
+            [
+              -254,
+              10,
+              -639
+            ],
+            [
+              -254,
+              10,
+              -598
+            ],
+            [
+              -255,
+              10,
+              -597
+            ],
+            [
+              -255,
+              10,
+              -595
+            ],
+            [
+              -254,
+              10,
+              -594
+            ],
+            [
+              -254,
+              10,
+              -592
+            ],
+            [
+              -260,
+              10,
+              -586
+            ],
+            [
+              -260,
+              10,
+              -580
+            ],
+            [
+              -261,
+              10,
+              -579
+            ],
+            [
+              -261,
+              10,
+              -557
+            ],
+            [
+              -266,
+              10,
+              -552
+            ],
+            [
+              -266,
+              10,
+              -550
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -291,
+              -123
+            ],
+            "y": [
+              -18,
+              34
+            ],
+            "z": [
+              -573,
+              -495
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -267,
+            10,
+            -549
+          ],
+          "from_waypoint": "顺利消防宿舍区入口",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 131,
+          "path_movement_counts": {
+            "diagonal": 18,
+            "step": 11,
+            "walk": 101
+          },
+          "reached_goal": [
+            -148,
+            6,
+            -520
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 142.33003055401556,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S05",
+          "to_snapped": [
+            -147,
+            6,
+            -519
+          ],
+          "to_waypoint": "赛车场",
+          "waypoint_count": 51,
+          "waypoints": [
+            [
+              -267,
+              10,
+              -549
+            ],
+            [
+              -266,
+              10,
+              -548
+            ],
+            [
+              -266,
+              10,
+              -539
+            ],
+            [
+              -266,
+              11,
+              -538
+            ],
+            [
+              -266,
+              11,
+              -537
+            ],
+            [
+              -265,
+              10,
+              -537
+            ],
+            [
+              -264,
+              10,
+              -537
+            ],
+            [
+              -263,
+              10,
+              -536
+            ],
+            [
+              -261,
+              10,
+              -536
+            ],
+            [
+              -260,
+              10,
+              -535
+            ],
+            [
+              -259,
+              10,
+              -535
+            ],
+            [
+              -258,
+              10,
+              -534
+            ],
+            [
+              -257,
+              10,
+              -534
+            ],
+            [
+              -256,
+              10,
+              -533
+            ],
+            [
+              -254,
+              10,
+              -533
+            ],
+            [
+              -253,
+              10,
+              -532
+            ],
+            [
+              -252,
+              10,
+              -532
+            ],
+            [
+              -251,
+              9,
+              -532
+            ],
+            [
+              -250,
+              9,
+              -532
+            ],
+            [
+              -249,
+              9,
+              -531
+            ],
+            [
+              -246,
+              9,
+              -531
+            ],
+            [
+              -245,
+              9,
+              -530
+            ],
+            [
+              -244,
+              9,
+              -530
+            ],
+            [
+              -242,
+              9,
+              -528
+            ],
+            [
+              -235,
+              9,
+              -528
+            ],
+            [
+              -234,
+              9,
+              -527
+            ],
+            [
+              -231,
+              9,
+              -527
+            ],
+            [
+              -229,
+              9,
+              -525
+            ],
+            [
+              -228,
+              8,
+              -525
+            ],
+            [
+              -216,
+              8,
+              -525
+            ],
+            [
+              -215,
+              8,
+              -524
+            ],
+            [
+              -212,
+              8,
+              -524
+            ],
+            [
+              -211,
+              7,
+              -524
+            ],
+            [
+              -205,
+              7,
+              -524
+            ],
+            [
+              -204,
+              7,
+              -523
+            ],
+            [
+              -194,
+              7,
+              -523
+            ],
+            [
+              -193,
+              7,
+              -522
+            ],
+            [
+              -183,
+              7,
+              -522
+            ],
+            [
+              -182,
+              7,
+              -521
+            ],
+            [
+              -181,
+              7,
+              -521
+            ],
+            [
+              -180,
+              6,
+              -521
+            ],
+            [
+              -174,
+              6,
+              -521
+            ],
+            [
+              -173,
+              7,
+              -521
+            ],
+            [
+              -169,
+              7,
+              -521
+            ],
+            [
+              -168,
+              6,
+              -520
+            ],
+            [
+              -154,
+              6,
+              -520
+            ],
+            [
+              -153,
+              7,
+              -520
+            ],
+            [
+              -152,
+              6,
+              -520
+            ],
+            [
+              -151,
+              7,
+              -520
+            ],
+            [
+              -150,
+              6,
+              -520
+            ],
+            [
+              -148,
+              6,
+              -520
+            ]
+          ]
+        },
+        {
+          "error": "consecutive waypoint export order has a large X/Z jump; likely a review jump or teleport, not a confirmed walked segment",
+          "from_snapped": [
+            -147,
+            6,
+            -519
+          ],
+          "from_waypoint": "赛车场",
+          "ok": false,
+          "search_status": "mark_order_large_jump_not_static_tested",
+          "segment_id": "MARKED-SEQ-01-S06",
+          "straight_line_distance_blocks": 186.67619023324855,
+          "to_snapped": [
+            -15,
+            -2,
+            -651
+          ],
+          "to_waypoint": "健身游乐场",
+          "vertical_delta_blocks": -8.0
+        },
+        {
+          "error": "consecutive waypoint export order has a large X/Z jump; likely a review jump or teleport, not a confirmed walked segment",
+          "from_snapped": [
+            -15,
+            -2,
+            -651
+          ],
+          "from_waypoint": "健身游乐场",
+          "ok": false,
+          "search_status": "mark_order_large_jump_not_static_tested",
+          "segment_id": "MARKED-SEQ-01-S07",
+          "straight_line_distance_blocks": 216.06017680266763,
+          "to_snapped": [
+            -206,
+            -2,
+            -550
+          ],
+          "to_waypoint": "盛德学校篮球场",
+          "vertical_delta_blocks": 0.0
+        },
+        {
+          "bbox": {
+            "x": [
+              -259,
+              -158
+            ],
+            "y": [
+              -50,
+              46
+            ],
+            "z": [
+              -647,
+              -502
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -206,
+            -2,
+            -550
+          ],
+          "from_waypoint": "盛德学校篮球场",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 90,
+          "path_movement_counts": {
+            "diagonal": 57,
+            "walk": 32
+          },
+          "reached_goal": [
+            -212,
+            -2,
+            -598
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 112.61017305526629,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S08",
+          "to_snapped": [
+            -211,
+            -2,
+            -599
+          ],
+          "to_waypoint": "盛德扶幼中心",
+          "waypoint_count": 15,
+          "waypoints": [
+            [
+              -206,
+              -2,
+              -550
+            ],
+            [
+              -229,
+              -2,
+              -550
+            ],
+            [
+              -237,
+              -2,
+              -542
+            ],
+            [
+              -239,
+              -2,
+              -542
+            ],
+            [
+              -242,
+              -2,
+              -545
+            ],
+            [
+              -242,
+              -2,
+              -546
+            ],
+            [
+              -250,
+              -2,
+              -554
+            ],
+            [
+              -250,
+              -2,
+              -557
+            ],
+            [
+              -242,
+              -2,
+              -565
+            ],
+            [
+              -242,
+              -2,
+              -566
+            ],
+            [
+              -240,
+              -2,
+              -568
+            ],
+            [
+              -240,
+              -2,
+              -569
+            ],
+            [
+              -214,
+              -2,
+              -595
+            ],
+            [
+              -214,
+              -2,
+              -596
+            ],
+            [
+              -212,
+              -2,
+              -598
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -235,
+              -68
+            ],
+            "y": [
+              -26,
+              22
+            ],
+            "z": [
+              -623,
+              -549
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -211,
+            -2,
+            -599
+          ],
+          "from_waypoint": "盛德扶幼中心",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 134,
+          "path_movement_counts": {
+            "diagonal": 30,
+            "step": 7,
+            "walk": 96
+          },
+          "reached_goal": [
+            -93,
+            -2,
+            -574
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 148.64373905300027,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S09",
+          "to_snapped": [
+            -92,
+            -2,
+            -573
+          ],
+          "to_waypoint": "羽毛球场",
+          "waypoint_count": 39,
+          "waypoints": [
+            [
+              -211,
+              -2,
+              -599
+            ],
+            [
+              -210,
+              -2,
+              -599
+            ],
+            [
+              -209,
+              -2,
+              -600
+            ],
+            [
+              -207,
+              -2,
+              -600
+            ],
+            [
+              -206,
+              -2,
+              -601
+            ],
+            [
+              -201,
+              -2,
+              -601
+            ],
+            [
+              -200,
+              -2,
+              -602
+            ],
+            [
+              -189,
+              -2,
+              -602
+            ],
+            [
+              -188,
+              -2,
+              -603
+            ],
+            [
+              -181,
+              -2,
+              -603
+            ],
+            [
+              -180,
+              -2,
+              -604
+            ],
+            [
+              -164,
+              -2,
+              -604
+            ],
+            [
+              -163,
+              -1,
+              -604
+            ],
+            [
+              -160,
+              -1,
+              -604
+            ],
+            [
+              -159,
+              0,
+              -604
+            ],
+            [
+              -158,
+              -1,
+              -605
+            ],
+            [
+              -146,
+              -1,
+              -605
+            ],
+            [
+              -145,
+              0,
+              -605
+            ],
+            [
+              -142,
+              0,
+              -608
+            ],
+            [
+              -141,
+              0,
+              -608
+            ],
+            [
+              -140,
+              -1,
+              -608
+            ],
+            [
+              -134,
+              -1,
+              -608
+            ],
+            [
+              -134,
+              0,
+              -607
+            ],
+            [
+              -134,
+              0,
+              -605
+            ],
+            [
+              -135,
+              0,
+              -604
+            ],
+            [
+              -135,
+              -1,
+              -603
+            ],
+            [
+              -135,
+              -1,
+              -601
+            ],
+            [
+              -135,
+              -2,
+              -600
+            ],
+            [
+              -131,
+              -2,
+              -596
+            ],
+            [
+              -131,
+              -2,
+              -594
+            ],
+            [
+              -130,
+              -2,
+              -593
+            ],
+            [
+              -130,
+              -2,
+              -589
+            ],
+            [
+              -128,
+              -2,
+              -587
+            ],
+            [
+              -121,
+              -2,
+              -587
+            ],
+            [
+              -120,
+              -2,
+              -586
+            ],
+            [
+              -118,
+              -2,
+              -586
+            ],
+            [
+              -112,
+              -2,
+              -580
+            ],
+            [
+              -99,
+              -2,
+              -580
+            ],
+            [
+              -93,
+              -2,
+              -574
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -119,
+              -80
+            ],
+            "y": [
+              -14,
+              10
+            ],
+            "z": [
+              -608,
+              -561
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -92,
+            -2,
+            -573
+          ],
+          "from_waypoint": "羽毛球场",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 25,
+          "path_movement_counts": {
+            "diagonal": 12,
+            "walk": 12
+          },
+          "reached_goal": [
+            -106,
+            -2,
+            -595
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 28.970562748477146,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S10",
+          "to_snapped": [
+            -107,
+            -2,
+            -596
+          ],
+          "to_waypoint": "教堂餐厅",
+          "waypoint_count": 6,
+          "waypoints": [
+            [
+              -92,
+              -2,
+              -573
+            ],
+            [
+              -98,
+              -2,
+              -579
+            ],
+            [
+              -98,
+              -2,
+              -583
+            ],
+            [
+              -100,
+              -2,
+              -583
+            ],
+            [
+              -106,
+              -2,
+              -589
+            ],
+            [
+              -106,
+              -2,
+              -595
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -131,
+              -25
+            ],
+            "y": [
+              -26,
+              22
+            ],
+            "z": [
+              -637,
+              -572
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -107,
+            -2,
+            -596
+          ],
+          "from_waypoint": "教堂餐厅",
+          "goal_candidate_count": 10,
+          "ok": true,
+          "path_len_cells": 72,
+          "path_movement_counts": {
+            "diagonal": 6,
+            "step": 9,
+            "walk": 56
+          },
+          "reached_goal": [
+            -50,
+            -2,
+            -614
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 79.27910477858748,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S11",
+          "to_snapped": [
+            -49,
+            -2,
+            -613
+          ],
+          "to_waypoint": "迦南書院",
+          "waypoint_count": 22,
+          "waypoints": [
+            [
+              -107,
+              -2,
+              -596
+            ],
+            [
+              -96,
+              -2,
+              -596
+            ],
+            [
+              -94,
+              -2,
+              -598
+            ],
+            [
+              -94,
+              -2,
+              -599
+            ],
+            [
+              -94,
+              -1,
+              -600
+            ],
+            [
+              -94,
+              -1,
+              -603
+            ],
+            [
+              -94,
+              -2,
+              -604
+            ],
+            [
+              -94,
+              -1,
+              -605
+            ],
+            [
+              -94,
+              -1,
+              -606
+            ],
+            [
+              -93,
+              -2,
+              -607
+            ],
+            [
+              -93,
+              -1,
+              -608
+            ],
+            [
+              -93,
+              -2,
+              -609
+            ],
+            [
+              -93,
+              0,
+              -611
+            ],
+            [
+              -93,
+              -3,
+              -612
+            ],
+            [
+              -78,
+              -3,
+              -612
+            ],
+            [
+              -77,
+              -3,
+              -613
+            ],
+            [
+              -68,
+              -3,
+              -613
+            ],
+            [
+              -67,
+              -3,
+              -614
+            ],
+            [
+              -62,
+              -3,
+              -614
+            ],
+            [
+              -61,
+              -3,
+              -615
+            ],
+            [
+              -50,
+              -3,
+              -615
+            ],
+            [
+              -50,
+              -2,
+              -614
+            ]
+          ]
+        },
+        {
+          "error": "no_path_found_under_static_walkability_model",
+          "from_snapped": [
+            -49,
+            -2,
+            -613
+          ],
+          "from_waypoint": "迦南書院",
+          "goal_candidate_count": 9,
+          "ok": false,
+          "search_status": "no_path_found",
+          "segment_id": "MARKED-SEQ-01-S12",
+          "to_snapped": [
+            -108,
+            21,
+            -594
+          ],
+          "to_waypoint": "图书馆"
+        },
+        {
+          "bbox": {
+            "x": [
+              -122,
+              -96
+            ],
+            "y": [
+              9,
+              33
+            ],
+            "z": [
+              -606,
+              -582
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -108,
+            21,
+            -594
+          ],
+          "from_waypoint": "图书馆",
+          "goal_candidate_count": 7,
+          "ok": true,
+          "path_len_cells": 2,
+          "path_movement_counts": {
+            "walk": 1
+          },
+          "reached_goal": [
+            -109,
+            21,
+            -594
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 1.0,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S13",
+          "to_snapped": [
+            -110,
+            21,
+            -594
+          ],
+          "to_waypoint": "需要蹲下的门",
+          "waypoint_count": 2,
+          "waypoints": [
+            [
+              -108,
+              21,
+              -594
+            ],
+            [
+              -109,
+              21,
+              -594
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -125,
+              -98
+            ],
+            "y": [
+              9,
+              34
+            ],
+            "z": [
+              -606,
+              -582
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -110,
+            21,
+            -594
+          ],
+          "from_waypoint": "需要蹲下的门",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 3,
+          "path_movement_counts": {
+            "step": 1,
+            "walk": 1
+          },
+          "reached_goal": [
+            -112,
+            22,
+            -594
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 2.414213562373095,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S14",
+          "to_snapped": [
+            -113,
+            22,
+            -594
+          ],
+          "to_waypoint": "教堂6楼平台入口",
+          "waypoint_count": 3,
+          "waypoints": [
+            [
+              -110,
+              21,
+              -594
+            ],
+            [
+              -111,
+              21,
+              -594
+            ],
+            [
+              -112,
+              22,
+              -594
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -128,
+              -101
+            ],
+            "y": [
+              10,
+              34
+            ],
+            "z": [
+              -613,
+              -582
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -113,
+            22,
+            -594
+          ],
+          "from_waypoint": "教堂6楼平台入口",
+          "goal_candidate_count": 7,
+          "ok": true,
+          "path_len_cells": 7,
+          "path_movement_counts": {
+            "diagonal": 2,
+            "walk": 4
+          },
+          "reached_goal": [
+            -115,
+            22,
+            -600
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 6.82842712474619,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S15",
+          "to_snapped": [
+            -116,
+            22,
+            -601
+          ],
+          "to_waypoint": "教堂6楼",
+          "waypoint_count": 3,
+          "waypoints": [
+            [
+              -113,
+              22,
+              -594
+            ],
+            [
+              -113,
+              22,
+              -598
+            ],
+            [
+              -115,
+              22,
+              -600
+            ]
+          ]
+        },
+        {
+          "error": "no_path_found_under_static_walkability_model",
+          "from_snapped": [
+            -116,
+            22,
+            -601
+          ],
+          "from_waypoint": "教堂6楼",
+          "goal_candidate_count": 8,
+          "ok": false,
+          "search_status": "no_path_found",
+          "segment_id": "MARKED-SEQ-01-S16",
+          "to_snapped": [
+            -117,
+            19,
+            -601
+          ],
+          "to_waypoint": "教堂5楼"
+        },
+        {
+          "error": "no_path_found_under_static_walkability_model",
+          "from_snapped": [
+            -117,
+            19,
+            -601
+          ],
+          "from_waypoint": "教堂5楼",
+          "goal_candidate_count": 3,
+          "ok": false,
+          "search_status": "no_path_found",
+          "segment_id": "MARKED-SEQ-01-S17",
+          "to_snapped": [
+            -112,
+            14,
+            -540
+          ],
+          "to_waypoint": "为什么这里卡住了"
+        },
+        {
+          "error": "no_path_found_under_static_walkability_model",
+          "from_snapped": [
+            -112,
+            14,
+            -540
+          ],
+          "from_waypoint": "为什么这里卡住了",
+          "goal_candidate_count": 8,
+          "ok": false,
+          "search_status": "no_path_found",
+          "segment_id": "MARKED-SEQ-01-S18",
+          "to_snapped": [
+            -114,
+            13,
+            -544
+          ],
+          "to_waypoint": "教堂4楼暗处"
+        },
+        {
+          "error": "no_path_found_under_static_walkability_model",
+          "from_snapped": [
+            -114,
+            13,
+            -544
+          ],
+          "from_waypoint": "教堂4楼暗处",
+          "goal_candidate_count": 9,
+          "ok": false,
+          "search_status": "no_path_found",
+          "segment_id": "MARKED-SEQ-01-S19",
+          "to_snapped": [
+            -114,
+            4,
+            -543
+          ],
+          "to_waypoint": "教堂2到3暗处楼梯"
+        },
+        {
+          "bbox": {
+            "x": [
+              -213,
+              -18
+            ],
+            "y": [
+              -92,
+              103
+            ],
+            "z": [
+              -639,
+              -444
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -114,
+            4,
+            -543
+          ],
+          "from_waypoint": "教堂2到3暗处楼梯",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 123,
+          "path_movement_counts": {
+            "diagonal": 16,
+            "step": 2,
+            "walk": 104
+          },
+          "reached_goal": [
+            -116,
+            7,
+            -541
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 129.77368136791145,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S20",
+          "to_snapped": [
+            -117,
+            7,
+            -540
+          ],
+          "to_waypoint": "教堂3楼暗处",
+          "waypoint_count": 24,
+          "waypoints": [
+            [
+              -114,
+              4,
+              -543
+            ],
+            [
+              -114,
+              4,
+              -557
+            ],
+            [
+              -113,
+              4,
+              -558
+            ],
+            [
+              -113,
+              4,
+              -590
+            ],
+            [
+              -118,
+              4,
+              -595
+            ],
+            [
+              -118,
+              4,
+              -597
+            ],
+            [
+              -120,
+              4,
+              -599
+            ],
+            [
+              -120,
+              4,
+              -600
+            ],
+            [
+              -120,
+              5,
+              -601
+            ],
+            [
+              -120,
+              5,
+              -602
+            ],
+            [
+              -119,
+              6,
+              -602
+            ],
+            [
+              -118,
+              6,
+              -602
+            ],
+            [
+              -117,
+              7,
+              -601
+            ],
+            [
+              -117,
+              7,
+              -598
+            ],
+            [
+              -116,
+              7,
+              -597
+            ],
+            [
+              -116,
+              7,
+              -580
+            ],
+            [
+              -115,
+              7,
+              -579
+            ],
+            [
+              -115,
+              7,
+              -571
+            ],
+            [
+              -114,
+              7,
+              -570
+            ],
+            [
+              -114,
+              7,
+              -563
+            ],
+            [
+              -113,
+              7,
+              -562
+            ],
+            [
+              -113,
+              7,
+              -545
+            ],
+            [
+              -116,
+              7,
+              -542
+            ],
+            [
+              -116,
+              7,
+              -541
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -129,
+              -105
+            ],
+            "y": [
+              -5,
+              19
+            ],
+            "z": [
+              -612,
+              -528
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -117,
+            7,
+            -540
+          ],
+          "from_waypoint": "教堂3楼暗处",
+          "goal_candidate_count": 8,
+          "ok": true,
+          "path_len_cells": 60,
+          "path_movement_counts": {
+            "diagonal": 7,
+            "walk": 52
+          },
+          "reached_goal": [
+            -116,
+            7,
+            -599
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 61.89949493661166,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S21",
+          "to_snapped": [
+            -117,
+            7,
+            -600
+          ],
+          "to_waypoint": "教堂3楼",
+          "waypoint_count": 7,
+          "waypoints": [
+            [
+              -117,
+              7,
+              -540
+            ],
+            [
+              -117,
+              7,
+              -554
+            ],
+            [
+              -113,
+              7,
+              -558
+            ],
+            [
+              -113,
+              7,
+              -569
+            ],
+            [
+              -115,
+              7,
+              -571
+            ],
+            [
+              -115,
+              7,
+              -598
+            ],
+            [
+              -116,
+              7,
+              -599
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -133,
+              -105
+            ],
+            "y": [
+              -14,
+              19
+            ],
+            "z": [
+              -612,
+              -585
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -117,
+            7,
+            -600
+          ],
+          "from_waypoint": "教堂3楼",
+          "goal_candidate_count": 6,
+          "ok": true,
+          "path_len_cells": 21,
+          "path_movement_counts": {
+            "diagonal": 3,
+            "step": 6,
+            "walk": 11
+          },
+          "reached_goal": [
+            -120,
+            -2,
+            -598
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 28.04590467207512,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S22",
+          "to_snapped": [
+            -121,
+            -2,
+            -597
+          ],
+          "to_waypoint": "教堂楼梯2",
+          "waypoint_count": 17,
+          "waypoints": [
+            [
+              -117,
+              7,
+              -600
+            ],
+            [
+              -118,
+              7,
+              -601
+            ],
+            [
+              -118,
+              6,
+              -602
+            ],
+            [
+              -119,
+              6,
+              -603
+            ],
+            [
+              -120,
+              6,
+              -603
+            ],
+            [
+              -120,
+              6,
+              -604
+            ],
+            [
+              -120,
+              7,
+              -605
+            ],
+            [
+              -119,
+              4,
+              -605
+            ],
+            [
+              -118,
+              2,
+              -605
+            ],
+            [
+              -117,
+              2,
+              -605
+            ],
+            [
+              -116,
+              1,
+              -605
+            ],
+            [
+              -116,
+              1,
+              -604
+            ],
+            [
+              -116,
+              -2,
+              -603
+            ],
+            [
+              -116,
+              -2,
+              -599
+            ],
+            [
+              -118,
+              -2,
+              -599
+            ],
+            [
+              -119,
+              -2,
+              -598
+            ],
+            [
+              -120,
+              -2,
+              -598
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -133,
+              -101
+            ],
+            "y": [
+              -14,
+              16
+            ],
+            "z": [
+              -609,
+              -556
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -121,
+            -2,
+            -597
+          ],
+          "from_waypoint": "教堂楼梯2",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 41,
+          "path_movement_counts": {
+            "diagonal": 5,
+            "step": 6,
+            "walk": 29
+          },
+          "reached_goal": [
+            -114,
+            4,
+            -569
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 44.55634918610404,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S23",
+          "to_snapped": [
+            -113,
+            4,
+            -568
+          ],
+          "to_waypoint": "教堂2楼平台",
+          "waypoint_count": 10,
+          "waypoints": [
+            [
+              -121,
+              -2,
+              -597
+            ],
+            [
+              -120,
+              -2,
+              -598
+            ],
+            [
+              -120,
+              2,
+              -602
+            ],
+            [
+              -118,
+              2,
+              -602
+            ],
+            [
+              -118,
+              4,
+              -600
+            ],
+            [
+              -118,
+              4,
+              -584
+            ],
+            [
+              -115,
+              4,
+              -581
+            ],
+            [
+              -115,
+              4,
+              -571
+            ],
+            [
+              -114,
+              4,
+              -570
+            ],
+            [
+              -114,
+              4,
+              -569
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -126,
+              -101
+            ],
+            "y": [
+              -8,
+              16
+            ],
+            "z": [
+              -580,
+              -533
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -113,
+            4,
+            -568
+          ],
+          "from_waypoint": "教堂2楼平台",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 23,
+          "path_movement_counts": {
+            "walk": 22
+          },
+          "reached_goal": [
+            -113,
+            4,
+            -546
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 22.0,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S24",
+          "to_snapped": [
+            -114,
+            4,
+            -545
+          ],
+          "to_waypoint": "教堂2楼入口",
+          "waypoint_count": 2,
+          "waypoints": [
+            [
+              -113,
+              4,
+              -568
+            ],
+            [
+              -113,
+              4,
+              -546
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -126,
+              -102
+            ],
+            "y": [
+              -14,
+              16
+            ],
+            "z": [
+              -557,
+              -532
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -114,
+            4,
+            -545
+          ],
+          "from_waypoint": "教堂2楼入口",
+          "goal_candidate_count": 7,
+          "ok": true,
+          "path_len_cells": 13,
+          "path_movement_counts": {
+            "diagonal": 2,
+            "step": 5,
+            "walk": 5
+          },
+          "reached_goal": [
+            -114,
+            -1,
+            -543
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 14.899494936611667,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S25",
+          "to_snapped": [
+            -114,
+            -2,
+            -544
+          ],
+          "to_waypoint": "教堂楼梯",
+          "waypoint_count": 8,
+          "waypoints": [
+            [
+              -114,
+              4,
+              -545
+            ],
+            [
+              -114,
+              4,
+              -544
+            ],
+            [
+              -112,
+              4,
+              -542
+            ],
+            [
+              -111,
+              3,
+              -542
+            ],
+            [
+              -111,
+              3,
+              -541
+            ],
+            [
+              -111,
+              2,
+              -540
+            ],
+            [
+              -114,
+              2,
+              -540
+            ],
+            [
+              -114,
+              -1,
+              -543
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -126,
+              -101
+            ],
+            "y": [
+              -14,
+              10
+            ],
+            "z": [
+              -556,
+              -523
+            ]
+          },
+          "door_crossings": [
+            {
+              "block_position": [
+                -107,
+                -2,
+                -534
+              ],
+              "feet_position": [
+                -107,
+                -2,
+                -534
+              ],
+              "state": {
+                "name": "minecraft:birch_door",
+                "properties": {
+                  "facing": "west",
+                  "half": "lower",
+                  "hinge": "left",
+                  "open": "true",
+                  "powered": "false"
+                }
+              }
+            },
+            {
+              "block_position": [
+                -107,
+                -1,
+                -534
+              ],
+              "feet_position": [
+                -107,
+                -2,
+                -534
+              ],
+              "state": {
+                "name": "minecraft:birch_door",
+                "properties": {
+                  "facing": "west",
+                  "half": "upper",
+                  "hinge": "left",
+                  "open": "true",
+                  "powered": "false"
+                }
+              }
+            }
+          ],
+          "from_snapped": [
+            -114,
+            -2,
+            -544
+          ],
+          "from_waypoint": "教堂楼梯",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 23,
+          "path_movement_counts": {
+            "diagonal": 3,
+            "step": 3,
+            "walk": 16
+          },
+          "reached_goal": [
+            -112,
+            -1,
+            -535
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 24.48528137423857,
+          "requires_door_interaction": true,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S26",
+          "to_snapped": [
+            -113,
+            -2,
+            -535
+          ],
+          "to_waypoint": "基督教汇基堂",
+          "waypoint_count": 14,
+          "waypoints": [
+            [
+              -114,
+              -2,
+              -544
+            ],
+            [
+              -112,
+              -2,
+              -544
+            ],
+            [
+              -111,
+              -2,
+              -543
+            ],
+            [
+              -108,
+              -2,
+              -543
+            ],
+            [
+              -107,
+              -2,
+              -542
+            ],
+            [
+              -107,
+              -2,
+              -541
+            ],
+            [
+              -106,
+              -2,
+              -540
+            ],
+            [
+              -106,
+              -2,
+              -534
+            ],
+            [
+              -108,
+              -2,
+              -534
+            ],
+            [
+              -108,
+              -2,
+              -535
+            ],
+            [
+              -109,
+              -2,
+              -535
+            ],
+            [
+              -110,
+              -1,
+              -535
+            ],
+            [
+              -111,
+              -2,
+              -535
+            ],
+            [
+              -112,
+              -1,
+              -535
+            ]
+          ]
+        },
+        {
+          "error": "consecutive waypoint export order has a large X/Z jump; likely a review jump or teleport, not a confirmed walked segment",
+          "from_snapped": [
+            -113,
+            -2,
+            -535
+          ],
+          "from_waypoint": "基督教汇基堂",
+          "ok": false,
+          "search_status": "mark_order_large_jump_not_static_tested",
+          "segment_id": "MARKED-SEQ-01-S27",
+          "straight_line_distance_blocks": 141.4390328021229,
+          "to_snapped": [
+            16,
+            -2,
+            -593
+          ],
+          "to_waypoint": "黑暗的地方",
+          "vertical_delta_blocks": 0.0
+        },
+        {
+          "bbox": {
+            "x": [
+              -114,
+              40
+            ],
+            "y": [
+              -27,
+              22
+            ],
+            "z": [
+              -647,
+              -569
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            16,
+            -2,
+            -593
+          ],
+          "from_waypoint": "黑暗的地方",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 133,
+          "path_movement_counts": {
+            "diagonal": 58,
+            "step": 5,
+            "walk": 69
+          },
+          "reached_goal": [
+            -89,
+            -3,
+            -622
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 159.23514608982748,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S28",
+          "to_snapped": [
+            -90,
+            -3,
+            -623
+          ],
+          "to_waypoint": "顺利消防局门口",
+          "waypoint_count": 33,
+          "waypoints": [
+            [
+              16,
+              -2,
+              -593
+            ],
+            [
+              11,
+              -2,
+              -598
+            ],
+            [
+              11,
+              -2,
+              -599
+            ],
+            [
+              2,
+              -2,
+              -608
+            ],
+            [
+              2,
+              -2,
+              -611
+            ],
+            [
+              -2,
+              -2,
+              -611
+            ],
+            [
+              -16,
+              -2,
+              -597
+            ],
+            [
+              -16,
+              -2,
+              -587
+            ],
+            [
+              -20,
+              -2,
+              -587
+            ],
+            [
+              -21,
+              -2,
+              -586
+            ],
+            [
+              -26,
+              -2,
+              -586
+            ],
+            [
+              -29,
+              -2,
+              -583
+            ],
+            [
+              -44,
+              -2,
+              -583
+            ],
+            [
+              -51,
+              -2,
+              -590
+            ],
+            [
+              -53,
+              0,
+              -590
+            ],
+            [
+              -54,
+              0,
+              -590
+            ],
+            [
+              -55,
+              -2,
+              -590
+            ],
+            [
+              -57,
+              -2,
+              -590
+            ],
+            [
+              -64,
+              -2,
+              -597
+            ],
+            [
+              -68,
+              -2,
+              -597
+            ],
+            [
+              -69,
+              -2,
+              -598
+            ],
+            [
+              -69,
+              -2,
+              -602
+            ],
+            [
+              -72,
+              -2,
+              -605
+            ],
+            [
+              -72,
+              -2,
+              -612
+            ],
+            [
+              -76,
+              -2,
+              -612
+            ],
+            [
+              -77,
+              -3,
+              -613
+            ],
+            [
+              -80,
+              -3,
+              -613
+            ],
+            [
+              -81,
+              -3,
+              -614
+            ],
+            [
+              -82,
+              -3,
+              -614
+            ],
+            [
+              -82,
+              -2,
+              -615
+            ],
+            [
+              -83,
+              -2,
+              -615
+            ],
+            [
+              -83,
+              -3,
+              -616
+            ],
+            [
+              -89,
+              -3,
+              -622
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -134,
+              -78
+            ],
+            "y": [
+              -15,
+              10
+            ],
+            "z": [
+              -635,
+              -610
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -90,
+            -3,
+            -623
+          ],
+          "from_waypoint": "顺利消防局门口",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 32,
+          "path_movement_counts": {
+            "step": 1,
+            "walk": 30
+          },
+          "reached_goal": [
+            -121,
+            -2,
+            -623
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 31.414213562373096,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S29",
+          "to_snapped": [
+            -122,
+            -2,
+            -622
+          ],
+          "to_waypoint": "顺利消防局",
+          "waypoint_count": 4,
+          "waypoints": [
+            [
+              -90,
+              -3,
+              -623
+            ],
+            [
+              -105,
+              -3,
+              -623
+            ],
+            [
+              -106,
+              -2,
+              -623
+            ],
+            [
+              -121,
+              -2,
+              -623
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -166,
+              -98
+            ],
+            "y": [
+              -26,
+              23
+            ],
+            "z": [
+              -695,
+              -598
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -122,
+            -2,
+            -622
+          ],
+          "from_waypoint": "顺利消防局",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 77,
+          "path_movement_counts": {
+            "diagonal": 23,
+            "step": 1,
+            "walk": 52
+          },
+          "reached_goal": [
+            -143,
+            -1,
+            -670
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 85.94112549695424,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S30",
+          "to_snapped": [
+            -142,
+            -1,
+            -671
+          ],
+          "to_waypoint": "顺利足球场正门",
+          "waypoint_count": 33,
+          "waypoints": [
+            [
+              -122,
+              -2,
+              -622
+            ],
+            [
+              -125,
+              -2,
+              -622
+            ],
+            [
+              -126,
+              -2,
+              -621
+            ],
+            [
+              -132,
+              -2,
+              -621
+            ],
+            [
+              -134,
+              -2,
+              -619
+            ],
+            [
+              -137,
+              -2,
+              -619
+            ],
+            [
+              -138,
+              -2,
+              -620
+            ],
+            [
+              -140,
+              -2,
+              -620
+            ],
+            [
+              -141,
+              -2,
+              -621
+            ],
+            [
+              -142,
+              -2,
+              -621
+            ],
+            [
+              -144,
+              -2,
+              -623
+            ],
+            [
+              -145,
+              -2,
+              -623
+            ],
+            [
+              -146,
+              -2,
+              -624
+            ],
+            [
+              -146,
+              -2,
+              -626
+            ],
+            [
+              -147,
+              -2,
+              -627
+            ],
+            [
+              -147,
+              -2,
+              -630
+            ],
+            [
+              -148,
+              -2,
+              -631
+            ],
+            [
+              -148,
+              -2,
+              -634
+            ],
+            [
+              -150,
+              -2,
+              -636
+            ],
+            [
+              -150,
+              -2,
+              -637
+            ],
+            [
+              -151,
+              -2,
+              -638
+            ],
+            [
+              -151,
+              -2,
+              -643
+            ],
+            [
+              -153,
+              -2,
+              -645
+            ],
+            [
+              -153,
+              -2,
+              -649
+            ],
+            [
+              -154,
+              -2,
+              -650
+            ],
+            [
+              -154,
+              -2,
+              -653
+            ],
+            [
+              -155,
+              -2,
+              -654
+            ],
+            [
+              -155,
+              -2,
+              -663
+            ],
+            [
+              -152,
+              -2,
+              -666
+            ],
+            [
+              -152,
+              -1,
+              -667
+            ],
+            [
+              -151,
+              -1,
+              -668
+            ],
+            [
+              -145,
+              -1,
+              -668
+            ],
+            [
+              -143,
+              -1,
+              -670
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -154,
+              -106
+            ],
+            "y": [
+              -14,
+              11
+            ],
+            "z": [
+              -686,
+              -659
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -142,
+            -1,
+            -671
+          ],
+          "from_waypoint": "顺利足球场正门",
+          "goal_candidate_count": 8,
+          "ok": true,
+          "path_len_cells": 26,
+          "path_movement_counts": {
+            "diagonal": 1,
+            "walk": 24
+          },
+          "reached_goal": [
+            -118,
+            -1,
+            -673
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 25.414213562373096,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S31",
+          "to_snapped": [
+            -118,
+            -2,
+            -674
+          ],
+          "to_waypoint": "顺足侧门",
+          "waypoint_count": 5,
+          "waypoints": [
+            [
+              -142,
+              -1,
+              -671
+            ],
+            [
+              -120,
+              -1,
+              -671
+            ],
+            [
+              -119,
+              -1,
+              -672
+            ],
+            [
+              -118,
+              -1,
+              -672
+            ],
+            [
+              -118,
+              -1,
+              -673
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -149,
+              -106
+            ],
+            "y": [
+              -14,
+              11
+            ],
+            "z": [
+              -706,
+              -662
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -118,
+            -2,
+            -674
+          ],
+          "from_waypoint": "顺足侧门",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 21,
+          "path_movement_counts": {
+            "diagonal": 17,
+            "step": 1,
+            "walk": 2
+          },
+          "reached_goal": [
+            -136,
+            -1,
+            -693
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 27.45584412271572,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S32",
+          "to_snapped": [
+            -137,
+            -1,
+            -694
+          ],
+          "to_waypoint": "顺利邨游乐场五人制足球场",
+          "waypoint_count": 5,
+          "waypoints": [
+            [
+              -118,
+              -2,
+              -674
+            ],
+            [
+              -119,
+              -1,
+              -674
+            ],
+            [
+              -121,
+              -1,
+              -676
+            ],
+            [
+              -121,
+              -1,
+              -678
+            ],
+            [
+              -136,
+              -1,
+              -693
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -211,
+              -89
+            ],
+            "y": [
+              -51,
+              47
+            ],
+            "z": [
+              -744,
+              -646
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -137,
+            -1,
+            -694
+          ],
+          "from_waypoint": "顺利邨游乐场五人制足球场",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 63,
+          "path_movement_counts": {
+            "diagonal": 11,
+            "step": 2,
+            "walk": 49
+          },
+          "reached_goal": [
+            -163,
+            -3,
+            -695
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 67.38477631085021,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S33",
+          "to_snapped": [
+            -163,
+            -3,
+            -696
+          ],
+          "to_waypoint": "消防公交车站",
+          "waypoint_count": 17,
+          "waypoints": [
+            [
+              -137,
+              -1,
+              -694
+            ],
+            [
+              -141,
+              -1,
+              -690
+            ],
+            [
+              -141,
+              -1,
+              -673
+            ],
+            [
+              -143,
+              -1,
+              -671
+            ],
+            [
+              -156,
+              -1,
+              -671
+            ],
+            [
+              -157,
+              -2,
+              -671
+            ],
+            [
+              -158,
+              -2,
+              -671
+            ],
+            [
+              -159,
+              -2,
+              -672
+            ],
+            [
+              -159,
+              -2,
+              -676
+            ],
+            [
+              -160,
+              -2,
+              -677
+            ],
+            [
+              -160,
+              -2,
+              -678
+            ],
+            [
+              -161,
+              -2,
+              -679
+            ],
+            [
+              -161,
+              -2,
+              -689
+            ],
+            [
+              -162,
+              -2,
+              -690
+            ],
+            [
+              -162,
+              -3,
+              -691
+            ],
+            [
+              -163,
+              -3,
+              -692
+            ],
+            [
+              -163,
+              -3,
+              -695
+            ]
+          ]
+        },
+        {
+          "error": "consecutive waypoint export order has a large X/Z jump; likely a review jump or teleport, not a confirmed walked segment",
+          "from_snapped": [
+            -163,
+            -3,
+            -696
+          ],
+          "from_waypoint": "消防公交车站",
+          "ok": false,
+          "search_status": "mark_order_large_jump_not_static_tested",
+          "segment_id": "MARKED-SEQ-01-S34",
+          "straight_line_distance_blocks": 177.1383639983163,
+          "to_snapped": [
+            -280,
+            10,
+            -563
+          ],
+          "to_waypoint": "顺利部队操场",
+          "vertical_delta_blocks": 13.0
+        },
+        {
+          "bbox": {
+            "x": [
+              -292,
+              -256
+            ],
+            "y": [
+              -2,
+              22
+            ],
+            "z": [
+              -586,
+              -551
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -280,
+            10,
+            -563
+          ],
+          "from_waypoint": "顺利部队操场",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 14,
+          "path_movement_counts": {
+            "diagonal": 8,
+            "step": 1,
+            "walk": 4
+          },
+          "reached_goal": [
+            -269,
+            10,
+            -573
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 17.045759306553638,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S35",
+          "to_snapped": [
+            -268,
+            10,
+            -574
+          ],
+          "to_waypoint": "顺利部队宿舍1号楼",
+          "waypoint_count": 10,
+          "waypoints": [
+            [
+              -280,
+              10,
+              -563
+            ],
+            [
+              -279,
+              10,
+              -563
+            ],
+            [
+              -274,
+              10,
+              -568
+            ],
+            [
+              -273,
+              10,
+              -568
+            ],
+            [
+              -273,
+              11,
+              -569
+            ],
+            [
+              -272,
+              10,
+              -570
+            ],
+            [
+              -271,
+              10,
+              -571
+            ],
+            [
+              -270,
+              10,
+              -571
+            ],
+            [
+              -270,
+              10,
+              -572
+            ],
+            [
+              -269,
+              10,
+              -573
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -299,
+              -256
+            ],
+            "y": [
+              -2,
+              22
+            ],
+            "z": [
+              -630,
+              -562
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -268,
+            10,
+            -574
+          ],
+          "from_waypoint": "顺利部队宿舍1号楼",
+          "goal_candidate_count": 7,
+          "ok": true,
+          "path_len_cells": 51,
+          "path_movement_counts": {
+            "diagonal": 25,
+            "walk": 25
+          },
+          "reached_goal": [
+            -288,
+            10,
+            -617
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 60.355339059327356,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S36",
+          "to_snapped": [
+            -287,
+            10,
+            -618
+          ],
+          "to_waypoint": "顺利纪律部队2号楼",
+          "waypoint_count": 22,
+          "waypoints": [
+            [
+              -268,
+              10,
+              -574
+            ],
+            [
+              -270,
+              10,
+              -576
+            ],
+            [
+              -272,
+              10,
+              -576
+            ],
+            [
+              -278,
+              10,
+              -582
+            ],
+            [
+              -278,
+              10,
+              -590
+            ],
+            [
+              -286,
+              10,
+              -598
+            ],
+            [
+              -286,
+              10,
+              -601
+            ],
+            [
+              -288,
+              10,
+              -603
+            ],
+            [
+              -288,
+              10,
+              -604
+            ],
+            [
+              -289,
+              10,
+              -605
+            ],
+            [
+              -289,
+              10,
+              -606
+            ],
+            [
+              -291,
+              10,
+              -608
+            ],
+            [
+              -291,
+              10,
+              -609
+            ],
+            [
+              -292,
+              10,
+              -610
+            ],
+            [
+              -292,
+              10,
+              -611
+            ],
+            [
+              -293,
+              10,
+              -612
+            ],
+            [
+              -293,
+              10,
+              -613
+            ],
+            [
+              -294,
+              10,
+              -614
+            ],
+            [
+              -294,
+              10,
+              -616
+            ],
+            [
+              -290,
+              10,
+              -616
+            ],
+            [
+              -289,
+              10,
+              -617
+            ],
+            [
+              -288,
+              10,
+              -617
+            ]
+          ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -312,
+              -275
+            ],
+            "y": [
+              -2,
+              22
+            ],
+            "z": [
+              -676,
+              -606
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -287,
+            10,
+            -618
+          ],
+          "from_waypoint": "顺利纪律部队2号楼",
+          "goal_candidate_count": 9,
+          "ok": true,
+          "path_len_cells": 46,
+          "path_movement_counts": {
+            "diagonal": 12,
+            "walk": 33
+          },
+          "reached_goal": [
+            -299,
+            10,
+            -663
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 49.97056274847714,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "MARKED-SEQ-01-S37",
+          "to_snapped": [
+            -300,
+            10,
+            -664
+          ],
+          "to_waypoint": "顺利队宿舍3号楼",
+          "waypoint_count": 8,
+          "waypoints": [
+            [
+              -287,
+              10,
+              -618
+            ],
+            [
+              -287,
+              10,
+              -620
+            ],
+            [
+              -297,
+              10,
+              -630
+            ],
+            [
+              -297,
+              10,
+              -635
+            ],
+            [
+              -298,
+              10,
+              -636
+            ],
+            [
+              -298,
+              10,
+              -645
+            ],
+            [
+              -299,
+              10,
+              -646
+            ],
+            [
+              -299,
+              10,
+              -663
+            ]
+          ]
+        },
+        {
+          "error": "no_path_found_under_static_walkability_model",
+          "from_snapped": [
+            -300,
+            10,
+            -664
+          ],
+          "from_waypoint": "顺利队宿舍3号楼",
+          "goal_candidate_count": 6,
+          "ok": false,
+          "search_status": "no_path_found",
+          "segment_id": "MARKED-SEQ-01-S38",
+          "to_snapped": [
+            -270,
+            2,
+            -741
+          ],
+          "to_waypoint": "顺利纪律宿舍2座"
+        }
+      ],
+      "static_route_status": "marked_sequence_with_static_gaps",
+      "title": "exact waypoint export order"
+    }
+  ],
+  "source_waypoints": "runtime/shun-lee-review-vnc/20260716_clean_v3_shun_lee_review_vnc/local-user-waypoints/shunlee-marked-waypoints.txt",
+  "summary": {
+    "path_limitation": "Xaero waypoint export records points, not the continuous walked trajectory between points.",
+    "route_count": 1,
+    "segment_count": 38,
+    "segment_static_status_counts": {
+      "certified_static_reference": 28,
+      "mark_order_large_jump_not_static_tested": 4,
+      "no_path_found": 6
+    },
+    "sequence_semantics": "exact_xaero_export_order",
+    "snap_status_counts": {
+      "exact_standable": 36,
+      "snapped": 3
+    },
+    "static_segment_gap_count": 10,
+    "static_segment_ok_count": 28,
+    "waypoint_count": 39
+  },
+  "world_dir": "eval/snapshots/imported_1_21_1/shun-lee-clean-v3/world",
+  "world_fingerprint": {
+    "algorithm": "sha256",
+    "file_count": 5,
+    "total_bytes": 2184801,
+    "value": "4dbea27e881adbcb6b08f2ed27584432773b2630e8f4b2b52249f2b04c2058c8"
+  }
+}
