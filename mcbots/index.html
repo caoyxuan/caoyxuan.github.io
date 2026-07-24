@@ -717,7 +717,8 @@
       color: var(--red);
     }
     .route-pill.all_segments_certified,
-    .route-pill.certified_static_reference {
+    .route-pill.certified_static_reference,
+    .route-pill.marked_route_all_segments_certified {
       border-color: #2b8f5a;
       color: var(--green);
     }
@@ -729,6 +730,8 @@
     .route-pill.partial_static_route,
     .route-pill.no_path_found,
     .route-pill.no_static_route_found,
+    .route-pill.marked_route_no_static_link,
+    .route-pill.marked_route_with_static_gaps,
     .route-pill.marked_sequence_with_static_gaps,
     .route-pill.mark_order_large_jump_not_static_tested {
       border-color: #8b3b42;
@@ -837,6 +840,8 @@
     }
     .route-segment.no_path_found,
     .route-segment.no_static_route_found,
+    .route-segment.marked_route_no_static_link,
+    .route-segment.marked_route_with_static_gaps,
     .route-segment.marked_sequence_with_static_gaps,
     .route-segment.mark_order_large_jump_not_static_tested {
       border-color: rgba(255, 123, 114, .62);
@@ -1280,7 +1285,7 @@
 
   <section class="panel route-plan-panel wide-route-panel">
     <div class="panel-head">
-      <h2>Marked waypoint sequence · 39</h2>
+      <h2>Marked waypoint routes · 10 / 39</h2>
       <span class="badge" id="routePlanCount"><span class="dot"></span>Loading</span>
     </div>
     <div class="route-body">
@@ -1304,7 +1309,7 @@
       <div class="route-active-detail" id="routeActiveDetail">
         <div class="text-empty">Loading route review plan...</div>
       </div>
-      <p class="note">下面是一条严格按 Xaero waypoint txt 行顺序生成的真实标点序列，不按语义或区域重排。绿色段是静态 world 几何认证可达；红色段是大跳未测试或静态模型未找到通路。点击 load coords 会同步到对应的 Uxx 标点，再用同步 Minecraft 或 Teleport current coords 传送。</p>
+      <p class="note">下面 10 条路线严格按 Xaero waypoint txt 行顺序切成连续片段，不按语义或区域重排。相邻路线共享一个边界点，覆盖全部 38 个连续段；绿色段是静态 world 几何认证可达，红色段是大跳未测试或静态模型未找到通路。点击 load coords 会同步到对应的 Uxx 标点，再用同步 Minecraft 或 Teleport current coords 传送。</p>
       <div class="route-summary" id="routePlanSummary">
         <div class="fact"><strong>...</strong><span>loading route plan</span></div>
       </div>
@@ -3089,8 +3094,8 @@
 
     function routeActionText(row) {
       const status = row.static_route_status || row.static_probe_status;
-      if (status === "marked_sequence_with_static_gaps") {
-        return "这是你的真实标点顺序；红色连续段表示导出点序中可能有传送/大跳、入口高度或静态模型找不到的连接。";
+      if (status === "marked_route_with_static_gaps" || status === "marked_route_no_static_link" || status === "marked_sequence_with_static_gaps") {
+        return "这是你的真实标点顺序切片；红色连续段表示导出点序中可能有传送/大跳、入口高度或静态模型找不到的连接。";
       }
       if (status === "partial_static_route" || status === "no_static_route_found" || status === "no_path_found" || status === "invalid_goal_acceptance_set") {
         return "红色段优先人工核对：可能是坐标高度、入口、楼梯、蹲下门或地图局部建模问题。";
@@ -3180,7 +3185,7 @@
       const scenes = new Set(routePlanRows.map((row) => row.city_category || row.scene_category).filter(Boolean));
       routePlanCount.innerHTML = `<span class="dot"></span>${uniquePoints.size || routePlanRows.length} marked points`;
       routePlanSummary.innerHTML = `
-        <div class="fact"><strong>${routePlanRows.length}</strong><span>exact marked sequence route</span></div>
+        <div class="fact"><strong>${routePlanRows.length}</strong><span>exact marked-order routes</span></div>
         <div class="fact"><strong>${uniquePoints.size}</strong><span>primary user waypoints covered</span></div>
         <div class="fact"><strong>${certifiedSegments}</strong><span>certified consecutive segments</span></div>
         <div class="fact"><strong>${failedSegments}</strong><span>segments to manually inspect</span></div>
