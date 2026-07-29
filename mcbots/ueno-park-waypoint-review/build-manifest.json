@@ -1,0 +1,36 @@
+{
+  "artifact_kind": "ueno-park-map-waypoint-review-build-v3",
+  "map_slug": "ueno-park-clean",
+  "waypoint_count": 7,
+  "reference_candidate_count": 8,
+  "observation_image_count": 28,
+  "basemap": {
+    "width": 576,
+    "height": 608,
+    "bounds": {
+      "min_x": -1632,
+      "max_x": -1057,
+      "min_z": 512,
+      "max_z": 1119
+    },
+    "observed_surface_y": {
+      "min_y": -10,
+      "max_y": 93
+    },
+    "sha256": "946076f4c20d08e1f1f36ce0e44eaa8f33049f5aac17931c4323f02b13cdc79e"
+  },
+  "html_sha256": "96a6baf60bcf22e376efc7777b427a62683aeca525787fdfe2ee810447610c26",
+  "source_waypoint_sha256": "47e85079bdbbcf3ca5208b86d0b401979f8d25154f0bad2c844dda7b9e628599",
+  "source_snapshot_manifest_sha256": "e0f3ee20ce2e04b1133d5c059a97913ceb033b7732bc4f7413a1d685839db4a3",
+  "geo_reference": {
+    "kind": "map-bbox-linear-reference-v1",
+    "bbox": {
+      "south": 35.708,
+      "west": 139.768,
+      "north": 35.721,
+      "east": 139.782
+    },
+    "reviewed_alignment": false,
+    "description": "Map-level Ueno reference only. Manual waypoint coordinates are projected linearly into the public Ueno bbox and are not reviewed MC-to-OSM matches."
+  }
+}
