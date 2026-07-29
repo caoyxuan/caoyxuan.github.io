@@ -1,8 +1,8 @@
 {
-  "artifact_kind": "ueno-park-map-waypoint-review-build-v3",
+  "artifact_kind": "ueno-park-map-waypoint-review-build-v4",
   "map_slug": "ueno-park-clean",
   "waypoint_count": 7,
-  "reference_candidate_count": 8,
+  "reference_candidate_count": 5,
   "observation_image_count": 28,
   "basemap": {
     "width": 576,
@@ -19,18 +19,22 @@
     },
     "sha256": "946076f4c20d08e1f1f36ce0e44eaa8f33049f5aac17931c4323f02b13cdc79e"
   },
-  "html_sha256": "96a6baf60bcf22e376efc7777b427a62683aeca525787fdfe2ee810447610c26",
+  "html_sha256": "083d487d0e2b1878138c76349d4ab7d4952d0208311c60bf234c785c57885139",
   "source_waypoint_sha256": "47e85079bdbbcf3ca5208b86d0b401979f8d25154f0bad2c844dda7b9e628599",
   "source_snapshot_manifest_sha256": "e0f3ee20ce2e04b1133d5c059a97913ceb033b7732bc4f7413a1d685839db4a3",
   "geo_reference": {
-    "kind": "map-bbox-linear-reference-v1",
-    "bbox": {
-      "south": 35.708,
-      "west": 139.768,
-      "north": 35.721,
-      "east": 139.782
+    "alignment_state": "reviewed_control_point_alignment",
+    "model_kind": "reflected_similarity_2d",
+    "summary": {
+      "fit_control_count": 4,
+      "validation_control_count": 1,
+      "excluded_control_count": 2,
+      "fit_rmse_m": 3.312005826211507,
+      "fit_max_error_m": 4.389985634719628,
+      "validation_max_error_m": 10.573230470409277,
+      "fit_gate_m": 10.0,
+      "validation_gate_m": 20.0
     },
-    "reviewed_alignment": false,
-    "description": "Map-level Ueno reference only. Manual waypoint coordinates are projected linearly into the public Ueno bbox and are not reviewed MC-to-OSM matches."
+    "control_point_source_sha256": "9c3a0065c98bc80bbc243516a9534a67b66eee2da712a8bdadaad691738c931f"
   }
 }
