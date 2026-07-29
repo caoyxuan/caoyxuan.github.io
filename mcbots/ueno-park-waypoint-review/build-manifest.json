@@ -1,5 +1,5 @@
 {
-  "artifact_kind": "ueno-park-map-waypoint-review-build-v4",
+  "artifact_kind": "ueno-park-map-waypoint-review-build-v5",
   "map_slug": "ueno-park-clean",
   "waypoint_count": 7,
   "reference_candidate_count": 5,
@@ -19,7 +19,7 @@
     },
     "sha256": "946076f4c20d08e1f1f36ce0e44eaa8f33049f5aac17931c4323f02b13cdc79e"
   },
-  "html_sha256": "083d487d0e2b1878138c76349d4ab7d4952d0208311c60bf234c785c57885139",
+  "html_sha256": "6079bea4ec18c2222914feb0e15f35d49db0fbd7bb4e011f8929158ad62777c6",
   "source_waypoint_sha256": "47e85079bdbbcf3ca5208b86d0b401979f8d25154f0bad2c844dda7b9e628599",
   "source_snapshot_manifest_sha256": "e0f3ee20ce2e04b1133d5c059a97913ceb033b7732bc4f7413a1d685839db4a3",
   "geo_reference": {
