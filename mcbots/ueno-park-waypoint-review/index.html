@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ueno Park Clean v2 人工 Waypoint 在线复核</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; }
+    body { margin: 0; background: #111827; color: #e5e7eb; }
+    main { max-width: 1500px; margin: auto; padding: 24px; }
+    .notice { background: #1f2937; border-left: 5px solid #f59e0b; padding: 14px; }
+    .meta { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 10px; margin: 16px 0; }
+    .meta div { background: #1f2937; padding: 12px; border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; background: #0f172a; }
+    th, td { border: 1px solid #374151; padding: 8px; vertical-align: top; }
+    th { position: sticky; top: 0; background: #1f2937; }
+    input, select, button { color: #e5e7eb; background: #111827; border: 1px solid #4b5563; padding: 7px; }
+    .coord { width: 82px; }
+    .reason { min-width: 220px; width: 95%; }
+    button { margin: 16px 10px 0 0; cursor: pointer; }
+    code { overflow-wrap: anywhere; }
+    small { color: #9ca3af; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Ueno Park Clean v2 人工 Waypoint 在线复核</h1>
+  <p class="notice">本页主表只来自人工 Xaero 导出。任何 OSM、Google 或候选表都只能作为旁路参考；
+  页面决定不会把 waypoint 自动升级为 exact endpoint、route certificate 或 benchmark task。</p>
+  <p class="notice"><strong>在线静态复核版：</strong>修改只保存在当前浏览器；请用“下载 digest-bound sidecar”导出结果。</p>
+  <section class="meta">
+    <div><small>map</small><br>ueno-park-clean</div>
+    <div><small>waypoints</small><br>7</div>
+    <div><small>sequence</small><br>xaero_file_order_newest_first</div>
+    <div><small>source SHA-256</small><br><code>47e85079bdbbcf3ca5208b86d0b401979f8d25154f0bad2c844dda7b9e628599</code></div>
+  </section>
+  <table>
+    <thead><tr><th>#</th><th>人工 waypoint</th><th>x</th><th>y</th><th>z</th><th>状态</th><th>理由</th></tr></thead>
+    <tbody>
+            <tr data-waypoint-id="ueno-park-clean-manual-001">
+              <td>1</td>
+              <td><strong>West Garden Plaza</strong><br><small>W · ueno-park-clean-manual-001</small></td>
+              <td><input class="coord x" type="number" value="-1390" aria-label="x"></td>
+              <td><input class="coord y" type="number" value="-6" aria-label="y"></td>
+              <td><input class="coord z" type="number" value="763" aria-label="z"></td>
+              <td>
+                <select class="status">
+                  <option value="pending">pending</option>
+                  <option value="accept">accept</option>
+                  <option value="modify">modify</option>
+                  <option value="reject">reject</option>
+                  <option value="unclear">unclear</option>
+                </select>
+              </td>
+              <td><input class="reason" type="text" placeholder="复核理由"></td>
+            </tr>
+            
+            <tr data-waypoint-id="ueno-park-clean-manual-002">
+              <td>2</td>
+              <td><strong>Waterfront Promenade</strong><br><small>W · ueno-park-clean-manual-002</small></td>
+              <td><input class="coord x" type="number" value="-1319" aria-label="x"></td>
+              <td><input class="coord y" type="number" value="-7" aria-label="y"></td>
+              <td><input class="coord z" type="number" value="799" aria-label="z"></td>
+              <td>
+                <select class="status">
+                  <option value="pending">pending</option>
+                  <option value="accept">accept</option>
+                  <option value="modify">modify</option>
+                  <option value="reject">reject</option>
+                  <option value="unclear">unclear</option>
+                </select>
+              </td>
+              <td><input class="reason" type="text" placeholder="复核理由"></td>
+            </tr>
+            
+            <tr data-waypoint-id="ueno-park-clean-manual-003">
+              <td>3</td>
+              <td><strong>South Boulevard Park Edge</strong><br><small>S · ueno-park-clean-manual-003</small></td>
+              <td><input class="coord x" type="number" value="-1236" aria-label="x"></td>
+              <td><input class="coord y" type="number" value="-6" aria-label="y"></td>
+              <td><input class="coord z" type="number" value="914" aria-label="z"></td>
+              <td>
+                <select class="status">
+                  <option value="pending">pending</option>
+                  <option value="accept">accept</option>
+                  <option value="modify">modify</option>
+                  <option value="reject">reject</option>
+                  <option value="unclear">unclear</option>
+                </select>
+              </td>
+              <td><input class="reason" type="text" placeholder="复核理由"></td>
+            </tr>
+            
+            <tr data-waypoint-id="ueno-park-clean-manual-004">
+              <td>4</td>
+              <td><strong>Red Gate Commercial Street</strong><br><small>R · ueno-park-clean-manual-004</small></td>
+              <td><input class="coord x" type="number" value="-1160" aria-label="x"></td>
+              <td><input class="coord y" type="number" value="-7" aria-label="y"></td>
+              <td><input class="coord z" type="number" value="871" aria-label="z"></td>
+              <td>
+                <select class="status">
+                  <option value="pending">pending</option>
+                  <option value="accept">accept</option>
+                  <option value="modify">modify</option>
+                  <option value="reject">reject</option>
+                  <option value="unclear">unclear</option>
+                </select>
+              </td>
+              <td><input class="reason" type="text" placeholder="复核理由"></td>
+            </tr>
+            
+            <tr data-waypoint-id="ueno-park-clean-manual-005">
+              <td>5</td>
+              <td><strong>Lakeside Park Plaza</strong><br><small>L · ueno-park-clean-manual-005</small></td>
+              <td><input class="coord x" type="number" value="-1279" aria-label="x"></td>
+              <td><input class="coord y" type="number" value="-6" aria-label="y"></td>
+              <td><input class="coord z" type="number" value="894" aria-label="z"></td>
+              <td>
+                <select class="status">
+                  <option value="pending">pending</option>
+                  <option value="accept">accept</option>
+                  <option value="modify">modify</option>
+                  <option value="reject">reject</option>
+                  <option value="unclear">unclear</option>
+                </select>
+              </td>
+              <td><input class="reason" type="text" placeholder="复核理由"></td>
+            </tr>
+            
+            <tr data-waypoint-id="ueno-park-clean-manual-006">
+              <td>6</td>
+              <td><strong>East Commercial Crossroads</strong><br><small>E · ueno-park-clean-manual-006</small></td>
+              <td><input class="coord x" type="number" value="-1192" aria-label="x"></td>
+              <td><input class="coord y" type="number" value="-7" aria-label="y"></td>
+              <td><input class="coord z" type="number" value="692" aria-label="z"></td>
+              <td>
+                <select class="status">
+                  <option value="pending">pending</option>
+                  <option value="accept">accept</option>
+                  <option value="modify">modify</option>
+                  <option value="reject">reject</option>
+                  <option value="unclear">unclear</option>
+                </select>
+              </td>
+              <td><input class="reason" type="text" placeholder="复核理由"></td>
+            </tr>
+            
+            <tr data-waypoint-id="ueno-park-clean-manual-007">
+              <td>7</td>
+              <td><strong>Main Boulevard Intersection</strong><br><small>M · ueno-park-clean-manual-007</small></td>
+              <td><input class="coord x" type="number" value="-1284" aria-label="x"></td>
+              <td><input class="coord y" type="number" value="-6" aria-label="y"></td>
+              <td><input class="coord z" type="number" value="688" aria-label="z"></td>
+              <td>
+                <select class="status">
+                  <option value="pending">pending</option>
+                  <option value="accept">accept</option>
+                  <option value="modify">modify</option>
+                  <option value="reject">reject</option>
+                  <option value="unclear">unclear</option>
+                </select>
+              </td>
+              <td><input class="reason" type="text" placeholder="复核理由"></td>
+            </tr>
+            </tbody>
+  </table>
+  <button id="save">保存到本浏览器</button>
+  <button id="download">下载 digest-bound sidecar</button>
+  <button id="reset">恢复 pending</button>
+</main>
+<script>
+const source = {"artifact_kind": "manual-waypoint-review-source-v1", "schema_version": 1, "map_slug": "ueno-park-clean", "source_waypoint_file": "ueno-park-clean-marked-waypoints.txt", "source_waypoint_sha256": "47e85079bdbbcf3ca5208b86d0b401979f8d25154f0bad2c844dda7b9e628599", "source_manifest": "ueno-park-clean-marked-waypoints.manifest.json", "source_snapshot_manifest_sha256": "e0f3ee20ce2e04b1133d5c059a97913ceb033b7732bc4f7413a1d685839db4a3", "sequence_semantics": "xaero_file_order_newest_first", "waypoints": [{"manual_waypoint_id": "ueno-park-clean-manual-001", "source_order": 1, "name": "West Garden Plaza", "initials": "W", "mc_x": -1390, "mc_y": -6, "mc_z": 763, "color": 8, "disabled": false, "waypoint_set": "gui.xaero_default", "review_status": "pending"}, {"manual_waypoint_id": "ueno-park-clean-manual-002", "source_order": 2, "name": "Waterfront Promenade", "initials": "W", "mc_x": -1319, "mc_y": -7, "mc_z": 799, "color": 4, "disabled": false, "waypoint_set": "gui.xaero_default", "review_status": "pending"}, {"manual_waypoint_id": "ueno-park-clean-manual-003", "source_order": 3, "name": "South Boulevard Park Edge", "initials": "S", "mc_x": -1236, "mc_y": -6, "mc_z": 914, "color": 2, "disabled": false, "waypoint_set": "gui.xaero_default", "review_status": "pending"}, {"manual_waypoint_id": "ueno-park-clean-manual-004", "source_order": 4, "name": "Red Gate Commercial Street", "initials": "R", "mc_x": -1160, "mc_y": -7, "mc_z": 871, "color": 7, "disabled": false, "waypoint_set": "gui.xaero_default", "review_status": "pending"}, {"manual_waypoint_id": "ueno-park-clean-manual-005", "source_order": 5, "name": "Lakeside Park Plaza", "initials": "L", "mc_x": -1279, "mc_y": -6, "mc_z": 894, "color": 11, "disabled": false, "waypoint_set": "gui.xaero_default", "review_status": "pending"}, {"manual_waypoint_id": "ueno-park-clean-manual-006", "source_order": 6, "name": "East Commercial Crossroads", "initials": "E", "mc_x": -1192, "mc_y": -7, "mc_z": 692, "color": 0, "disabled": false, "waypoint_set": "gui.xaero_default", "review_status": "pending"}, {"manual_waypoint_id": "ueno-park-clean-manual-007", "source_order": 7, "name": "Main Boulevard Intersection", "initials": "M", "mc_x": -1284, "mc_y": -6, "mc_z": 688, "color": 13, "disabled": false, "waypoint_set": "gui.xaero_default", "review_status": "pending"}], "claim_boundary": "Human-created review waypoints only; not exact endpoints, certified routes, task-ready rows, or benchmark admission."};
+const initialSidecar = {"artifact_kind": "manual-waypoint-review-sidecar-v1", "schema_version": 1, "map_slug": "ueno-park-clean", "source_waypoint_sha256": "47e85079bdbbcf3ca5208b86d0b401979f8d25154f0bad2c844dda7b9e628599", "source_snapshot_manifest_sha256": "e0f3ee20ce2e04b1133d5c059a97913ceb033b7732bc4f7413a1d685839db4a3", "reviewer": "", "exported_at_utc": null, "decisions": [{"manual_waypoint_id": "ueno-park-clean-manual-001", "status": "pending", "original_position": {"x": -1390, "y": -6, "z": 763}, "reviewed_position": {"x": -1390, "y": -6, "z": 763}, "reason": ""}, {"manual_waypoint_id": "ueno-park-clean-manual-002", "status": "pending", "original_position": {"x": -1319, "y": -7, "z": 799}, "reviewed_position": {"x": -1319, "y": -7, "z": 799}, "reason": ""}, {"manual_waypoint_id": "ueno-park-clean-manual-003", "status": "pending", "original_position": {"x": -1236, "y": -6, "z": 914}, "reviewed_position": {"x": -1236, "y": -6, "z": 914}, "reason": ""}, {"manual_waypoint_id": "ueno-park-clean-manual-004", "status": "pending", "original_position": {"x": -1160, "y": -7, "z": 871}, "reviewed_position": {"x": -1160, "y": -7, "z": 871}, "reason": ""}, {"manual_waypoint_id": "ueno-park-clean-manual-005", "status": "pending", "original_position": {"x": -1279, "y": -6, "z": 894}, "reviewed_position": {"x": -1279, "y": -6, "z": 894}, "reason": ""}, {"manual_waypoint_id": "ueno-park-clean-manual-006", "status": "pending", "original_position": {"x": -1192, "y": -7, "z": 692}, "reviewed_position": {"x": -1192, "y": -7, "z": 692}, "reason": ""}, {"manual_waypoint_id": "ueno-park-clean-manual-007", "status": "pending", "original_position": {"x": -1284, "y": -6, "z": 688}, "reviewed_position": {"x": -1284, "y": -6, "z": 688}, "reason": ""}], "claim_boundary": "Human-created review waypoints only; not exact endpoints, certified routes, task-ready rows, or benchmark admission."};
+const storageKey = "manual-waypoint-review:" + source.source_waypoint_sha256;
+function collect() {
+  const decisions = Array.from(document.querySelectorAll("tbody tr")).map((row) => {
+    const original = source.waypoints.find((item) => item.manual_waypoint_id === row.dataset.waypointId);
+    const reviewed = {
+      x: Number(row.querySelector(".x").value),
+      y: Number(row.querySelector(".y").value),
+      z: Number(row.querySelector(".z").value)
+    };
+    return {
+      manual_waypoint_id: row.dataset.waypointId,
+      status: row.querySelector(".status").value,
+      original_position: {x: original.mc_x, y: original.mc_y, z: original.mc_z},
+      reviewed_position: reviewed,
+      reason: row.querySelector(".reason").value.trim()
+    };
+  });
+  return {...initialSidecar, exported_at_utc: new Date().toISOString(), decisions};
+}
+function restore(value) {
+  const byId = new Map((value.decisions || []).map((item) => [item.manual_waypoint_id, item]));
+  document.querySelectorAll("tbody tr").forEach((row) => {
+    const item = byId.get(row.dataset.waypointId);
+    if (!item) return;
+    row.querySelector(".status").value = item.status || "pending";
+    const pos = item.reviewed_position || item.original_position || {};
+    for (const axis of ["x", "y", "z"]) if (Number.isFinite(pos[axis])) row.querySelector("." + axis).value = pos[axis];
+    row.querySelector(".reason").value = item.reason || "";
+  });
+}
+document.querySelector("#save").addEventListener("click", () => localStorage.setItem(storageKey, JSON.stringify(collect())));
+document.querySelector("#download").addEventListener("click", () => {
+  const payload = collect();
+  localStorage.setItem(storageKey, JSON.stringify(payload));
+  const blob = new Blob([JSON.stringify(payload, null, 2) + "\n"], {type: "application/json"});
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = source.map_slug + "-manual-waypoint-review.sidecar.json";
+  link.click();
+  URL.revokeObjectURL(link.href);
+});
+document.querySelector("#reset").addEventListener("click", () => {
+  localStorage.removeItem(storageKey);
+  restore(initialSidecar);
+});
+try {
+  const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
+  restore(saved || initialSidecar);
+} catch (_) {
+  restore(initialSidecar);
+}
+</script>
+</body>
+</html>
