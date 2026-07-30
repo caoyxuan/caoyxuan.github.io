@@ -5061,10 +5061,10 @@
     },
     {
       "city_category": "residential origin to local sports pitch",
-      "difficulty_prelabel": "D5_blocked_or_uncertified_static_route",
+      "difficulty_prelabel": "D3_vertical_or_multi_junction_static",
       "metrics": {
         "certified_segment_count": 2,
-        "detour_ratio": 3.3429736169610744,
+        "detour_ratio": 2.8396185665587566,
         "door_crossing_count": 0,
         "height_range_blocks": 13,
         "junction_count": 114,
@@ -5077,43 +5077,25 @@
         "narrow_passage_count": 1,
         "path_len_cells": 429,
         "reference_length_blocks": 471.66739671278134,
-        "segment_count": 3,
+        "segment_count": 2,
         "step_edge_count": 17,
-        "straight_line_distance_blocks": 141.0921684573598,
+        "straight_line_distance_blocks": 166.10237806846715,
         "total_ascent_blocks": 6,
         "total_descent_blocks": 17,
         "turn_count": 115
       },
-      "operation_focus": "起点定位、找同伴、侧门进入、球场终点",
+      "operation_focus": "宿舍起点定位、侧门进入、球场终点",
       "points": [
         {
           "coverage_role": "primary",
-          "exact_standable": false,
-          "order": 1,
-          "original": [
-            -268,
-            2,
-            -744
-          ],
-          "role": "start",
-          "snap_distance_blocks": 3.605551275463989,
-          "snapped": [
-            -270,
-            2,
-            -741
-          ],
-          "waypoint": "顺利纪律宿舍2座"
-        },
-        {
-          "coverage_role": "primary",
           "exact_standable": true,
-          "order": 2,
+          "order": 1,
           "original": [
             -300,
             10,
             -664
           ],
-          "role": "via",
+          "role": "start",
           "snap_distance_blocks": 0.0,
           "snapped": [
             -300,
@@ -5125,7 +5107,7 @@
         {
           "coverage_role": "primary",
           "exact_standable": true,
-          "order": 3,
+          "order": 2,
           "original": [
             -118,
             -2,
@@ -5143,7 +5125,7 @@
         {
           "coverage_role": "primary",
           "exact_standable": true,
-          "order": 4,
+          "order": 3,
           "original": [
             -137,
             -1,
@@ -5159,29 +5141,10 @@
           "waypoint": "顺利邨游乐场五人制足球场"
         }
       ],
-      "reviewer_intent": "你住在顺利纪律宿舍2座。先去顺利队宿舍3号楼找同伴，再从顺足侧门进入，最后到五人制足球场。",
+      "reviewer_intent": "你从顺利队宿舍3号楼出发，经顺利足球场侧门进入，最后到五人制足球场。",
       "route_id": "SLR-N06",
-      "scene_mix": "远端宿舍起点、同伴宿舍、球场侧门、五人制足球场",
+      "scene_mix": "三号宿舍起点、球场侧门、五人制足球场",
       "segments": [
-        {
-          "error": "no_path_found_under_static_walkability_model",
-          "from_snapped": [
-            -270,
-            2,
-            -741
-          ],
-          "from_waypoint": "顺利纪律宿舍2座",
-          "goal_candidate_count": 9,
-          "ok": false,
-          "search_status": "no_path_found",
-          "segment_id": "SLR-N06-S01",
-          "to_snapped": [
-            -300,
-            10,
-            -664
-          ],
-          "to_waypoint": "顺利队宿舍3号楼"
-        },
         {
           "bbox": {
             "x": [
@@ -5221,7 +5184,7 @@
           "reference_length_blocks": 444.2115525900656,
           "requires_door_interaction": false,
           "search_status": "certified_static_reference",
-          "segment_id": "SLR-N06-S02",
+          "segment_id": "SLR-N06-S01",
           "to_snapped": [
             -118,
             -2,
@@ -5831,7 +5794,7 @@
           "reference_length_blocks": 27.45584412271572,
           "requires_door_interaction": false,
           "search_status": "certified_static_reference",
-          "segment_id": "SLR-N06-S03",
+          "segment_id": "SLR-N06-S02",
           "to_snapped": [
             -137,
             -1,
@@ -5868,8 +5831,8 @@
           ]
         }
       ],
-      "static_route_status": "partial_static_route",
-      "title": "从远端宿舍去五人制球场"
+      "static_route_status": "all_segments_certified",
+      "title": "从三号宿舍去五人制球场"
     },
     {
       "city_category": "education edge to recreation",
@@ -7277,78 +7240,42 @@
       "title": "去教堂活动并找到三楼房间"
     },
     {
-      "city_category": "indoor maintenance/obstacle check",
-      "difficulty_prelabel": "D5_blocked_or_uncertified_static_route",
+      "city_category": "indoor upper-floor maintenance",
+      "difficulty_prelabel": "D1_short_simple_static",
       "metrics": {
         "certified_segment_count": 1,
-        "detour_ratio": 1.2343409917242094,
+        "detour_ratio": 3.6862209781008595,
         "door_crossing_count": 0,
-        "height_range_blocks": 6,
-        "junction_count": 19,
+        "height_range_blocks": 3,
+        "junction_count": 8,
         "ladder_edge_count": 0,
         "movement_counts": {
-          "diagonal": 8,
-          "step": 6,
-          "walk": 56
+          "diagonal": 1,
+          "step": 3,
+          "walk": 6
         },
         "narrow_passage_count": 0,
-        "path_len_cells": 71,
-        "reference_length_blocks": 75.79898987322329,
-        "segment_count": 2,
-        "step_edge_count": 6,
-        "straight_line_distance_blocks": 61.40846847137616,
-        "total_ascent_blocks": 6,
+        "path_len_cells": 11,
+        "reference_length_blocks": 11.656854249492381,
+        "segment_count": 1,
+        "step_edge_count": 3,
+        "straight_line_distance_blocks": 3.1622776601683795,
+        "total_ascent_blocks": 3,
         "total_descent_blocks": 0,
-        "turn_count": 19
+        "turn_count": 8
       },
-      "operation_focus": "卡点复核、暗处检查、楼层出口确认",
+      "operation_focus": "高层起点定位、垂直移动、六楼到达确认",
       "points": [
         {
           "coverage_role": "primary",
           "exact_standable": true,
           "order": 1,
           "original": [
-            -112,
-            14,
-            -540
-          ],
-          "role": "start",
-          "snap_distance_blocks": 0.0,
-          "snapped": [
-            -112,
-            14,
-            -540
-          ],
-          "waypoint": "为什么这里卡住了"
-        },
-        {
-          "coverage_role": "primary",
-          "exact_standable": false,
-          "order": 2,
-          "original": [
-            -114,
-            12,
-            -544
-          ],
-          "role": "via",
-          "snap_distance_blocks": 1.0,
-          "snapped": [
-            -114,
-            13,
-            -544
-          ],
-          "waypoint": "教堂4楼暗处"
-        },
-        {
-          "coverage_role": "primary",
-          "exact_standable": true,
-          "order": 3,
-          "original": [
             -117,
             19,
             -601
           ],
-          "role": "end",
+          "role": "start",
           "snap_distance_blocks": 0.0,
           "snapped": [
             -117,
@@ -7356,226 +7283,17 @@
             -601
           ],
           "waypoint": "教堂5楼"
-        }
-      ],
-      "reviewer_intent": "你是教堂工作人员。去检查之前容易卡住的位置和四楼暗处，确认后到五楼出口位置结束。",
-      "route_id": "SLR-N09",
-      "scene_mix": "卡点、四楼暗处、五楼出口",
-      "segments": [
-        {
-          "error": "no_path_found_under_static_walkability_model",
-          "from_snapped": [
-            -112,
-            14,
-            -540
-          ],
-          "from_waypoint": "为什么这里卡住了",
-          "goal_candidate_count": 8,
-          "ok": false,
-          "search_status": "no_path_found",
-          "segment_id": "SLR-N09-S01",
-          "to_snapped": [
-            -114,
-            13,
-            -544
-          ],
-          "to_waypoint": "教堂4楼暗处"
         },
-        {
-          "bbox": {
-            "x": [
-              -133,
-              -98
-            ],
-            "y": [
-              -3,
-              35
-            ],
-            "z": [
-              -617,
-              -528
-            ]
-          },
-          "door_crossings": [],
-          "from_snapped": [
-            -114,
-            13,
-            -544
-          ],
-          "from_waypoint": "教堂4楼暗处",
-          "goal_candidate_count": 8,
-          "ok": true,
-          "path_len_cells": 71,
-          "path_movement_counts": {
-            "diagonal": 8,
-            "step": 6,
-            "walk": 56
-          },
-          "reached_goal": [
-            -118,
-            19,
-            -602
-          ],
-          "reference_eligible_for_spl": true,
-          "reference_length_blocks": 75.79898987322329,
-          "requires_door_interaction": false,
-          "search_status": "certified_static_reference",
-          "segment_id": "SLR-N09-S02",
-          "to_snapped": [
-            -117,
-            19,
-            -601
-          ],
-          "to_waypoint": "教堂5楼",
-          "waypoint_count": 21,
-          "waypoints": [
-            [
-              -114,
-              13,
-              -544
-            ],
-            [
-              -114,
-              13,
-              -557
-            ],
-            [
-              -113,
-              13,
-              -558
-            ],
-            [
-              -113,
-              13,
-              -576
-            ],
-            [
-              -114,
-              13,
-              -577
-            ],
-            [
-              -114,
-              13,
-              -591
-            ],
-            [
-              -118,
-              13,
-              -595
-            ],
-            [
-              -118,
-              13,
-              -597
-            ],
-            [
-              -120,
-              13,
-              -599
-            ],
-            [
-              -120,
-              14,
-              -600
-            ],
-            [
-              -120,
-              14,
-              -601
-            ],
-            [
-              -120,
-              15,
-              -602
-            ],
-            [
-              -119,
-              15,
-              -602
-            ],
-            [
-              -118,
-              16,
-              -602
-            ],
-            [
-              -118,
-              16,
-              -599
-            ],
-            [
-              -120,
-              16,
-              -599
-            ],
-            [
-              -120,
-              17,
-              -600
-            ],
-            [
-              -120,
-              17,
-              -601
-            ],
-            [
-              -120,
-              18,
-              -602
-            ],
-            [
-              -119,
-              18,
-              -602
-            ],
-            [
-              -118,
-              19,
-              -602
-            ]
-          ]
-        }
-      ],
-      "static_route_status": "partial_static_route",
-      "title": "教堂暗处维护检查"
-    },
-    {
-      "city_category": "indoor upper-floor library errand",
-      "difficulty_prelabel": "D5_blocked_or_uncertified_static_route",
-      "metrics": {
-        "certified_segment_count": 2,
-        "detour_ratio": 0.7331993772038558,
-        "door_crossing_count": 0,
-        "height_range_blocks": 1,
-        "junction_count": 3,
-        "ladder_edge_count": 0,
-        "movement_counts": {
-          "diagonal": 2,
-          "walk": 5
-        },
-        "narrow_passage_count": 0,
-        "path_len_cells": 9,
-        "reference_length_blocks": 7.82842712474619,
-        "segment_count": 3,
-        "step_edge_count": 0,
-        "straight_line_distance_blocks": 10.677078252031311,
-        "total_ascent_blocks": 0,
-        "total_descent_blocks": 1,
-        "turn_count": 3
-      },
-      "operation_focus": "高层平台、窄门/蹲下、图书馆终点确认",
-      "points": [
         {
           "coverage_role": "primary",
           "exact_standable": true,
-          "order": 1,
+          "order": 2,
           "original": [
             -116,
             22,
             -601
           ],
-          "role": "start",
+          "role": "end",
           "snap_distance_blocks": 0.0,
           "snapped": [
             -116,
@@ -7583,29 +7301,168 @@
             -601
           ],
           "waypoint": "教堂6楼"
+        }
+      ],
+      "reviewer_intent": "你是教堂工作人员。从教堂五楼出发，沿可通行的楼层连接上到六楼完成巡检。",
+      "route_id": "SLR-N09",
+      "scene_mix": "教堂五楼、垂直通道、教堂六楼",
+      "segments": [
+        {
+          "bbox": {
+            "x": [
+              -133,
+              -100
+            ],
+            "y": [
+              3,
+              38
+            ],
+            "z": [
+              -617,
+              -585
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -117,
+            19,
+            -601
+          ],
+          "from_waypoint": "教堂5楼",
+          "goal_candidate_count": 7,
+          "ok": true,
+          "path_len_cells": 11,
+          "path_movement_counts": {
+            "diagonal": 1,
+            "step": 3,
+            "walk": 6
+          },
+          "reached_goal": [
+            -117,
+            22,
+            -602
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 11.656854249492381,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "SLR-N09-S01",
+          "to_snapped": [
+            -116,
+            22,
+            -601
+          ],
+          "to_waypoint": "教堂6楼",
+          "waypoint_count": 10,
+          "waypoints": [
+            [
+              -117,
+              19,
+              -601
+            ],
+            [
+              -117,
+              19,
+              -600
+            ],
+            [
+              -118,
+              19,
+              -599
+            ],
+            [
+              -120,
+              19,
+              -599
+            ],
+            [
+              -120,
+              20,
+              -600
+            ],
+            [
+              -120,
+              20,
+              -601
+            ],
+            [
+              -120,
+              21,
+              -602
+            ],
+            [
+              -119,
+              21,
+              -602
+            ],
+            [
+              -118,
+              22,
+              -602
+            ],
+            [
+              -117,
+              22,
+              -602
+            ]
+          ]
+        }
+      ],
+      "static_route_status": "all_segments_certified",
+      "title": "从教堂五楼上到六楼巡检"
+    },
+    {
+      "city_category": "indoor upper-floor library errand",
+      "connector_points": [
+        "教堂6楼"
+      ],
+      "difficulty_prelabel": "D1_short_simple_static",
+      "metrics": {
+        "certified_segment_count": 2,
+        "detour_ratio": 0.9981058486168645,
+        "door_crossing_count": 0,
+        "height_range_blocks": 1,
+        "junction_count": 3,
+        "ladder_edge_count": 0,
+        "movement_counts": {
+          "diagonal": 3,
+          "step": 1,
+          "walk": 5
         },
+        "narrow_passage_count": 1,
+        "path_len_cells": 11,
+        "reference_length_blocks": 10.65685424949238,
+        "segment_count": 2,
+        "step_edge_count": 1,
+        "straight_line_distance_blocks": 10.677078252031311,
+        "total_ascent_blocks": 1,
+        "total_descent_blocks": 0,
+        "turn_count": 4
+      },
+      "operation_focus": "图书馆起点、窄门离开、高层终点确认",
+      "points": [
         {
           "coverage_role": "primary",
-          "exact_standable": false,
-          "order": 2,
+          "exact_standable": true,
+          "order": 1,
           "original": [
-            -113,
+            -108,
             21,
             -594
           ],
-          "role": "via",
-          "snap_distance_blocks": 1.0,
+          "role": "start",
+          "snap_distance_blocks": 0.0,
           "snapped": [
-            -113,
-            22,
+            -108,
+            21,
             -594
           ],
-          "waypoint": "教堂6楼平台入口"
+          "waypoint": "图书馆"
         },
         {
           "coverage_role": "primary",
           "exact_standable": true,
-          "order": 3,
+          "order": 2,
           "original": [
             -110,
             21,
@@ -7621,111 +7478,28 @@
           "waypoint": "需要蹲下的门"
         },
         {
-          "coverage_role": "primary",
+          "coverage_role": "connector",
           "exact_standable": true,
-          "order": 4,
+          "order": 3,
           "original": [
-            -108,
-            21,
-            -594
-          ],
-          "role": "end",
-          "snap_distance_blocks": 0.0,
-          "snapped": [
-            -108,
-            21,
-            -594
-          ],
-          "waypoint": "图书馆"
-        }
-      ],
-      "reviewer_intent": "你在教堂六楼，要去图书馆取书。先到六楼平台入口，通过需要蹲下的门，最后到图书馆。",
-      "route_id": "SLR-N10",
-      "scene_mix": "六楼、六楼平台入口、蹲下门、图书馆",
-      "segments": [
-        {
-          "bbox": {
-            "x": [
-              -132,
-              -97
-            ],
-            "y": [
-              6,
-              38
-            ],
-            "z": [
-              -617,
-              -578
-            ]
-          },
-          "door_crossings": [],
-          "from_snapped": [
             -116,
             22,
             -601
           ],
-          "from_waypoint": "教堂6楼",
-          "goal_candidate_count": 9,
-          "ok": true,
-          "path_len_cells": 7,
-          "path_movement_counts": {
-            "diagonal": 2,
-            "walk": 4
-          },
-          "reached_goal": [
-            -114,
+          "role": "end",
+          "snap_distance_blocks": 0.0,
+          "snapped": [
+            -116,
             22,
-            -595
+            -601
           ],
-          "reference_eligible_for_spl": true,
-          "reference_length_blocks": 6.82842712474619,
-          "requires_door_interaction": false,
-          "search_status": "certified_static_reference",
-          "segment_id": "SLR-N10-S01",
-          "to_snapped": [
-            -113,
-            22,
-            -594
-          ],
-          "to_waypoint": "教堂6楼平台入口",
-          "waypoint_count": 3,
-          "waypoints": [
-            [
-              -116,
-              22,
-              -601
-            ],
-            [
-              -116,
-              22,
-              -597
-            ],
-            [
-              -114,
-              22,
-              -595
-            ]
-          ]
-        },
-        {
-          "error": "no_path_found_under_static_walkability_model",
-          "from_snapped": [
-            -113,
-            22,
-            -594
-          ],
-          "from_waypoint": "教堂6楼平台入口",
-          "goal_candidate_count": 7,
-          "ok": false,
-          "search_status": "no_path_found",
-          "segment_id": "SLR-N10-S02",
-          "to_snapped": [
-            -110,
-            21,
-            -594
-          ],
-          "to_waypoint": "需要蹲下的门"
-        },
+          "waypoint": "教堂6楼"
+        }
+      ],
+      "reviewer_intent": "你从图书馆取书后离开，经过标记的窄门，最后返回教堂六楼。",
+      "route_id": "SLR-N10",
+      "scene_mix": "图书馆、窄门、教堂六楼",
+      "segments": [
         {
           "bbox": {
             "x": [
@@ -7743,12 +7517,12 @@
           },
           "door_crossings": [],
           "from_snapped": [
-            -110,
+            -108,
             21,
             -594
           ],
-          "from_waypoint": "需要蹲下的门",
-          "goal_candidate_count": 9,
+          "from_waypoint": "图书馆",
+          "goal_candidate_count": 7,
           "ok": true,
           "path_len_cells": 2,
           "path_movement_counts": {
@@ -7763,17 +7537,17 @@
           "reference_length_blocks": 1.0,
           "requires_door_interaction": false,
           "search_status": "certified_static_reference",
-          "segment_id": "SLR-N10-S03",
+          "segment_id": "SLR-N10-S01",
           "to_snapped": [
-            -108,
+            -110,
             21,
             -594
           ],
-          "to_waypoint": "图书馆",
+          "to_waypoint": "需要蹲下的门",
           "waypoint_count": 2,
           "waypoints": [
             [
-              -110,
+              -108,
               21,
               -594
             ],
@@ -7783,55 +7557,139 @@
               -594
             ]
           ]
+        },
+        {
+          "bbox": {
+            "x": [
+              -132,
+              -94
+            ],
+            "y": [
+              5,
+              38
+            ],
+            "z": [
+              -617,
+              -578
+            ]
+          },
+          "door_crossings": [],
+          "from_snapped": [
+            -110,
+            21,
+            -594
+          ],
+          "from_waypoint": "需要蹲下的门",
+          "goal_candidate_count": 7,
+          "ok": true,
+          "path_len_cells": 9,
+          "path_movement_counts": {
+            "diagonal": 3,
+            "step": 1,
+            "walk": 4
+          },
+          "reached_goal": [
+            -115,
+            22,
+            -600
+          ],
+          "reference_eligible_for_spl": true,
+          "reference_length_blocks": 9.65685424949238,
+          "requires_door_interaction": false,
+          "search_status": "certified_static_reference",
+          "segment_id": "SLR-N10-S02",
+          "to_snapped": [
+            -116,
+            22,
+            -601
+          ],
+          "to_waypoint": "教堂6楼",
+          "waypoint_count": 6,
+          "waypoints": [
+            [
+              -110,
+              21,
+              -594
+            ],
+            [
+              -111,
+              21,
+              -594
+            ],
+            [
+              -112,
+              22,
+              -594
+            ],
+            [
+              -112,
+              22,
+              -596
+            ],
+            [
+              -115,
+              22,
+              -599
+            ],
+            [
+              -115,
+              22,
+              -600
+            ]
+          ]
         }
       ],
-      "static_route_status": "partial_static_route",
-      "title": "从六楼去图书馆取书"
+      "static_route_status": "all_segments_certified",
+      "title": "从图书馆经窄门返回六楼"
     }
   ],
   "source_waypoints": "runtime/shun-lee-review-vnc/20260716_clean_v3_shun_lee_review_vnc/local-user-waypoints/shunlee-marked-waypoints.txt",
   "summary": {
-    "connector_reuse_count": 0,
+    "connector_reuse_count": 1,
     "duplicate_primary_waypoints": [],
-    "missing_primary_waypoints": [],
-    "primary_waypoint_count": 39,
+    "excluded_waypoints": [
+      {
+        "reason": "exact point is isolated from the adjacent reviewed floor routes",
+        "waypoint": "为什么这里卡住了"
+      },
+      {
+        "reason": "original point is not standable and requires a one-block snap",
+        "waypoint": "教堂4楼暗处"
+      },
+      {
+        "reason": "original point is not standable and requires a one-block snap",
+        "waypoint": "教堂6楼平台入口"
+      },
+      {
+        "reason": "original column is empty and the nearest snap is an isolated leaf surface",
+        "waypoint": "顺利纪律宿舍2座"
+      }
+    ],
+    "missing_primary_waypoints": [
+      "为什么这里卡住了",
+      "教堂4楼暗处",
+      "教堂6楼平台入口",
+      "顺利纪律宿舍2座"
+    ],
+    "primary_waypoint_count": 35,
     "route_count": 10,
     "route_static_status_counts": {
-      "all_segments_certified": 7,
-      "partial_static_route": 3
+      "all_segments_certified": 10
     },
     "segment_static_status_counts": {
-      "certified_static_reference": 26,
-      "no_path_found": 3
+      "certified_static_reference": 26
     },
     "snap_status_counts": {
       "exact_standable": 36,
       "snapped": 3
     },
-    "unassigned_waypoints": [],
-    "uncertified_or_failed_segments": [
-      {
-        "from": "顺利纪律宿舍2座",
-        "route_id": "SLR-N06",
-        "search_status": "no_path_found",
-        "segment_id": "SLR-N06-S01",
-        "to": "顺利队宿舍3号楼"
-      },
-      {
-        "from": "为什么这里卡住了",
-        "route_id": "SLR-N09",
-        "search_status": "no_path_found",
-        "segment_id": "SLR-N09-S01",
-        "to": "教堂4楼暗处"
-      },
-      {
-        "from": "教堂6楼平台入口",
-        "route_id": "SLR-N10",
-        "search_status": "no_path_found",
-        "segment_id": "SLR-N10-S02",
-        "to": "需要蹲下的门"
-      }
+    "unassigned_waypoints": [
+      "为什么这里卡住了",
+      "教堂4楼暗处",
+      "教堂6楼平台入口",
+      "顺利纪律宿舍2座"
     ],
+    "uncertified_or_failed_segments": [],
     "waypoint_count": 39
   },
   "world_dir": "eval/snapshots/imported_1_21_1/shun-lee-clean-v3/world",

@@ -1285,7 +1285,7 @@
 
   <section class="panel route-plan-panel wide-route-panel">
     <div class="panel-head">
-      <h2>Task-semantic marked routes · 10 / 39</h2>
+      <h2>Strict task-semantic routes · 10 routes / 35 usable points</h2>
       <span class="badge" id="routePlanCount"><span class="dot"></span>Loading</span>
     </div>
     <div class="route-body">
@@ -1297,19 +1297,19 @@
           </select>
         </label>
         <div class="reference-actions route-source-links">
-          <a class="button" href="assets/shunlee-10-natural-reachable-routes.md" target="_blank" rel="noopener">路线说明</a>
-          <a class="button" href="assets/shunlee-10-natural-reachable-routes.csv" target="_blank" rel="noopener">CSV</a>
-          <a class="button" href="assets/shunlee-10-natural-reachable-routes.json" target="_blank" rel="noopener">JSON</a>
+          <a class="button" href="assets/shunlee-10-natural-reachable-routes.md?v=6ecdf4e3" target="_blank" rel="noopener">路线说明</a>
+          <a class="button" href="assets/shunlee-10-natural-reachable-routes.csv?v=6ecdf4e3" target="_blank" rel="noopener">CSV</a>
+          <a class="button" href="assets/shunlee-10-natural-reachable-routes.json?v=6ecdf4e3" target="_blank" rel="noopener">JSON</a>
         </div>
       </div>
       <div class="route-map-shell" aria-label="selected user waypoint route on Minecraft top-down map">
-        <img src="assets/shun-lee-clean-v3-topdown-nomarkers.png" alt="Shun Lee clean Minecraft top-down map without waypoints">
+        <img src="assets/shun-lee-clean-v3-topdown-nomarkers.png?v=9e5e80c7" alt="Shun Lee clean-v3 Minecraft top-down map without waypoints">
         <svg id="routeMapSvg" viewBox="0 0 1296 816" role="img" aria-label="Selected user waypoint route"></svg>
       </div>
       <div class="route-active-detail" id="routeActiveDetail">
         <div class="text-empty">Loading route review plan...</div>
       </div>
-      <p class="note">下面 10 条路线只使用你本地标出的 39 个点，并改成任务语义：从家/宿舍/教堂入口出发，去晨练、吃饭、学校、消防局、球场、游乐场或图书馆。每条至少 3 个点；宿舍楼主要作为起点或找同伴的位置，不再做无意义巡楼。绿色段是静态 world 几何认证可达，红色段需要你进 Minecraft 人工复核；个别落在白线/边缘的点仍保留为人工核对点。点击 load coords 会同步到对应的 Uxx 标点，再用同步 Minecraft 或 Teleport current coords 传送。</p>
+      <p class="note">下面 10 条路线只重组你已有的可用点：原始 39 个点中，35 个原坐标可站立且进入严格路线集；空列、需要移动坐标或与相邻楼层路线断连的 4 个点不再显示为有效路线点。26 / 26 个相邻语义路段均有静态 world 几何认证路径，不再依赖 endpoint override；Adventure-mode 实走仍待人工验证。点击 load coords 后可用同步 Minecraft 或 Teleport current coords 传送。</p>
       <div class="route-summary" id="routePlanSummary">
         <div class="fact"><strong>...</strong><span>loading route plan</span></div>
       </div>
@@ -1410,10 +1410,10 @@
           <div class="facts">
             <div class="fact"><strong>0</strong><span>old MC waypoints currently installed</span></div>
             <div class="fact"><strong>v3</strong><span>clean world package</span></div>
-            <div class="fact"><strong>39</strong><span>user MC waypoints in export order</span></div>
+            <div class="fact"><strong>35 / 39</strong><span>usable existing points / original export</span></div>
             <div class="fact"><strong>new</strong><span>your MC-created waypoints stay visible</span></div>
           </div>
-          <p class="note">旧的 SL76 waypoint 已从服务器 review 客户端文件中移除。顶部可选传送点现在使用你导出的 39 个本地 MC waypoint，并按导出文件顺序展示路线；旧 76 个 OSM/MC probe 只在后台用于估算 Google/OSM 对照和 control API。</p>
+          <p class="note">旧的 SL76 waypoint 已从服务器 review 客户端文件中移除。顶部可选传送点现在只使用原始导出中进入严格路线集的 35 个已有点；4 个空列、需移动或断连点仅保留在上游审计证据中。旧 76 个 OSM/MC probe 只在后台用于估算 Google/OSM 对照和 control API。</p>
         </div>
       </section>
 
@@ -3689,7 +3689,7 @@
         nearbyTextList.innerHTML = `<div class="text-empty">${escapeHtml(error.message)}</div>`;
       });
 
-    fetch("assets/shunlee-10-natural-reachable-routes.json", { cache: "no-store" })
+    fetch("assets/shunlee-10-natural-reachable-routes.json?v=6ecdf4e3", { cache: "no-store" })
       .then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json();
