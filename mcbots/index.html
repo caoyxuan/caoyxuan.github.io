@@ -1285,7 +1285,7 @@
 
   <section class="panel route-plan-panel wide-route-panel">
     <div class="panel-head">
-      <h2>Strict task-semantic routes · 10 routes / 35 usable points</h2>
+      <h2>Task-semantic routes · 10 routes / 30 routed + 5 alternate points</h2>
       <span class="badge" id="routePlanCount"><span class="dot"></span>Loading</span>
     </div>
     <div class="route-body">
@@ -1297,9 +1297,10 @@
           </select>
         </label>
         <div class="reference-actions route-source-links">
-          <a class="button" href="assets/shunlee-10-natural-reachable-routes.md?v=6ecdf4e3" target="_blank" rel="noopener">路线说明</a>
-          <a class="button" href="assets/shunlee-10-natural-reachable-routes.csv?v=6ecdf4e3" target="_blank" rel="noopener">CSV</a>
-          <a class="button" href="assets/shunlee-10-natural-reachable-routes.json?v=6ecdf4e3" target="_blank" rel="noopener">JSON</a>
+          <a class="button" href="assets/shunlee-10-natural-reachable-routes.md?v=semantic-hidden-v2" target="_blank" rel="noopener">路线说明</a>
+          <a class="button" href="assets/shunlee-10-natural-reachable-routes.csv?v=semantic-hidden-v2" target="_blank" rel="noopener">CSV</a>
+          <a class="button" href="assets/shunlee-10-natural-reachable-routes.json?v=semantic-hidden-v2" target="_blank" rel="noopener">JSON</a>
+          <a class="button" href="assets/shunlee-10-route-waypoints.txt?v=424e8400" download>Xaero waypoints（30 点）</a>
         </div>
       </div>
       <div class="route-map-shell" aria-label="selected user waypoint route on Minecraft top-down map">
@@ -1309,7 +1310,7 @@
       <div class="route-active-detail" id="routeActiveDetail">
         <div class="text-empty">Loading route review plan...</div>
       </div>
-      <p class="note">下面 10 条路线只重组你已有的可用点：原始 39 个点中，35 个原坐标可站立且进入严格路线集；空列、需要移动坐标或与相邻楼层路线断连的 4 个点不再显示为有效路线点。26 / 26 个相邻语义路段均有静态 world 几何认证路径，不再依赖 endpoint override；Adventure-mode 实走仍待人工验证。点击 load coords 后可用同步 Minecraft 或 Teleport current coords 传送。</p>
+      <p class="note">下面 10 条任务语义路线来自你的现有点：原始 39 个点中，30 个进入路线，5 个原坐标可站立的点保留在 alternate pool，空列、需移动坐标或与相邻路线断连的 4 个点被排除。25 / 25 个相邻路线段均有静态 world 几何认证路径，不依赖 endpoint override；Adventure-mode 实走仍待人工验证。Agent 题面只显示语义起终点和必要目的地，楼梯、侧门、低矮门等 evaluator-only 点在详情中分开展示。</p>
       <div class="route-summary" id="routePlanSummary">
         <div class="fact"><strong>...</strong><span>loading route plan</span></div>
       </div>
@@ -2704,6 +2705,7 @@
             name: point.waypoint || `point ${index + 1}`,
             role: point.role || routeStepRole(index, row.points.length),
             coverage: point.coverage_role || "primary",
+            visibility: point.visibility || "prompt",
             coordinate,
             original,
             snapped,
@@ -2724,6 +2726,7 @@
           name: anchor ? anchorDisplayName(anchor) : names[index] || "",
           role: routeStepRole(index, ids.length),
           coverage: "reference",
+          visibility: "prompt",
           coordinate: anchor ? { x: Number(anchor.mc_x), y: Number(anchor.mc_y), z: Number(anchor.mc_z) } : null,
           anchor,
           isLocalRoutePoint: false,
@@ -3015,7 +3018,9 @@
 
     function routeStepHtml(row, entry, index, total) {
       const anchor = entry.anchor || (!entry.isLocalRoutePoint ? anchorsByDisplayId.get(entry.id) : null);
-      const role = routeStepRole(index, total);
+      const role = entry.visibility === "evaluator_hidden"
+        ? "evaluator hidden"
+        : routeStepRole(index, total);
       const name = anchor ? anchorDisplayName(anchor) : entry.name || "";
       const coord = entry.coordinate ? `MC ${entry.coordinate.x},${entry.coordinate.y},${entry.coordinate.z}` : "coordinate missing";
       const decision = anchor ? decisionSuffixForKey(anchor.prompt_id) : "";
@@ -3061,9 +3066,14 @@
     function routeActiveDetailHtml(row) {
       if (!row) return '<div class="text-empty">No route selected.</div>';
       const entries = routePointEntries(row);
+      const promptEntries = entries.filter((entry) => entry.visibility !== "evaluator_hidden");
+      const hiddenEntries = entries.filter((entry) => entry.visibility === "evaluator_hidden");
       const operationTags = Array.isArray(row.points)
         ? [row.operation_focus].filter(Boolean)
         : splitRouteValues(row.operation_tags);
+      const hiddenRequirements = Array.isArray(row.hidden_operation_requirements)
+        ? row.hidden_operation_requirements
+        : [];
       const metrics = row.metrics || {};
       const length = Number(metrics.reference_length_blocks || row.static_probe_length_blocks);
       const status = row.static_route_status || row.static_probe_status || "";
@@ -3077,10 +3087,19 @@
             ${routePillHtml(row.scene_category || row.city_category)}
           </div>
         </div>
+        <p><strong>Agent 可见题面:</strong> ${escapeHtml(row.reviewer_intent || row.prompt_zh || "")}</p>
         <div class="route-step-list">
-          ${entries.map((entry, index) => routeStepHtml(row, entry, index, entries.length)).join("")}
+          ${promptEntries.map((entry, index) => routeStepHtml(row, entry, index, promptEntries.length)).join("")}
         </div>
-        <p><strong>路线意图:</strong> ${escapeHtml(row.reviewer_intent || row.prompt_zh || "")}</p>
+        ${hiddenEntries.length ? `
+          <details>
+            <summary>Evaluator-only 路径约束（不进入 Agent 题面）</summary>
+            <div class="route-step-list">
+              ${hiddenEntries.map((entry, index) => routeStepHtml(row, entry, index, hiddenEntries.length)).join("")}
+            </div>
+            ${hiddenRequirements.length ? `<small>${escapeHtml(JSON.stringify(hiddenRequirements))}</small>` : ""}
+          </details>
+        ` : ""}
         <p><strong>场景组合:</strong> ${escapeHtml(row.scene_mix || row.manual_review_goal || "")}</p>
         <small>${escapeHtml(row.city_category || "")}${operationTags.length ? ` · ${escapeHtml(operationTags.join(" · "))}` : ""}</small>
         <small>Static reachability: ${escapeHtml(status)}${Number.isFinite(length) ? ` · ${length.toFixed(1)} blocks` : ""}${metrics.turn_count != null ? ` · ${escapeHtml(metrics.turn_count)} turns` : ""}${badSegments.length ? ` · ${badSegments.length} segment(s) need manual check` : ""}</small>
@@ -3089,7 +3108,10 @@
     }
 
     function routePathText(row) {
-      return routePointEntries(row).map((entry) => entry.label).join(" -> ");
+      return routePointEntries(row)
+        .filter((entry) => entry.visibility !== "evaluator_hidden")
+        .map((entry) => entry.label)
+        .join(" -> ");
     }
 
     function routeActionText(row) {
@@ -3098,7 +3120,7 @@
         return "这是你的真实标点顺序切片；红色连续段表示导出点序中可能有传送/大跳、入口高度或静态模型找不到的连接。";
       }
       if (status === "partial_static_route" || status === "no_static_route_found" || status === "no_path_found" || status === "invalid_goal_acceptance_set") {
-        return "红色段优先人工核对：可能是坐标高度、入口、楼梯、蹲下门或地图局部建模问题。";
+        return "红色段优先人工核对：可能是坐标高度、入口、垂直通道、特殊通行条件或地图局部建模问题。";
       }
       if (status === "all_segments_found_uncertified" || status === "static_path_upper_bound") {
         return "已有静态路径，但还需要你按游戏画面确认真实入口和路线是否自然。";
@@ -3119,7 +3141,7 @@
           </td>
           <td>
             ${escapeHtml(routePathText(row))}
-            <small>${Math.max(0, entries.length - 2)} via point(s)</small>
+            <small>Agent 可见语义点；另有 ${entries.filter((entry) => entry.visibility === "evaluator_hidden").length} 个 evaluator hidden point(s)</small>
           </td>
           <td>
             ${escapeHtml(row.operation_focus || row.manual_review_goal || "")}
@@ -3149,7 +3171,7 @@
             <thead>
               <tr>
                 <th>路线</th>
-                <th>MC 点顺序</th>
+                <th>Agent 可见语义点</th>
                 <th>审核重点</th>
                 <th>可达性 / 多样性</th>
                 <th>坐标</th>
@@ -3183,10 +3205,18 @@
         failedSegments += (row.segments || []).filter((segment) => segment.search_status !== "certified_static_reference").length;
       });
       const scenes = new Set(routePlanRows.map((row) => row.city_category || row.scene_category).filter(Boolean));
-      routePlanCount.innerHTML = `<span class="dot"></span>${uniquePoints.size || routePlanRows.length} marked points`;
+      const sourceSummary = routePlanPayload && routePlanPayload.summary ? routePlanPayload.summary : {};
+      const promptCount = Number(sourceSummary.prompt_visible_waypoint_count);
+      const hiddenCount = Number(sourceSummary.hidden_evaluator_waypoint_count);
+      const alternateCount = Array.isArray(sourceSummary.alternate_pool_waypoints)
+        ? sourceSummary.alternate_pool_waypoints.length
+        : 0;
+      routePlanCount.innerHTML = `<span class="dot"></span>${Number.isFinite(promptCount) ? promptCount : uniquePoints.size} prompt-visible · ${Number.isFinite(hiddenCount) ? hiddenCount : 0} hidden`;
       routePlanSummary.innerHTML = `
         <div class="fact"><strong>${routePlanRows.length}</strong><span>task-semantic marked routes</span></div>
-        <div class="fact"><strong>${uniquePoints.size}</strong><span>primary user waypoints covered</span></div>
+        <div class="fact"><strong>${Number.isFinite(promptCount) ? promptCount : uniquePoints.size}</strong><span>Agent-visible semantic waypoints</span></div>
+        <div class="fact"><strong>${Number.isFinite(hiddenCount) ? hiddenCount : 0}</strong><span>evaluator-only hidden waypoints</span></div>
+        <div class="fact"><strong>${alternateCount}</strong><span>valid points held in alternate pool</span></div>
         <div class="fact"><strong>${certifiedSegments}</strong><span>certified consecutive segments</span></div>
         <div class="fact"><strong>${failedSegments}</strong><span>segments to manually inspect</span></div>
         <div class="fact"><strong>${scenes.size}</strong><span>scene categories</span></div>
@@ -3689,7 +3719,7 @@
         nearbyTextList.innerHTML = `<div class="text-empty">${escapeHtml(error.message)}</div>`;
       });
 
-    fetch("assets/shunlee-10-natural-reachable-routes.json?v=6ecdf4e3", { cache: "no-store" })
+    fetch("assets/shunlee-10-natural-reachable-routes.json?v=semantic-hidden-v2", { cache: "no-store" })
       .then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json();
