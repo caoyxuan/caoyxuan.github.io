@@ -1,20 +1,15 @@
 # Shun Lee 本地标点 10 条任务语义路线与静态可达性
 - 来源: `runtime/shun-lee-review-vnc/20260716_clean_v3_shun_lee_review_vnc/local-user-waypoints/shunlee-marked-waypoints.txt`
 - World: `eval/snapshots/imported_1_21_1/shun-lee-clean-v3/world`
-- 点数: 39；路线数: 10；primary 覆盖: 39/39
+- 点数: 39；路线数: 10；primary 覆盖: 35/39
 - 说明: `connector` 是为保持路线自然而重复出现的衔接点；覆盖统计只按 `primary` 计一次。
 - 边界: 这是静态 world 几何寻路结果，不等于真人/agent 实走通过；`all_segments_certified` 最适合优先人工审核。
 
 ## 总览
-- 路线状态: {"all_segments_certified": 7, "partial_static_route": 3}
-- 路段状态: {"certified_static_reference": 26, "no_path_found": 3}
+- 路线状态: {"all_segments_certified": 10}
+- 路段状态: {"certified_static_reference": 26}
 - 坐标贴近: {"exact_standable": 36, "snapped": 3}
-- 非认证/失败路段数: 3
-
-### 需要人工优先确认的路段
-- SLR-N06 SLR-N06-S01: 顺利纪律宿舍2座 -> 顺利队宿舍3号楼 (no_path_found)
-- SLR-N09 SLR-N09-S01: 为什么这里卡住了 -> 教堂4楼暗处 (no_path_found)
-- SLR-N10 SLR-N10-S02: 教堂6楼平台入口 -> 需要蹲下的门 (no_path_found)
+- 非认证/失败路段数: 0
 
 ## SLR-N01 · 从家出发去赛车场晨练
 - 城市类型: residential origin to recreation
@@ -115,26 +110,24 @@
 | SLR-N05-S02 | 顺利部队操场 -> 顺利纪律部队2号楼 | certified_static_reference | 66.0 | 60 | diagonal:15,step:2,walk:42 |
 | SLR-N05-S03 | 顺利纪律部队2号楼 -> 顺利足球场正门 | certified_static_reference | 375.9 | 343 | diagonal:62,step:16,walk:264 |
 
-## SLR-N06 · 从远端宿舍去五人制球场
+## SLR-N06 · 从三号宿舍去五人制球场
 - 城市类型: residential origin to local sports pitch
-- 场景组合: 远端宿舍起点、同伴宿舍、球场侧门、五人制足球场
-- 操作重点: 起点定位、找同伴、侧门进入、球场终点
-- 人工审核意图: 你住在顺利纪律宿舍2座。先去顺利队宿舍3号楼找同伴，再从顺足侧门进入，最后到五人制足球场。
-- 静态状态: partial_static_route；难度预标: D5_blocked_or_uncertified_static_route
+- 场景组合: 三号宿舍起点、球场侧门、五人制足球场
+- 操作重点: 宿舍起点定位、侧门进入、球场终点
+- 人工审核意图: 你从顺利队宿舍3号楼出发，经顺利足球场侧门进入，最后到五人制足球场。
+- 静态状态: all_segments_certified；难度预标: D3_vertical_or_multi_junction_static
 - 指标: length=471.7, turns=115, ascent=6, descent=17, doors=0
 
 | # | role | waypoint | coverage | original xyz | tested xyz | snap |
 |---:|---|---|---|---:|---:|---:|
-| 1 | start | 顺利纪律宿舍2座 | primary | -268,2,-744 | -270,2,-741 | 3.6 |
-| 2 | via | 顺利队宿舍3号楼 | primary | -300,10,-664 | -300,10,-664 | 0.0 |
-| 3 | via | 顺足侧门 | primary | -118,-2,-674 | -118,-2,-674 | 0.0 |
-| 4 | end | 顺利邨游乐场五人制足球场 | primary | -137,-1,-694 | -137,-1,-694 | 0.0 |
+| 1 | start | 顺利队宿舍3号楼 | primary | -300,10,-664 | -300,10,-664 | 0.0 |
+| 2 | via | 顺足侧门 | primary | -118,-2,-674 | -118,-2,-674 | 0.0 |
+| 3 | end | 顺利邨游乐场五人制足球场 | primary | -137,-1,-694 | -137,-1,-694 | 0.0 |
 
 | segment | from -> to | status | length | cells | movement |
 |---|---|---|---:|---:|---|
-| SLR-N06-S01 | 顺利纪律宿舍2座 -> 顺利队宿舍3号楼 | no_path_found |  |  |  |
-| SLR-N06-S02 | 顺利队宿舍3号楼 -> 顺足侧门 | certified_static_reference | 444.2 | 408 | diagonal:70,step:16,walk:321 |
-| SLR-N06-S03 | 顺足侧门 -> 顺利邨游乐场五人制足球场 | certified_static_reference | 27.5 | 21 | diagonal:17,step:1,walk:2 |
+| SLR-N06-S01 | 顺利队宿舍3号楼 -> 顺足侧门 | certified_static_reference | 444.2 | 408 | diagonal:70,step:16,walk:321 |
+| SLR-N06-S02 | 顺足侧门 -> 顺利邨游乐场五人制足球场 | certified_static_reference | 27.5 | 21 | diagonal:17,step:1,walk:2 |
 
 ## SLR-N07 · 放学后从书院去游乐场
 - 城市类型: education edge to recreation
@@ -184,42 +177,38 @@
 | SLR-N08-S06 | 教堂3楼暗处 -> 教堂3楼 | certified_static_reference | 61.9 | 60 | diagonal:7,walk:52 |
 | SLR-N08-S07 | 教堂3楼 -> 教堂楼梯2 | certified_static_reference | 28.0 | 21 | diagonal:3,step:6,walk:11 |
 
-## SLR-N09 · 教堂暗处维护检查
-- 城市类型: indoor maintenance/obstacle check
-- 场景组合: 卡点、四楼暗处、五楼出口
-- 操作重点: 卡点复核、暗处检查、楼层出口确认
-- 人工审核意图: 你是教堂工作人员。去检查之前容易卡住的位置和四楼暗处，确认后到五楼出口位置结束。
-- 静态状态: partial_static_route；难度预标: D5_blocked_or_uncertified_static_route
-- 指标: length=75.8, turns=19, ascent=6, descent=0, doors=0
+## SLR-N09 · 从教堂五楼上到六楼巡检
+- 城市类型: indoor upper-floor maintenance
+- 场景组合: 教堂五楼、垂直通道、教堂六楼
+- 操作重点: 高层起点定位、垂直移动、六楼到达确认
+- 人工审核意图: 你是教堂工作人员。从教堂五楼出发，沿可通行的楼层连接上到六楼完成巡检。
+- 静态状态: all_segments_certified；难度预标: D1_short_simple_static
+- 指标: length=11.7, turns=8, ascent=3, descent=0, doors=0
 
 | # | role | waypoint | coverage | original xyz | tested xyz | snap |
 |---:|---|---|---|---:|---:|---:|
-| 1 | start | 为什么这里卡住了 | primary | -112,14,-540 | -112,14,-540 | 0.0 |
-| 2 | via | 教堂4楼暗处 | primary | -114,12,-544 | -114,13,-544 | 1.0 |
-| 3 | end | 教堂5楼 | primary | -117,19,-601 | -117,19,-601 | 0.0 |
+| 1 | start | 教堂5楼 | primary | -117,19,-601 | -117,19,-601 | 0.0 |
+| 2 | end | 教堂6楼 | primary | -116,22,-601 | -116,22,-601 | 0.0 |
 
 | segment | from -> to | status | length | cells | movement |
 |---|---|---|---:|---:|---|
-| SLR-N09-S01 | 为什么这里卡住了 -> 教堂4楼暗处 | no_path_found |  |  |  |
-| SLR-N09-S02 | 教堂4楼暗处 -> 教堂5楼 | certified_static_reference | 75.8 | 71 | diagonal:8,step:6,walk:56 |
+| SLR-N09-S01 | 教堂5楼 -> 教堂6楼 | certified_static_reference | 11.7 | 11 | diagonal:1,step:3,walk:6 |
 
-## SLR-N10 · 从六楼去图书馆取书
+## SLR-N10 · 从图书馆经窄门返回六楼
 - 城市类型: indoor upper-floor library errand
-- 场景组合: 六楼、六楼平台入口、蹲下门、图书馆
-- 操作重点: 高层平台、窄门/蹲下、图书馆终点确认
-- 人工审核意图: 你在教堂六楼，要去图书馆取书。先到六楼平台入口，通过需要蹲下的门，最后到图书馆。
-- 静态状态: partial_static_route；难度预标: D5_blocked_or_uncertified_static_route
-- 指标: length=7.8, turns=3, ascent=0, descent=1, doors=0
+- 场景组合: 图书馆、窄门、教堂六楼
+- 操作重点: 图书馆起点、窄门离开、高层终点确认
+- 人工审核意图: 你从图书馆取书后离开，经过标记的窄门，最后返回教堂六楼。
+- 静态状态: all_segments_certified；难度预标: D1_short_simple_static
+- 指标: length=10.7, turns=4, ascent=1, descent=0, doors=0
 
 | # | role | waypoint | coverage | original xyz | tested xyz | snap |
 |---:|---|---|---|---:|---:|---:|
-| 1 | start | 教堂6楼 | primary | -116,22,-601 | -116,22,-601 | 0.0 |
-| 2 | via | 教堂6楼平台入口 | primary | -113,21,-594 | -113,22,-594 | 1.0 |
-| 3 | via | 需要蹲下的门 | primary | -110,21,-594 | -110,21,-594 | 0.0 |
-| 4 | end | 图书馆 | primary | -108,21,-594 | -108,21,-594 | 0.0 |
+| 1 | start | 图书馆 | primary | -108,21,-594 | -108,21,-594 | 0.0 |
+| 2 | via | 需要蹲下的门 | primary | -110,21,-594 | -110,21,-594 | 0.0 |
+| 3 | end | 教堂6楼 | connector | -116,22,-601 | -116,22,-601 | 0.0 |
 
 | segment | from -> to | status | length | cells | movement |
 |---|---|---|---:|---:|---|
-| SLR-N10-S01 | 教堂6楼 -> 教堂6楼平台入口 | certified_static_reference | 6.8 | 7 | diagonal:2,walk:4 |
-| SLR-N10-S02 | 教堂6楼平台入口 -> 需要蹲下的门 | no_path_found |  |  |  |
-| SLR-N10-S03 | 需要蹲下的门 -> 图书馆 | certified_static_reference | 1.0 | 2 | walk:1 |
+| SLR-N10-S01 | 图书馆 -> 需要蹲下的门 | certified_static_reference | 1.0 | 2 | walk:1 |
+| SLR-N10-S02 | 需要蹲下的门 -> 教堂6楼 | certified_static_reference | 9.7 | 9 | diagonal:3,step:1,walk:4 |
