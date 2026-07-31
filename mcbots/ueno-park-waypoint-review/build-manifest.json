@@ -1,8 +1,19 @@
 {
-  "artifact_kind": "ueno-park-map-waypoint-review-build-v6",
-  "map_slug": "ueno-park-clean",
+  "artifact_kind": "ueno-park-map-waypoint-review-build-v7",
+  "map_slug": "ueno-park-clean-strict",
   "waypoint_count": 7,
   "reference_candidate_count": 5,
+  "osm_candidate_count": 100,
+  "osm_candidate_category_quotas": {
+    "civic_service": 10,
+    "culture": 15,
+    "food_commerce": 26,
+    "landmark_history": 15,
+    "park_nature": 3,
+    "street_access": 8,
+    "transport": 15,
+    "worship": 8
+  },
   "observation_image_count": 28,
   "basemap": {
     "width": 576,
@@ -17,7 +28,25 @@
       "min_y": -10,
       "max_y": 93
     },
-    "sha256": "946076f4c20d08e1f1f36ce0e44eaa8f33049f5aac17931c4323f02b13cdc79e"
+    "sha256": "2470ff459c2aa30807c224070ed2b4964f2e5655760dd94c0a5cd69cbc239958"
+  },
+  "strict_world": {
+    "minecraft_version": "1.21.11",
+    "data_version": 4671,
+    "authored_chunk_count": 1013,
+    "foreign_zero_difference_chunks_removed": 22,
+    "south_residual_chunks_retained": 0,
+    "residual_white_background_column_count": 0,
+    "summary_sha256": "06fb94735eb74d31508dff8d1101c92077a2a47d4859dcf2bba6a5d8a22d7abb"
+  },
+  "old_manual_waypoints": {
+    "count": 7,
+    "status": "pending_strict_world_recheck",
+    "observation_source": "superseded_clean_v2"
+  },
+  "osm_candidates": {
+    "source_sha256": "942655150a0ae29a15c9f674f49f7f7e0b4771fadcad7776fd63c10b415a8f85",
+    "claim_boundary": "Reference candidates only. OSM positions are approximate search centres under the reviewed transform; Google Maps is current-only. A candidate becomes a manual waypoint only after first-person Minecraft inspection and human creation."
   },
   "time_alignment": {
     "comparison_target_utc": "2024-09-04T18:49:58Z",
@@ -34,7 +63,7 @@
     "rendered_label_count": 40,
     "sha256": "2c35e3e665b5dbe0d2dd749c61667577bb6f25552e48bdc7f36c2fd8ce282d02"
   },
-  "html_sha256": "e6445a1df1a04cc1e24f8a6ad8831d772796b7dec7f075539a6afbf8b871a707",
+  "html_sha256": "9d661da4b89d40e9a7533cb8ca4d82da2ccc6b45e9407bdf5131d406fea29483",
   "source_waypoint_sha256": "47e85079bdbbcf3ca5208b86d0b401979f8d25154f0bad2c844dda7b9e628599",
   "source_snapshot_manifest_sha256": "e0f3ee20ce2e04b1133d5c059a97913ceb033b7732bc4f7413a1d685839db4a3",
   "geo_reference": {
