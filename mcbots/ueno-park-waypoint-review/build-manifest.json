@@ -60,9 +60,9 @@
     "claim_boundary": "Reference candidates only. OSM positions are approximate search centres under the reviewed transform; Google Maps is current-only. A candidate becomes a manual waypoint only after first-person Minecraft inspection and human creation."
   },
   "shortlist": {
-    "source_sha256": "2c032b909591e8f4a684c67c0d8c54dbfb83c4f8e8d83e553a329de81b74e695",
-    "xaero_sha256": "6f8dc28ec4f2179fa8900797f345f990a050f2a6c23c307dd24cccb484fa2631",
-    "csv_sha256": "787e43d92ef1d89c56d3e412104b169b3640379471219f3a5b12e707edff7061",
+    "source_sha256": "bb9377a3c125d379ca30f288fdfe040f39eaa2ea1e893eb25d66e51fb755e437",
+    "xaero_sha256": "562eef2b6264b2814337327be0e3543db83e571179d37421c0746143eae1c2af",
+    "csv_sha256": "5811376438950914ddbd3d70e8e19e46cbe5e6bb5738e26ff43af6cfd377cd38",
     "review_status": "pending_human_minecraft_confirmation"
   },
   "time_alignment": {
@@ -80,7 +80,7 @@
     "rendered_label_count": 40,
     "sha256": "2c35e3e665b5dbe0d2dd749c61667577bb6f25552e48bdc7f36c2fd8ce282d02"
   },
-  "html_sha256": "1b45451896ada8b920179d92c8d24f4aa23544e559c818ad406f8242a57ef6e8",
+  "html_sha256": "3b14593dc5c629c23dc3484c1375a5b68fc518cb369b91e149622996defa9950",
   "source_waypoint_sha256": "47e85079bdbbcf3ca5208b86d0b401979f8d25154f0bad2c844dda7b9e628599",
   "source_snapshot_manifest_sha256": "e0f3ee20ce2e04b1133d5c059a97913ceb033b7732bc4f7413a1d685839db4a3",
   "geo_reference": {
