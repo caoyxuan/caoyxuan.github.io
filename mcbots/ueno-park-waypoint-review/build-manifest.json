@@ -45,7 +45,7 @@
     "observation_source": "superseded_clean_v2"
   },
   "osm_candidates": {
-    "source_sha256": "942655150a0ae29a15c9f674f49f7f7e0b4771fadcad7776fd63c10b415a8f85",
+    "source_sha256": "64b8fe0ee1c027b23aa35fff60c02f8ec36ff67f04dbd75c267edd068d7eae49",
     "claim_boundary": "Reference candidates only. OSM positions are approximate search centres under the reviewed transform; Google Maps is current-only. A candidate becomes a manual waypoint only after first-person Minecraft inspection and human creation."
   },
   "time_alignment": {
@@ -63,7 +63,7 @@
     "rendered_label_count": 40,
     "sha256": "2c35e3e665b5dbe0d2dd749c61667577bb6f25552e48bdc7f36c2fd8ce282d02"
   },
-  "html_sha256": "9d661da4b89d40e9a7533cb8ca4d82da2ccc6b45e9407bdf5131d406fea29483",
+  "html_sha256": "7a683da473dbed74b3ecbf54f1f17edf48b860fe6f5a66bb42f79901baaba49f",
   "source_waypoint_sha256": "47e85079bdbbcf3ca5208b86d0b401979f8d25154f0bad2c844dda7b9e628599",
   "source_snapshot_manifest_sha256": "e0f3ee20ce2e04b1133d5c059a97913ceb033b7732bc4f7413a1d685839db4a3",
   "geo_reference": {
