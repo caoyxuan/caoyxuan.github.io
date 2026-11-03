@@ -58,4 +58,4 @@ latest_posts:
 
 I am a second-year Ph.D. student in Computer Science at [HKUST](https://hkust.edu.hk/zh-hant), supervised by Prof. [Junxian He](https://jxhe.github.io/). Previously, I received my master's degree in Computer Science and Technology from Zhejiang University, advised by Prof. [Yang Yang](http://yangy.org/) and Prof. [Jiarong Xu](https://galina0217.github.io/). My work with them and Prof. [Carl Yang](https://www.cs.emory.edu/~jyang71/) focused on data-centric machine learning.
 
-I want to understand how data gives rise to new capabilities—and how increasingly capable AI systems can create the data they need to improve further. I am particularly interested in physical intelligence and recursive self-improvement (RSI), with progress measured by what these systems can learn and accomplish in the real world.
+I want to understand how data gives rise to new capabilities—and how increasingly capable AI systems can create the data they need to improve further. I am particularly interested in physical intelligence, where agents learn through interaction and turn their experience into useful capabilities in the real world.
