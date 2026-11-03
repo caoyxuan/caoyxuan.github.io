@@ -56,8 +56,6 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-I am a first-year Ph.D. student in Computer Science at [HKUST](https://hkust.edu.hk/zh-hant), supervised by Prof. [Junxian He](https://jxhe.github.io/). Before that, I got my masters' degree in Computer Science and Technology Department at Zhejiang University, advised by Prof. [Yang Yang](http://yangy.org/) and Prof. [Jiarong Xu](https://galina0217.github.io/). 
-I also collaborated with Prof. [Carl Yang](https://www.cs.emory.edu/~jyang71/) on various aspects of graph-related research topics. 
+I am a second-year Ph.D. student in Computer Science at [HKUST](https://hkust.edu.hk/zh-hant), supervised by Prof. [Junxian He](https://jxhe.github.io/). Previously, I received my master's degree in Computer Science and Technology from Zhejiang University, advised by Prof. [Yang Yang](http://yangy.org/) and Prof. [Jiarong Xu](https://galina0217.github.io/). My work with them and Prof. [Carl Yang](https://www.cs.emory.edu/~jyang71/) focused on data-centric machine learning.
 
-My current research interest primarily lies in LLM post-training and LLM reasoning.
-I am also interested in graph data mining and its specialized applications in real-world scenarios.
+My research focuses on how to create, curate, and learn from data to improve AI systems, with an emphasis on measurable gains in real-world settings. I am particularly interested in physical intelligence and recursive self-improvement (RSI): how agents can turn interactions with their environments into useful training data and use that experience to improve their own learning and problem-solving capabilities.
