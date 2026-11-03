@@ -33,8 +33,30 @@ body.sticky-bottom-footer {
 
 // Profile
 .profile {
+  &.profile-with-portrait {
+    width: 35%;
+
+    @media (min-width: 576px) {
+      width: 30%;
+    }
+  }
+
   img {
     width: 100%;
+  }
+
+  .profile-portrait {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+
+    img {
+      display: block;
+      height: 100%;
+      object-fit: cover;
+      // Crop the narrow white border from the Scholar photo.
+      transform: scale(1.06);
+    }
   }
 }
 
