@@ -60,4 +60,4 @@ I am a second-year Ph.D. student in Computer Science at [HKUST](https://hkust.ed
 
 I want to understand how data gives rise to new capabilities—and how increasingly capable AI systems can create the data they need to improve further. I am particularly interested in physical intelligence, where agents learn through interaction and turn their experience into useful capabilities in the real world.
 
-<a href="{{ '/assets/pdf/CV__YuxuanCao.pdf' | relative_url }}" download="CV_caoyuxuan_1104.pdf">Download CV (PDF)</a>
+<a href="https://caoyxuan.github.io/assets/pdf/CV__YuxuanCao.pdf" download="CV_caoyuxuan_1104.pdf">Download CV (PDF)</a>
