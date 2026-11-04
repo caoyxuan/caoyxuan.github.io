@@ -26,6 +26,37 @@ education:
     start_date: "2018.09"
     end_date: "2022.07"
     
+internships:
+  - company: "Moonshot AI"
+    role: "Post-training, Coding Team"
+    start_date: "2026.05"
+    end_date: "2026.09"
+    description: >-
+      Built pipelines for coding-agent session replay, long-horizon PRD task synthesis,
+      and multi-turn coding benchmarks. Developed task-synthesis and evaluation workflows
+      for embodied coding agents, targeting long-horizon planning and physical reasoning.
+
+  - company: "WeChat, Tencent"
+    role: "Research Intern"
+    start_date: "2025.06"
+    end_date: "2025.12"
+    advisors: "Prof. Junxian He and Dr. Zifei Shan"
+    description: >-
+      Researched self-evolving tool interfaces for LLM agents, improving Toolathlon
+      performance by 16.7 percentage points without model training. Developed latent
+      reasoning and inference-acceleration methods using knowledge distillation,
+      parallel chain-of-thought decoding, and multi-token prediction.
+
+  - company: "Ant Group, Alipay"
+    role: "Research Intern"
+    start_date: "2024.12"
+    end_date: "2025.03"
+    advisors: "Dr. Sheng Guo"
+    description: >-
+      Developed a redundancy-aware acceleration framework for dynamic graph neural
+      networks (AAAI 2026), reducing runtime by an average of 83.49% across diverse
+      architectures while preserving model accuracy.
+
 awards: 
   - name: "Hong Kong PhD Fellowship Scheme"
     date: "2025"

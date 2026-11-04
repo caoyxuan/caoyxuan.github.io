@@ -100,6 +100,27 @@ layout: default
         </ul>
       </section>
     {% endif %}
+    <!-- Internship Experience -->
+    {% if page.internships and page.internships.size > 0 %}
+      <section id="internships" aria-labelledby="internships-heading">
+        <h2 id="internships-heading">Internship Experience</h2>
+        <ul>
+          {% for item in page.internships %}
+            <li>
+              <strong>{{ item.company | escape }}</strong><br>
+              <em>{{ item.role | escape }}</em><br>
+              <span>{{ item.start_date | escape }} &ndash; {{ item.end_date | escape }}</span><br>
+              {% if item.advisors %}
+                <span>Advised by {{ item.advisors | escape }}</span><br>
+              {% endif %}
+              {% if item.description %}
+                <p>{{ item.description | escape }}</p>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
    {% if page.miscellaneous %}
   <section class="miscellaneous">
     <h2>Miscellaneous</h2>
